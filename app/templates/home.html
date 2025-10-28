@@ -13,9 +13,11 @@
 
 <body>
   <!-- Header -->
-  <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+  <nav class="navbar navbar-expand-sm navbar-dark fixed-top" style="background-color: #2E7D32;">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Trang chủ</a>
+      <a class="" href="/">
+        <img src="static/logo.png" alt="headerLogo" height="65" class="d-inline-block align-text-top">
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -28,7 +30,7 @@
             <a class="nav-link" href="#">Lớp học</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Hoạt động</a>
+            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">Hoạt động</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#">a</a></li>
               <li><a class="dropdown-item" href="#">b</a></li>
@@ -40,11 +42,15 @@
           </li>
         </ul>
         <div class="navbar-nav">
-          <a href="#" class="nav-link px-3" data-bs-toggle="modal" data-bs-target="#loginModal">
-            <i class="bi bi-box-arrow-in-right"></i> Đăng nhập
+          <a href="#" role="button" class="btn btn-outline-light me-2 d-flex align-items-center" data-bs-toggle="modal"
+            data-bs-target="#loginModal">
+            <i class="bi bi-box-arrow-in-right me-2"></i>
+            Đăng nhập
           </a>
-          <a href="#" class="nav-link px-3" data-bs-toggle="modal" data-bs-target="#registerModal">
-            <i class="bi bi-person-plus"></i> Đăng ký
+          <a href="#" role="button" class="btn btn-light text-success d-flex align-items-center fw-semibold"
+            data-bs-toggle="modal" data-bs-target="#registerModal">
+            <i class="bi bi-person-plus me-2"></i>
+            Đăng ký
           </a>
         </div>
       </div>
@@ -54,12 +60,13 @@
   <!-- Main Content Area -->
 
   <!-- Footer -->
-  <div class="mt-4 p-5 bg-dark text-white rounded fixed-bottom">
-    <h1>Quản lý trường mẫu giáo</h1>
+  <div class="mt-4 p-5 text-white rounded fixed-bottom" style="background-color: #2E7D32;">
+    <h1 style="font-size: 30px;"><img src="static/logo.png" alt="footerLogo" height="70">Giáo dục thông minh
+    </h1>
     <div class="row">
-      <div class="col">.col</div>
-      <div class="col">.col</div>
-      <div class="col">.col</div>
+      <div class="col">Giới thiệu</div>
+      <div class="col">Liên hệ với chúng tôi</div>
+      <div class="col">Nền tảng mạng xã hội</div>
     </div>
 
   </div>
