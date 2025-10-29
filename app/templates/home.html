@@ -1,80 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trường Mẫu Giáo</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-</head>
-
-<body>
-  <!-- Header -->
-  <nav class="navbar navbar-expand-sm navbar-dark fixed-top" style="background-color: #2E7D32;">
-    <div class="container-fluid">
-      <a class="" href="/">
-        <img src="static/logo.png" alt="headerLogo" height="65" class="d-inline-block align-text-top">
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Giới thiệu</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Lớp học</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">Hoạt động</a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">a</a></li>
-              <li><a class="dropdown-item" href="#">b</a></li>
-              <li><a class="dropdown-item" href="#">c</a></li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Liên hệ</a>
-          </li>
-        </ul>
-        <div class="navbar-nav">
-          <a href="#" role="button" class="btn btn-outline-light me-2 d-flex align-items-center" data-bs-toggle="modal"
-            data-bs-target="#loginModal">
-            <i class="bi bi-box-arrow-in-right me-2"></i>
-            Đăng nhập
-          </a>
-          <a href="#" role="button" class="btn btn-light text-success d-flex align-items-center fw-semibold"
-            data-bs-toggle="modal" data-bs-target="#registerModal">
-            <i class="bi bi-person-plus me-2"></i>
-            Đăng ký
-          </a>
-        </div>
+{% block header %}
+<nav class="navbar navbar-expand-sm navbar-dark fixed-top" style="background-color: #2E7D32;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="headerLogo" height="65"
+        class="d-inline-block align-text-top">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Giới thiệu</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Lớp học</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">Hoạt động</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">a</a></li>
+            <li><a class="dropdown-item" href="#">b</a></li>
+            <li><a class="dropdown-item" href="#">c</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Liên hệ</a>
+        </li>
+      </ul>
+      <div class="navbar-nav">
+        <a href="#" role="button" class="btn btn-outline-light me-2 d-flex align-items-center" data-bs-toggle="modal"
+          data-bs-target="#loginModal">
+          <i class="bi bi-box-arrow-in-right me-2"></i>
+          Đăng nhập
+        </a>
+        <a href="#" role="button" class="btn btn-light text-success d-flex align-items-center fw-semibold"
+          data-bs-toggle="modal" data-bs-target="#registerModal">
+          <i class="bi bi-person-plus me-2"></i>
+          Đăng ký
+        </a>
       </div>
     </div>
-  </nav>
-
-  <!-- Main Content Area -->
-
-  <!-- Footer -->
-  <div class="mt-4 p-5 text-white rounded fixed-bottom" style="background-color: #2E7D32;">
-    <h1 style="font-size: 30px;"><img src="static/logo.png" alt="footerLogo" height="70">Giáo dục thông minh
-    </h1>
-    <div class="row">
-      <div class="col">Giới thiệu</div>
-      <div class="col">Liên hệ với chúng tôi</div>
-      <div class="col">Nền tảng mạng xã hội</div>
-    </div>
-
   </div>
+</nav>
+{% endblock %}
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script>
-</body>
+{% block content %}
+<!-- Main Content Area -->
+<div class="container" style="padding-top: 100px;">
+  <!-- Add your page content here -->
+</div>
+{% endblock %}
 
-</html>
+{% block footer %}
+<footer>
+  <div class="mt-4 p-5 text-white rounded" style="background-color: #2E7D32;">
+    <div class="container">
+      <h1 style="font-size: 30px;"><img src="{{ url_for('static', filename='logo.png') }}" alt="footerLogo" height="70">
+        Giáo dục thông minh
+      </h1>
+      <div class="row">
+        <div class="col">Giới thiệu</div>
+        <div class="col">Liên hệ với chúng tôi</div>
+        <div class="col">Nền tảng mạng xã hội</div>
+      </div>
+    </div>
+  </div>
+</footer>
+{% endblock %}
