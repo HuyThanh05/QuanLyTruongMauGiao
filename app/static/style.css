@@ -113,3 +113,21 @@ body {
 .app-footer .nav-link:hover {
   color: #4f3d92;
 }
+
+/* Pagination - đổi màu active thành tím */
+.pagination .page-item.active .page-link {
+  background-color: #6f42c1;
+  border-color: #6f42c1;
+  color: #ffffff;
+}
+.pagination .page-link {
+  color: #6f42c1;
+}
+.pagination .page-link:hover {
+  color: #5a35b0;
+  background-color: rgba(111, 66, 193, 0.1);
+}
+
+.icon-footer {
+  color: #6f42c1;
+}
