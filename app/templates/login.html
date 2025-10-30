@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Css/loginform.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script
+      defer
+      src="{{ url_for('static', filename='Js/login.js') }}"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <!--Login Form-->
+      <div class="form-box login">
+        <form action="#" method="post">
+          <h1 style="color: #6f42c1">Đăng nhập</h1>
+          <div class="input-box">
+            <input type="phonenumber" placeholder="Số điện thoại" required />
+          </div>
+          <div class="input-box">
+            <input type="password" placeholder="Mật khẩu" required />
+          </div>
+          <div class="forgot-link"><a href="#">Quên mật khẩu?</a></div>
+          <button type="submit" class="btn">Đăng nhập</button>
+          <p>Đăng nhập với các nền tảng khác</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-google"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+          </div>
+        </form>
+      </div>
+      <!--Register Form-->
+      <div class="form-box register">
+        <form action="#" method="post">
+          <h1 style="color: #6f42c1">Đăng ký</h1>
+          <div class="input-box">
+            <input type="phonenumber" placeholder="Số điện thoại" required />
+          </div>
+          <div class="input-box">
+            <input type="email" placeholder="Email" required />
+          </div>
+          <div class="input-box">
+            <input type="password" placeholder="Mật Khẩu" required />
+          </div>
+          <div class="input-box">
+            <input type="password" placeholder="Xác nhận mật khẩu" required />
+          </div>
+          <button type="submit" class="btn">Đăng ký</button>
+          <p>Đăng ký với các nền tảng khác</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-google"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+          </div>
+        </form>
+      </div>
+      <!--Toggle Box-->
+      <div class="toggle-box">
+        <!--Toggle Box Left-->
+        <div class="toggle-panel toggle-left">
+          <h1>Hello, Welcome!</h1>
+          <p>Chưa có tài khoản?</p>
+          <button class="btn register-btn">Đăng ký</button>
+        </div>
+
+        <!--Toggle Box Right-->
+        <div class="toggle-panel toggle-right">
+          <h1>Welcome Back!</h1>
+          <p>Đã có tài khoản?</p>
+          <button class="btn login-btn">Đăng nhập</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
