@@ -4,7 +4,7 @@ app = Flask(__name__,template_folder="app/templates", static_folder="app/static"
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('login.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
