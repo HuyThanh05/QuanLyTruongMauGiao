@@ -16,17 +16,22 @@
       defer
       src="{{ url_for('static', filename='Js/loginRegisterMode.js') }}"
     ></script>
-    <script
-      defer
-      src="{{ url_for('static', filename='Js/authenticationAPI.js') }}"
-    ></script>
   </head>
   <body>
     <div class="container">
       <!--Login Form-->
       <div class="form-box login">
-        <form action="#" method="post">
+        <form action="{{ url_for('authController.login') }}" method="post">
           <h1 style="color: #6f42c1">Đăng nhập</h1>
+          {% with messages = get_flashed_messages(with_categories=true) %} {% if
+          messages %} {% for category, message in messages %}
+          <div
+            class="alert alert-{{ 'danger' if category == 'error' else 'success' }}"
+            style="margin-bottom: 15px"
+          >
+            {{ message }}
+          </div>
+          {% endfor %} {% endif %} {% endwith %}
           <div class="input-box">
             <input type="email" name="email" placeholder="Email" required />
           </div>
@@ -51,8 +56,17 @@
       </div>
       <!--Register Form-->
       <div class="form-box register">
-        <form action="#" method="post">
+        <form action="{{ url_for('authController.signup') }}" method="post">
           <h1 style="color: #6f42c1">Đăng ký</h1>
+          {% with messages = get_flashed_messages(with_categories=true) %} {% if
+          messages %} {% for category, message in messages %}
+          <div
+            class="alert alert-{{ 'danger' if category == 'error' else 'success' }}"
+            style="margin-bottom: 15px"
+          >
+            {{ message }}
+          </div>
+          {% endfor %} {% endif %} {% endwith %}
           <div class="input-box">
             <input
               type="text"
