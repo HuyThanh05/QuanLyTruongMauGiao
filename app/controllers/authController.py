@@ -1,7 +1,6 @@
-from flask import Blueprint, request, jsonify, url_for, redirect
+from flask import Blueprint, request, jsonify, url_for, redirect, flash, render_template
 from flask_login import login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
-
 from app.models.user import User
 from app import db
 
@@ -9,60 +8,54 @@ authController = Blueprint('authController', __name__)
 
 @authController.route('/signup', methods=['POST'])
 def signup():
+    # get data from form
+    email = request.form.get('email')
+    phone = request.form.get('phone')
+    password = request.form.get('password')
+    confirm_password = request.form.get('confirmPassword')
     
-    mode = request.args.get('mode')
-    data = request.get_json()
-
-    if not data:
-        return jsonify({'error': 'Thiếu dữ liệu'}), 400
-
-    email = data.get('email')
-    phone = data.get('phone')
-    password = data.get('password')
-
-    if not mode or mode != "register":
-        return jsonify({'error': 'Mode phải là register'}), 400
+    # Data Validation
+    if not email or not password or not phone:
+        flash('Vui lòng nhập đầy đủ thông tin', 'error')
+        return redirect(url_for('routeController.signup'))
     
-    if not email or not password:
-        return jsonify({'error': 'Thiếu email hoặc mật khẩu'}), 400
+    if password != confirm_password:
+        flash('Mật khẩu xác nhận không khớp', 'error')
+        return redirect(url_for('routeController.signup'))
     
-    if not phone:
-        return jsonify({'error': 'Thiếu số điện thoại'}), 400
-    
-    # Xử lí logic đăng ký
+    # Check if email already exists
     existing = User.query.filter_by(email=email).first()
     if existing:
-        return jsonify({'error': 'Email đã được sử dụng'}), 400
+        flash('Email đã được sử dụng', 'error')
+        return redirect(url_for('routeController.signup'))
     
     user = User(email=email, phone=phone, password_hash=generate_password_hash(password))
     db.session.add(user)
     db.session.commit()
-    return jsonify({'message': 'Đăng ký thành công'}), 201
+    
+    flash('Đăng ký thành công! Vui lòng đăng nhập', 'success')
+    return redirect(url_for('routeController.signup'))
 
 @authController.route('/login', methods=['POST'])
 def login():
-    data = request.get_json()
-    mode = request.args.get('mode')
-
-    if not mode or mode != "login":
-        return jsonify({'error': 'Mode phải là login'}), 400
+    # Get data from form
+    email = request.form.get('email')
+    password = request.form.get('password')
     
-    if not data:
-        return jsonify({'error': 'Thiếu dữ liệu'}), 400
-
-    email = data.get('email')
-    password = data.get('password')
-
+    # Data Validation
     if not email or not password:
-        return jsonify({'error': 'Thiếu email hoặc mật khẩu'}), 400
+        flash('Vui lòng nhập đầy đủ thông tin', 'error')
+        return redirect(url_for('routeController.signup'))
     
-    # Xử lí logic đăng nhập
+    # Check if email and password are correct
     user = User.query.filter_by(email=email).first()
     if user and check_password_hash(user.password_hash, password):
         login_user(user)
-        return jsonify({'message': 'Đăng nhập thành công', 'redirect': url_for('routeController.home')}), 200
+        flash('Đăng nhập thành công!', 'success')
+        return redirect(url_for('routeController.home'))
     
-    return jsonify({'error': 'Email hoặc mật khẩu không đúng'}), 401
+    flash('Email hoặc mật khẩu không đúng', 'error')
+    return redirect(url_for('routeController.signup'))
 
 @authController.route('/logout', methods=['GET','POST'])
 def logout():
