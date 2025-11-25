@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, url_for, redirect, flash, render_template
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models.user import User
 from app import db
@@ -8,6 +8,10 @@ authController = Blueprint('authController', __name__)
 
 @authController.route('/signup', methods=['POST'])
 def signup():
+
+    if current_user.is_authenticated:
+        return redirect(url_for('routeController.home'))
+
     # get data from form
     email = request.form.get('email')
     phone = request.form.get('phone')
@@ -38,6 +42,10 @@ def signup():
 
 @authController.route('/login', methods=['POST'])
 def login():
+
+    if current_user.is_authenticated:
+        return redirect(url_for('routeController.home'))
+
     # Get data from form
     email = request.form.get('email')
     password = request.form.get('password')
