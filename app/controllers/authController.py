@@ -1,5 +1,7 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, url_for, redirect
+from flask_login import login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
+
 from app.models.user import User
 from app import db
 
@@ -56,6 +58,13 @@ def login():
     
     # Xử lí logic đăng nhập
     user = User.query.filter_by(email=email).first()
-    if not user or not check_password_hash(user.password_hash, password):
-        return jsonify({'error': 'Email hoặc mật khẩu không đúng'}), 401
-    return jsonify({'message': 'Đăng nhập thành công'}), 200
+    if user and check_password_hash(user.password_hash, password):
+        login_user(user)
+        return jsonify({'message': 'Đăng nhập thành công', 'redirect': url_for('routeController.home')}), 200
+    
+    return jsonify({'error': 'Email hoặc mật khẩu không đúng'}), 401
+
+@authController.route('/logout', methods=['GET','POST'])
+def logout():
+    logout_user()
+    return redirect(url_for('routeController.home'))
