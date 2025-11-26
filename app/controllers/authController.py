@@ -1,8 +1,9 @@
 from flask import Blueprint, request, jsonify, url_for, redirect, flash, render_template
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.models.user import User
-from app import db
+
+from app.models.Models import User
+from app import db, basic_auth
 
 authController = Blueprint('authController', __name__)
 
@@ -69,3 +70,8 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('routeController.home'))
+
+@authController.route('/secret')
+@basic_auth.required
+def secret():
+    return redirect(url_for("admin.index"))
