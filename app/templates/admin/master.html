@@ -1,0 +1,26 @@
+{% extends 'admin/base.html' %}
+{% block head %}
+{{ super() }}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='Css/admin.css') }}"
+/>
+{%endblock%}
+{%block body%}
+<div class="admin-wrapper">
+
+    <!-- Sidebar -->
+    {% include 'components/sidebar.html' %}
+
+    <div class="admin-main">
+        {% include 'components/navbar.html' %}
+
+        <div class="admin-content">
+            {% block page_content %}
+                {{ super() }}    <!-- RENDER CRUD LIST/EDIT/CREATE -->
+            {% endblock %}
+        </div>
+    </div>
+
+</div>
+{%endblock%}
