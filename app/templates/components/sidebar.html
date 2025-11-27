@@ -32,11 +32,13 @@
         ><i class="fa-solid fa-chart-line me-2"></i>Báo cáo</a
       >
     </li>
+  {% if "Admin" in current_user.roles| map(attribute="name") %}
     <li class="nav-item">
       <a href="{{url_for('routeController.administrator')}}" class="nav-link"
         ><i class="fa-solid fa-user-shield me-2"></i>Quản trị</a
       >
     </li>
+    {% endif %}
   </ul>
   {% if current_user.is_authenticated %}
   <div class="mt-auto pt-3">
