@@ -1,11 +1,13 @@
-<nav class="sidebar vh-100 p-3 sidebar-purple d-flex flex-column">
+<nav class="sidebar p-3 sidebar-purple d-flex flex-column">
   <h4 class="text-center mb-4"><i class="fa-solid fa-school me-2"></i>Educa</h4>
   <ul class="nav flex-column">
+    {% if not "Admin" in current_user.roles| map(attribute="name") %}
     <li class="nav-item">
       <a href="{{ url_for('routeController.home') }}" class="nav-link"
         ><i class="fa-solid fa-house me-2"></i>Trang chủ</a
       >
     </li>
+    {% endif %} {% if "Teacher" in current_user.roles| map(attribute="name") %}
     <li class="nav-item">
       <a href="{{ url_for('routeController.student') }}" class="nav-link"
         ><i class="fa-regular fa-face-smile me-2"></i>Học sinh</a
@@ -19,23 +21,61 @@
 
     <li class="nav-item">
       <a href="{{url_for('routeController.schedule')}}" class="nav-link"
-        ><i class="fa-solid fa-calendar-days me-2"></i>Lịch học</a
+        ><i class="fa-solid fa-clipboard-user me-2"></i>Quản lý sĩ số lớp</a
       >
     </li>
+    {% endif %} {% if "Accountant" in current_user.roles| map(attribute="name")
+    %}
     <li class="nav-item">
       <a href="{{url_for('routeController.fee')}}" class="nav-link"
-        ><i class="fa-solid fa-wallet me-2"></i>Học phí</a
+        ><i class="fa-solid fa-coins me-2"></i>Học phí</a
       >
     </li>
     <li class="nav-item">
       <a href="{{url_for('routeController.report')}}" class="nav-link"
-        ><i class="fa-solid fa-chart-line me-2"></i>Báo cáo</a
+        ><i class="fa-solid fa-chart-column me-2"></i>Thống kê doanh thu</a
       >
     </li>
-  {% if "Admin" in current_user.roles| map(attribute="name") %}
+    {% endif %} {% if "Parent" in current_user.roles| map(attribute="name") %}
     <li class="nav-item">
-      <a href="{{url_for('routeController.administrator')}}" class="nav-link"
-        ><i class="fa-solid fa-user-shield me-2"></i>Quản trị</a
+      <a href="{{url_for('routeController.report')}}" class="nav-link"
+        ><i class="fa-solid fa-folder-open me-2"></i>Quản lí hồ sơ</a
+      >
+    </li>
+    <li class="nav-item">
+      <a href="{{url_for('routeController.report')}}" class="nav-link"
+        ><i class="fa-solid fa-children me-2"></i>Thông tin trẻ</a
+      >
+    </li>
+    <li class="nav-item">
+      <a href="{{url_for('routeController.report')}}" class="nav-link"
+        ><i class="fa-solid fa-piggy-bank me-2"></i>Theo dõi học phí</a
+      >
+    </li>
+    <li class="nav-item">
+      <a href="{{url_for('routeController.report')}}" class="nav-link"
+        ><i class="fa-solid fa-bell me-2"></i>Thông báo</a
+      >
+    </li>
+    {% endif %} {% if "Admin" in current_user.roles| map(attribute="name") %}
+    <li class="nav-item">
+      <a href="/admin/student" class="nav-link"
+        ><i class="fa-solid fa-people-roof me-2"></i>Quản lý trẻ</a
+      >
+    </li>
+    <li class="nav-item">
+      <a href="{{url_for('routeController.report')}}" class="nav-link"
+        ><i class="fa-solid fa-sack-dollar me-2"></i>Cấu hình học phí</a
+      >
+    </li>
+    <li class="nav-item">
+      <a href="{{url_for('routeController.report')}}" class="nav-link"
+        ><i class="fa-solid fa-users-gear me-2"></i>Cấu hình sĩ số lớp</a
+      >
+    </li>
+    <li class="nav-item">
+      <a href="/admin/user" class="nav-link"
+        ><i class="fa-solid fa-user-shield me-2"></i>Quản lý user</a
       >
     </li>
     {% endif %}

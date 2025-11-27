@@ -1,7 +1,6 @@
 body {
   display: flex;
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
 /* Màu chủ đạo tím Bootstrap */
@@ -16,11 +15,16 @@ body {
 
 .sidebar {
   width: 220px;
+  flex: 0 0 220px; /* cố định chiều ngang, không co giãn theo flex */
+  min-width: 220px;
+  align-self: stretch; /* kéo dài theo chiều cao của body (trang) */
+  min-height: 100vh; /* ít nhất bằng chiều cao màn hình */
 }
 
 .main-content {
   flex: 1;
   background-color: #f8f9fa;
+  overflow-x: auto; /* nội dung rộng (như bảng admin) sẽ có thanh scroll ngang, không bị footer che/mất */
 }
 
 /* Thu nhỏ chiều cao header */
@@ -140,6 +144,8 @@ body {
 .app-footer {
   border-top: 1px solid #ece7ff;
   background: #faf7ff;
+  width: 100%; /* luôn chiếm full chiều ngang main-content */
+  flex: 0 0 auto; /* không bị co giãn khi ở trong layout flex */
 }
 .app-footer .nav-link {
   color: #6b5aa7;
