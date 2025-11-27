@@ -7,21 +7,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager,current_user
 from flask_migrate import Migrate
 from flask_babel import Babel
-from flask_principal import identity_loaded, RoleNeed, Principal
 
 db = SQLAlchemy()
 login_manager = LoginManager()
-admin = Admin(name="microblog",
-              theme=Bootstrap4Theme(swatch="cerulean"))
+admin = Admin(
+    name="microblog",
+    theme=Bootstrap4Theme(swatch="cerulean"),
+)
 babel = Babel()
-
-def on_identity_loaded(sender, identity):
-    identity.user = current_user
-
-    # Load user roles
-    if hasattr(current_user, 'roles'):
-        for role in current_user.roles:
-            identity.provides.add(RoleNeed(role.name))
 
 def create_app():
     app = Flask(
@@ -46,10 +39,6 @@ def create_app():
     # Import models
     from app.models.Models import User, Role, Student
     
-    # Initialize Flask-Principal
-    principals = Principal(app)
-    identity_loaded.connect_via(app)(on_identity_loaded)
-
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
