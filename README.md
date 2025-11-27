@@ -4,15 +4,15 @@ Hệ thống quản lý toàn diện cho trường mẫu giáo, được xây d�
 
 ## Tính Năng
 
--  Quản lý thông tin trường học
--  Quản lý học sinh
--  Quản lý giáo viên
--  Quản lý lớp học
--  Quản lý thời khóa biểu
--  Quản lý hoạt động hàng ngày
--  Quản lý học phí
--  Quản lý bữa ăn
--  Báo cáo và thống kê
+- Quản lý thông tin trường học
+- Quản lý học sinh
+- Quản lý giáo viên
+- Quản lý lớp học
+- Quản lý thời khóa biểu
+- Quản lý hoạt động hàng ngày
+- Quản lý học phí
+- Quản lý bữa ăn
+- Báo cáo và thống kê
 
 ## Cấu Trúc Dự Án
 
@@ -40,17 +40,20 @@ QuanLyTruongMauGiao/
 ## Hướng Dẫn Cài Đặt
 
 1. Clone repository về máy:
+
    ```bash
    git clone https://github.com/rifujin123/QuanLyTruongMauGiao.git
    cd QuanLyTruongMauGiao
    ```
 
 2. Tạo môi trường ảo Python:
+
    ```bash
    python -m venv venv
    ```
 
 3. Kích hoạt môi trường ảo:
+
    - Windows:
      ```bash
      .\venv\Scripts\activate
@@ -61,11 +64,13 @@ QuanLyTruongMauGiao/
      ```
 
 4. Cài đặt các thư viện cần thiết:
+
    ```bash
    pip install -r requirements.txt
    ```
 
 5. Khởi chạy ứng dụng:
+
    ```bash
    python run.py
    ```
@@ -83,6 +88,7 @@ QuanLyTruongMauGiao/
 ## Đóng Góp
 
 Mọi đóng góp đều được chào đón! Vui lòng:
+
 1. Fork dự án
 2. Tạo branch mới (`git checkout -b feature/AmazingFeature`)
 3. Commit thay đổi (`git commit -m 'Add some AmazingFeature'`)
@@ -99,4 +105,5 @@ Dự án này được phân phối dưới giấy phép MIT License.
 - Email: [2351050085khoi@ou.edu.vn]
 
 ---
-  From [rifujin123](https://github.com/rifujin123)
+
+From [rifujin123](https://github.com/rifujin123)
