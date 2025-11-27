@@ -2,12 +2,11 @@ from flask_sqlalchemy import SQLAlchemy
 from app import db
 from datetime import datetime
 from flask_login import UserMixin
-from flask_security import RoleMixin
 
-# roles_users = db.Table('roles_users',
-#     db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
-#     db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
-# )
+roles_users = db.Table('roles_users',
+    db.Column('user_id', db.Integer(), db.ForeignKey('users.id')),
+    db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
+)
 
 #Database Models
 class User(db.Model, UserMixin):
@@ -17,16 +16,19 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(50), nullable = False, unique = True)
     password_hash = db.Column(db.String(255),nullable = False)
     #relationships
-    # roles = db.relationship('Role',secondary= roles_users,backref= 'roled')
+    roles = db.relationship('Role',secondary= roles_users,backref= 'roled')
 
     def __repr__(self):
         return f"User({self.id}, {self.email}, {self.phone})"
 
-# class Role(db.Model, RoleMixin):
-#     __tablename__ = "role"
-#
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(50), unique=True, nullable=False)
+class Role(db.Model):
+    __tablename__ = "role"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    
+    def __repr__(self):
+        return f"Role({self.id}, {self.name})"
 
 class Student(db.Model):
     __tablename__ = "students"
@@ -39,3 +41,4 @@ class Student(db.Model):
 
     def __repr__(self):
         return f"Student({self.id}, {self.name}, {self.age}, {self.class_name})"
+
