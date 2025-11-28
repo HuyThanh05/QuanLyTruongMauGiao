@@ -1,12 +1,17 @@
 <nav class="sidebar p-3 sidebar-purple d-flex flex-column">
-  <h4 class="text-center mb-4"><i class="fa-solid fa-school me-2"></i>Educa</h4>
+    <a href="{{ url_for('routeController.home') }}" style="text-decoration: none;">
+    <h4 class="text-center mb-4" ><i class="fa-solid fa-school me-2"></i>Educa</h4>
+    </a>
+
   <ul class="nav flex-column">
+
     {% if not "Admin" in current_user.roles| map(attribute="name") %}
     <li class="nav-item">
       <a href="{{ url_for('routeController.home') }}" class="nav-link"
         ><i class="fa-solid fa-house me-2"></i>Trang chủ</a
       >
     </li>
+
     {% endif %} {% if "Teacher" in current_user.roles| map(attribute="name") %}
     <li class="nav-item">
       <a href="{{ url_for('routeController.student') }}" class="nav-link"
@@ -20,7 +25,7 @@
     </li>
 
     <li class="nav-item">
-      <a href="{{url_for('routeController.schedule')}}" class="nav-link"
+      <a href="{{url_for('routeController.classsize')}}" class="nav-link"
         ><i class="fa-solid fa-clipboard-user me-2"></i>Quản lý sĩ số lớp</a
       >
     </li>
@@ -33,27 +38,27 @@
     </li>
     <li class="nav-item">
       <a href="{{url_for('routeController.report')}}" class="nav-link"
-        ><i class="fa-solid fa-chart-column me-2"></i>Thống kê doanh thu</a
+        ><i class="fa-solid fa-chart-column me-2"></i>Doanh thu</a
       >
     </li>
     {% endif %} {% if "Parent" in current_user.roles| map(attribute="name") %}
     <li class="nav-item">
-      <a href="{{url_for('routeController.report')}}" class="nav-link"
+      <a href="{{url_for('routeController.studentprofile')}}" class="nav-link"
         ><i class="fa-solid fa-folder-open me-2"></i>Quản lí hồ sơ</a
       >
     </li>
     <li class="nav-item">
-      <a href="{{url_for('routeController.report')}}" class="nav-link"
+      <a href="{{url_for('routeController.kid')}}" class="nav-link"
         ><i class="fa-solid fa-children me-2"></i>Thông tin trẻ</a
       >
     </li>
     <li class="nav-item">
-      <a href="{{url_for('routeController.report')}}" class="nav-link"
+      <a href="{{url_for('routeController.feetracking')}}" class="nav-link"
         ><i class="fa-solid fa-piggy-bank me-2"></i>Theo dõi học phí</a
       >
     </li>
     <li class="nav-item">
-      <a href="{{url_for('routeController.report')}}" class="nav-link"
+      <a href="{{url_for('routeController.parentnotification')}}" class="nav-link"
         ><i class="fa-solid fa-bell me-2"></i>Thông báo</a
       >
     </li>
