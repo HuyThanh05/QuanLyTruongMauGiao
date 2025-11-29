@@ -1,20 +1,42 @@
+import enum
+
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship, column_property
+
 from app import db
 from datetime import datetime
 from flask_login import UserMixin
 
+#Enums
+class GenderEnum(enum.Enum):
+    Male = "Male"
+    Female = "Female"
+
+class PaymentMethodEnum(enum.Enum):
+    Offline = "Offline"
+    Online = "Online"
+
+class PaymentStatusEnum(enum.Enum):
+    Paid = "Paid"
+    Unpaid = "Unpaid"
+
+#Association Class
 roles_users = db.Table('roles_users',
     db.Column('user_id', db.Integer(), db.ForeignKey('users.id')),
-    db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
+    db.Column('role_id', db.Integer(), db.ForeignKey('roles.id'))
 )
 
 #Database Models
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), default='guest')
     phone = db.Column(db.String(10), nullable = False,unique=True)
     email = db.Column(db.String(50), nullable = False, unique = True)
     password_hash = db.Column(db.String(255),nullable = False)
+    account_status = db.Column(db.Boolean(), default=False)
+    last_login = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     #relationships
     roles = db.relationship('Role',secondary= roles_users,backref= 'roled')
 
@@ -22,7 +44,7 @@ class User(db.Model, UserMixin):
         return f"User({self.id}, {self.email}, {self.phone})"
 
 class Role(db.Model):
-    __tablename__ = "role"
+    __tablename__ = "roles"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
@@ -30,15 +52,69 @@ class Role(db.Model):
     def __repr__(self):
         return f"Role({self.id}, {self.name})"
 
+class Classroom(db.Model):
+    __tablename__ = "classrooms"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    term = db.Column(db.String(100), nullable=False)
+    max_slots = db.Column(db.Integer, nullable=False)
+    #relationships
+    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
 class Student(db.Model):
     __tablename__ = "students"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    class_name = db.Column(db.String(50), nullable=False)
-    parent_contact = db.Column(db.String(100), nullable=False)
+    dob = db.Column(db.DateTime, nullable=False)
+    gender = db.Column(db.Enum(GenderEnum), nullable=False)
+    address = db.Column(db.String(255), nullable=False)
+    entry_date = db.Column(db.DateTime, default=datetime.utcnow)
+    #relationships
+    parent_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    class_id = db.Column(db.Integer, db.ForeignKey('classrooms.id'))
+    tuitionfee = relationship("TuitionFee", uselist=False, back_populates="student")
 
     def __repr__(self):
-        return f"Student({self.id}, {self.name}, {self.age}, {self.class_name})"
+        return f"Student({self.id}, {self.name}, {self.age})"
 
+class HealthRecord(db.Model):
+    __tablename__ = "health_records"
+    id = db.Column(db.Integer, primary_key=True)
+    weight = db.Column(db.Float, nullable=False)
+    height = db.Column(db.Float, nullable=False)
+    temperature = db.Column(db.Float, nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    note = db.Column(db.String(255), nullable=False)
+    #relationships
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
+    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+class TuitionFee(db.Model):
+    __tablename__ = "fees"
+    id = db.Column(db.Integer, primary_key=True)
+    month = db.Column(db.Integer, nullable=False)
+    year = db.Column(db.Integer, nullable=False)
+    fee_base = db.Column(db.Float, nullable=False)
+    meal_fee = db.Column(db.Float, nullable=False)
+    extra_fee = db.Column(db.Float, nullable=False)
+    total = column_property(fee_base + meal_fee + extra_fee)
+    payment_date = db.Column(db.DateTime)
+    status = db.Column(db.Enum(PaymentStatusEnum), nullable=False)
+    #relationships
+    invoice_id = db.Column(db.Integer, db.ForeignKey('invoices.id'))
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
+    student = relationship("Student", uselist=False, back_populates="tuitionfee")
+
+
+class Invoice(db.Model):
+    __tablename__ = "invoices"
+    id = db.Column(db.Integer, primary_key=True)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    amount = db.Column(db.Float, nullable=False)
+    payment_method_id = db.Column(db.Enum(PaymentMethodEnum), nullable=False)
+    content: db.Column = db.Column(db.String(255), nullable=False)
+    #relationships
+    accountant_id = db.Column(db.Integer, db.ForeignKey('users.id'))
