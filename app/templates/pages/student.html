@@ -10,12 +10,14 @@ block content %}
           </div>
           <div>
             <div class="text-secondary small">Tổng số học sinh</div>
-            <div class="fw-bold fs-5">200</div>
+            <div class="fw-bold fs-5">{{total_students}}</div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  {% for classes in classrooms %}
   <div class="col-12 col-sm-6 col-lg-3">
     <div class="card shadow-sm border-0 h-100">
       <div class="card-body">
@@ -24,43 +26,14 @@ block content %}
             <i class="fa-solid fa-seedling icon"></i>
           </div>
           <div>
-            <div class="text-secondary small">Lớp hoa sen</div>
-            <div class="fw-bold">20.0%</div>
+            <div class="text-secondary small">{{classes.name}}</div>
+            <div class="fw-bold">{{classes.max_slots}}</div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-12 col-sm-6 col-lg-3">
-    <div class="card shadow-sm border-0 h-100">
-      <div class="card-body">
-        <div class="d-flex align-items-center gap-3">
-          <div class="rounded-3 p-3 bg-light">
-            <i class="fa-solid fa-spa icon"></i>
-          </div>
-          <div>
-            <div class="text-secondary small">Lớp hoa hồng</div>
-            <div class="fw-bold">60.0%</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-sm-6 col-lg-3">
-    <div class="card shadow-sm border-0 h-100">
-      <div class="card-body">
-        <div class="d-flex align-items-center gap-3">
-          <div class="rounded-3 p-3 bg-light">
-            <i class="fa-solid fa-sun icon"></i>
-          </div>
-          <div>
-            <div class="text-secondary small">Lớp hoa hướng dương</div>
-            <div class="fw-bold">20.0%</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  {% endfor %}
 </div>
 
 <div class="card border-0 shadow-sm">
@@ -79,9 +52,9 @@ block content %}
           </button>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#">Tất cả</a></li>
-            <li><a class="dropdown-item" href="#">Lớp hoa hướng dương</a></li>
-            <li><a class="dropdown-item" href="#">Lớp hoa hồng</a></li>
-            <li><a class="dropdown-item" href="#">Lớp hoa sen</a></li>
+            {%for class in classrooms%}
+            <li><a class="dropdown-item" href="#">{{class.name}}</a></li>
+            {%endfor%}
           </ul>
         </div>
         <div class="input-group input-group-sm">
@@ -110,30 +83,16 @@ block content %}
           </tr>
         </thead>
         <tbody>
+          {%for student in students%}
           <tr>
-            <td>1</td>
-            <td>Lê Tuấn KHôi</td>
-            <td>29/10/2005</td>
-            <td>Nam</td>
-            <td>Nguyễn Thị Luyến</td>
+            <td>{{student.id}}</td>
+            <td>{{student.name}}</td>
+            <td>{{student.formatted_dob}}</td>
+            <td>{{student.gender.value}}</td>
+            <td>{{student.parent.name}}</td>
             <td>0123456789</td>
           </tr>
-          <tr>
-            <td>2</td>
-            <td>Lê Tuấn KHôi</td>
-            <td>29/10/2005</td>
-            <td>Nam</td>
-            <td>Nguyễn Thị Luyến</td>
-            <td>0123456789</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Lê Tuấn KHôi</td>
-            <td>29/10/2005</td>
-            <td>Nam</td>
-            <td>Nguyễn Thị Luyến</td>
-            <td>0123456789</td>
-          </tr>
+          {%endfor%}
         </tbody>
       </table>
     </div>
