@@ -4,17 +4,13 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, column_property
 
 from app import db
-from datetime import datetime
+from datetime import datetime, date
 from flask_login import UserMixin
 
 #Enums
 class GenderEnum(enum.Enum):
-    Male = "Male"
-    Female = "Female"
-
-class PaymentMethodEnum(enum.Enum):
-    Offline = "Offline"
-    Online = "Online"
+    Nam = "Nam"
+    Nu = "Nữ"
 
 class PaymentStatusEnum(enum.Enum):
     Paid = "Paid"
@@ -39,18 +35,14 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     #relationships
     roles = db.relationship('Role',secondary= roles_users,backref= 'roled')
+    children = db.relationship('Student', back_populates='parent')
 
-    def __repr__(self):
-        return f"User({self.id}, {self.email}, {self.phone})"
 
 class Role(db.Model):
     __tablename__ = "roles"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
-    
-    def __repr__(self):
-        return f"Role({self.id}, {self.name})"
 
 class Classroom(db.Model):
     __tablename__ = "classrooms"
@@ -68,17 +60,22 @@ class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    dob = db.Column(db.DateTime, nullable=False)
+    dob = db.Column(db.Date, nullable=False)
     gender = db.Column(db.Enum(GenderEnum), nullable=False)
     address = db.Column(db.String(255), nullable=False)
-    entry_date = db.Column(db.DateTime, default=datetime.utcnow)
+    entry_date = db.Column(db.Date, default=date.today)  # Ngày nhập học
     #relationships
     parent_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     class_id = db.Column(db.Integer, db.ForeignKey('classrooms.id'))
     tuitionfee = relationship("TuitionFee", uselist=False, back_populates="student")
+    parent = db.relationship("User", back_populates="children")
 
-    def __repr__(self):
-        return f"Student({self.id}, {self.name}, {self.age})"
+    @property
+    def formatted_dob(self):
+        if self.dob:
+            return self.dob.strftime("%d/%m/%Y")
+        return ""
+
 
 class HealthRecord(db.Model):
     __tablename__ = "health_records"
@@ -108,13 +105,11 @@ class TuitionFee(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
     student = relationship("Student", uselist=False, back_populates="tuitionfee")
 
-
 class Invoice(db.Model):
     __tablename__ = "invoices"
     id = db.Column(db.Integer, primary_key=True)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     amount = db.Column(db.Float, nullable=False)
-    payment_method_id = db.Column(db.Enum(PaymentMethodEnum), nullable=False)
     content: db.Column = db.Column(db.String(255), nullable=False)
     #relationships
     accountant_id = db.Column(db.Integer, db.ForeignKey('users.id'))

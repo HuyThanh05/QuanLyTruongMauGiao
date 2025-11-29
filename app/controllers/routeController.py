@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, redirect, url_for, abort
 from flask_login import login_required, current_user
 from functools import wraps
 
+from app.models.Models import Classroom, Student
+
 routeController = Blueprint('routeController', __name__)
 
 #decorator wrap login_required for rbac
@@ -30,12 +32,23 @@ def home():
 @routeController.route('/student')
 @roles_required('Teacher')
 def student():
-    return render_template('pages/student.html', Title='Danh sách học sinh')
+    all_classrooms = Classroom.query.all()
+    all_students = Student.query.all()
+
+    total_students = 0
+    for classroom in all_classrooms:
+         total_students += classroom.max_slots
+
+    return render_template('pages/student.html', Title='Danh sách học sinh', students=all_students, classrooms=all_classrooms,total_students=total_students)
 
 @routeController.route('/health')
 @roles_required('Teacher')
 def health():
-    return render_template('pages/health.html', Title='Sức khỏe')
+    from app.models.Models import HealthRecord
+    all_classrooms = Classroom.query.all()
+    all_students = Student.query.all()
+
+    return render_template('pages/health.html', Title='Sức khỏe',students=all_students,classrooms=all_classrooms)
 
 @routeController.route('/schedule')
 @roles_required('Teacher')
@@ -55,7 +68,18 @@ def report():
 @routeController.route('/classsize')
 @roles_required('Teacher')
 def classsize():
-    return render_template('pages/classSize.html', Title = "Quản lý sĩ số lớp")
+    all_classrooms = Classroom.query.all()
+    all_students = Student.query.all()
+
+    classroom_student_count = {}
+    for student in all_students:
+        if student.class_id:
+            if student.class_id in classroom_student_count:
+                classroom_student_count[student.class_id] += 1
+            else:
+                classroom_student_count[student.class_id] = 1
+
+    return render_template('pages/classSize.html', Title = "Quản lý sĩ số lớp", classrooms=all_classrooms, students=all_students, classroom_student_count=classroom_student_count)
 
 
 @routeController.route('/studentprofile')
