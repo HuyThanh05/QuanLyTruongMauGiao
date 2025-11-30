@@ -1,10 +1,13 @@
-{% extends 'pages/base.html' %} {% block title %}Trang chủ{% endblock %} {%
-block breadcrumb %}{% endblock %} {% block head %}
-<link
-  rel="stylesheet"
-  href="{{ url_for('static', filename='Css/home.css') }}"
-/>
-{% endblock %} {% block content %}
+{% extends 'pages/base.html' %}
+{% block title %}Trang chủ{% endblock %}
+{% block breadcrumb %}{% endblock %}
+{% block head %}
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='Css/home.css') }}"
+  />
+{% endblock %}
+{% block content %}
 <!-- Hero Section -->
 <div class="hero-section">
   <div class="container">

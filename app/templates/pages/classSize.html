@@ -1,5 +1,6 @@
-{% extends 'pages/base.html' %} {% block title %}Sĩ số lớp{% endblock %} {%
-block content %}
+{% extends 'pages/base.html' %}
+{% block title %}Sĩ số lớp{% endblock %}
+{% block content %}
 <!-- Bộ lọc chọn lớp -->
 <div class="card border-0 shadow-sm mb-4">
   <div class="card-body">
@@ -32,18 +33,20 @@ block content %}
                 <i class="fa-solid fa-check me-2"></i>Tất cả các lớp
               </a>
             </li>
-            {% if classrooms %} {% for classroom in classrooms %}
-            <li>
-              <a
-                class="dropdown-item"
-                href="#"
-                data-classroom-id="{{ classroom.id }}"
-                data-classroom-name="{{ classroom.name }}"
-              >
-                {{ classroom.name }}
-              </a>
-            </li>
-            {% endfor %} {% endif %}
+            {% if classrooms %}
+              {% for classroom in classrooms %}
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    data-classroom-id="{{ classroom.id }}"
+                    data-classroom-name="{{ classroom.name }}"
+                  >
+                    {{ classroom.name }}
+                  </a>
+                </li>
+              {% endfor %}
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -53,40 +56,42 @@ block content %}
 
 <!-- Thống kê sĩ số các lớp -->
 <div class="row g-3 mb-4">
-  {% if classrooms %} {% for classroom in classrooms %}
-  <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-    <div class="card shadow-sm border-0 h-100">
-      <div class="card-body">
-        <div class="d-flex align-items-center gap-3">
-          <div class="rounded-3 p-3 bg-light">
-            <i class="fa-solid fa-users icon"></i>
-          </div>
-          <div class="flex-grow-1">
-            <div class="text-secondary small mb-1">{{ classroom.name }}</div>
-            <div class="fw-bold fs-5">
-              <span id="current-{{ classroom.id }}"
-                >{{classroom_student_count.get(classroom.id)}}</span
-              >
-              /
-              <span class="text-muted">{{ classroom.max_slots }}</span>
-            </div>
-            <div class="progress mt-2" style="height: 6px">
-              <div
-                class="progress-bar"
-                role="progressbar"
-                id="progress-{{ classroom.id }}"
-                style="width: 0%"
-                aria-valuenow="0"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              ></div>
+  {% if classrooms %}
+    {% for classroom in classrooms %}
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-3 p-3 bg-light">
+                <i class="fa-solid fa-users icon"></i>
+              </div>
+              <div class="flex-grow-1">
+                <div class="text-secondary small mb-1">{{ classroom.name }}</div>
+                <div class="fw-bold fs-5">
+                  <span id="current-{{ classroom.id }}">
+                    {{ classroom_student_count.get(classroom.id) }}
+                  </span>
+                  /
+                  <span class="text-muted">{{ classroom.max_slots }}</span>
+                </div>
+                <div class="progress mt-2" style="height: 6px">
+                  <div
+                    class="progress-bar"
+                    role="progressbar"
+                    id="progress-{{ classroom.id }}"
+                    style="width: 0%"
+                    aria-valuenow="0"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  {% endfor %} {% endif %}
+    {% endfor %}
+  {% endif %}
 </div>
 
 <!-- Biểu đồ và thống kê -->
@@ -96,8 +101,7 @@ block content %}
     <div class="card border-0 shadow-sm h-100">
       <div class="card-body">
         <h5 class="mb-4">
-          <i class="fa-solid fa-chart-pie icon me-2"></i>Biểu đồ phân bố giới
-          tính
+          <i class="fa-solid fa-chart-pie icon me-2"></i>Biểu đồ phân bố giới tính
         </h5>
         <div class="position-relative" style="height: 400px">
           <canvas id="genderChart"></canvas>
