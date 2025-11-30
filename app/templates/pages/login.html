@@ -35,12 +35,15 @@
               required
             />
           </div>
-          <div class="forgot-link"><a href="#">Quên mật khẩu?</a></div>
+          <div class="forgot-link">
+            <a href="#">Quên mật khẩu?</a>
+          </div>
           <button type="submit" class="btn">Đăng nhập</button>
-          {% if flashed_messages %} {% for category, message in flashed_messages
-          %}
-          <div class="flash-message">{{ message }}</div>
-          {% endfor %} {% endif %}
+          {% if flashed_messages %}
+            {% for category, message in flashed_messages %}
+              <div class="flash-message">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
           <p>Đăng nhập với các nền tảng khác</p>
           <div class="social-icons">
             <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -82,10 +85,11 @@
             />
           </div>
           <button type="submit" class="btn">Đăng ký</button>
-          {% if flashed_messages %} {% for category, message in flashed_messages
-          %}
-          <div class="flash-message">{{ message }}</div>
-          {% endfor %} {% endif %}
+          {% if flashed_messages %}
+            {% for category, message in flashed_messages %}
+              <div class="flash-message">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
           <p>Đăng ký với các nền tảng khác</p>
           <div class="social-icons">
             <a href="#"><i class="fab fa-facebook-f"></i></a>

@@ -1,99 +1,106 @@
 <nav class="sidebar p-3 sidebar-purple d-flex flex-column">
-    <a href="{{ url_for('routeController.home') }}" style="text-decoration: none;">
-    <h4 class="text-center mb-4" ><i class="fa-solid fa-school me-2"></i>Educa</h4>
-    </a>
+  <a href="{{ url_for('routeController.home') }}" style="text-decoration: none">
+    <h4 class="text-center mb-4">
+      <i class="fa-solid fa-school me-2"></i>Educa
+    </h4>
+  </a>
 
   <ul class="nav flex-column">
-
     {% if not "Admin" in current_user.roles| map(attribute="name") %}
-    <li class="nav-item">
-      <a href="{{ url_for('routeController.home') }}" class="nav-link"
-        ><i class="fa-solid fa-house me-2"></i>Trang chủ</a
-      >
-    </li>
+      <li class="nav-item">
+        <a href="{{ url_for('routeController.home') }}" class="nav-link">
+          <i class="fa-solid fa-house me-2"></i>Trang chủ
+        </a>
+      </li>
+    {% endif %}
 
-    {% endif %} {% if "Teacher" in current_user.roles| map(attribute="name") %}
-    <li class="nav-item">
-      <a href="{{ url_for('routeController.student') }}" class="nav-link"
-        ><i class="fa-regular fa-face-smile me-2"></i>Học sinh</a
-      >
-    </li>
-    <li class="nav-item">
-      <a href="{{url_for('routeController.health')}}" class="nav-link"
-        ><i class="fa-solid fa-weight-scale me-2"></i>Sức khỏe</a
-      >
-    </li>
+    {% if "Teacher" in current_user.roles| map(attribute="name") %}
+      <li class="nav-item">
+        <a href="{{ url_for('routeController.student') }}" class="nav-link">
+          <i class="fa-regular fa-face-smile me-2"></i>Học sinh
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('routeController.health') }}" class="nav-link">
+          <i class="fa-solid fa-weight-scale me-2"></i>Sức khỏe
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('routeController.classsize') }}" class="nav-link">
+          <i class="fa-solid fa-clipboard-user me-2"></i>Quản lý sĩ số lớp
+        </a>
+      </li>
+    {% endif %}
 
-    <li class="nav-item">
-      <a href="{{url_for('routeController.classsize')}}" class="nav-link"
-        ><i class="fa-solid fa-clipboard-user me-2"></i>Quản lý sĩ số lớp</a
-      >
-    </li>
-    {% endif %} {% if "Accountant" in current_user.roles| map(attribute="name")
-    %}
-    <li class="nav-item">
-      <a href="{{url_for('routeController.fee')}}" class="nav-link"
-        ><i class="fa-solid fa-coins me-2"></i>Học phí</a
-      >
-    </li>
-    <li class="nav-item">
-      <a href="{{url_for('routeController.report')}}" class="nav-link"
-        ><i class="fa-solid fa-chart-column me-2"></i>Doanh thu</a
-      >
-    </li>
-    {% endif %} {% if "Parent" in current_user.roles| map(attribute="name") %}
-    <li class="nav-item">
-      <a href="{{url_for('routeController.studentprofile')}}" class="nav-link"
-        ><i class="fa-solid fa-folder-open me-2"></i>Quản lí hồ sơ</a
-      >
-    </li>
-    <li class="nav-item">
-      <a href="{{url_for('routeController.kid')}}" class="nav-link"
-        ><i class="fa-solid fa-children me-2"></i>Thông tin trẻ</a
-      >
-    </li>
-    <li class="nav-item">
-      <a href="{{url_for('routeController.feetracking')}}" class="nav-link"
-        ><i class="fa-solid fa-piggy-bank me-2"></i>Theo dõi học phí</a
-      >
-    </li>
-    <li class="nav-item">
-      <a href="{{url_for('routeController.parentnotification')}}" class="nav-link"
-        ><i class="fa-solid fa-bell me-2"></i>Thông báo</a
-      >
-    </li>
-    {% endif %} {% if "Admin" in current_user.roles| map(attribute="name") %}
-    <li class="nav-item">
-      <a href="/admin/student" class="nav-link"
-        ><i class="fa-solid fa-people-roof me-2"></i>Quản lý trẻ</a
-      >
-    </li>
-    <li class="nav-item">
-      <a href="{{url_for('routeController.report')}}" class="nav-link"
-        ><i class="fa-solid fa-sack-dollar me-2"></i>Cấu hình học phí</a
-      >
-    </li>
-    <li class="nav-item">
-      <a href="{{url_for('routeController.report')}}" class="nav-link"
-        ><i class="fa-solid fa-users-gear me-2"></i>Cấu hình sĩ số lớp</a
-      >
-    </li>
-    <li class="nav-item">
-      <a href="/admin/user" class="nav-link"
-        ><i class="fa-solid fa-user-shield me-2"></i>Quản lý user</a
-      >
-    </li>
+    {% if "Accountant" in current_user.roles| map(attribute="name") %}
+      <li class="nav-item">
+        <a href="{{ url_for('routeController.fee') }}" class="nav-link">
+          <i class="fa-solid fa-coins me-2"></i>Học phí
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('routeController.report') }}" class="nav-link">
+          <i class="fa-solid fa-chart-column me-2"></i>Doanh thu
+        </a>
+      </li>
+    {% endif %}
+
+    {% if "Parent" in current_user.roles| map(attribute="name") %}
+      <li class="nav-item">
+        <a href="{{ url_for('routeController.studentprofile') }}" class="nav-link">
+          <i class="fa-solid fa-folder-open me-2"></i>Quản lí hồ sơ
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('routeController.kid') }}" class="nav-link">
+          <i class="fa-solid fa-children me-2"></i>Thông tin trẻ
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('routeController.feetracking') }}" class="nav-link">
+          <i class="fa-solid fa-piggy-bank me-2"></i>Theo dõi học phí
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('routeController.parentnotification') }}" class="nav-link">
+          <i class="fa-solid fa-bell me-2"></i>Thông báo
+        </a>
+      </li>
+    {% endif %}
+
+    {% if "Admin" in current_user.roles| map(attribute="name") %}
+      <li class="nav-item">
+        <a href="/admin/student" class="nav-link">
+          <i class="fa-solid fa-people-roof me-2"></i>Quản lý trẻ
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('routeController.report') }}" class="nav-link">
+          <i class="fa-solid fa-sack-dollar me-2"></i>Cấu hình học phí
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('routeController.report') }}" class="nav-link">
+          <i class="fa-solid fa-users-gear me-2"></i>Cấu hình sĩ số lớp
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/admin/user" class="nav-link">
+          <i class="fa-solid fa-user-shield me-2"></i>Quản lý user
+        </a>
+      </li>
     {% endif %}
   </ul>
+
   {% if current_user.is_authenticated %}
-  <div class="mt-auto pt-3">
-    <a
-      href="{{ url_for('authController.logout') }}"
-      class="btn logout-button w-100 d-flex align-items-center justify-content-center gap-2 fw-semibold"
-    >
-      <i class="fa-solid fa-right-from-bracket"></i>
-      Đăng xuất
-    </a>
-  </div>
+    <div class="mt-auto pt-3">
+      <a
+        href="{{ url_for('authController.logout') }}"
+        class="btn logout-button w-100 d-flex align-items-center justify-content-center gap-2 fw-semibold"
+      >
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Đăng xuất
+      </a>
+    </div>
   {% endif %}
 </nav>

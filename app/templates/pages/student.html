@@ -1,5 +1,6 @@
-{% extends 'pages/base.html' %} {% block title %}Trang chủ{% endblock %} {%
-block content %}
+{% extends 'pages/base.html' %}
+{% block title %}Trang chủ{% endblock %}
+{% block content %}
 <div class="row g-3 mb-4">
   <div class="col-12 col-sm-6 col-lg-3">
     <div class="card shadow-sm border-0 h-100">
@@ -10,7 +11,7 @@ block content %}
           </div>
           <div>
             <div class="text-secondary small">Tổng số học sinh</div>
-            <div class="fw-bold fs-5">{{total_students}}</div>
+            <div class="fw-bold fs-5">{{ total_students }}</div>
           </div>
         </div>
       </div>
@@ -18,21 +19,21 @@ block content %}
   </div>
 
   {% for classes in classrooms %}
-  <div class="col-12 col-sm-6 col-lg-3">
-    <div class="card shadow-sm border-0 h-100">
-      <div class="card-body">
-        <div class="d-flex align-items-center gap-3">
-          <div class="rounded-3 p-3 bg-light">
-            <i class="fa-solid fa-seedling icon"></i>
-          </div>
-          <div>
-            <div class="text-secondary small">{{classes.name}}</div>
-            <div class="fw-bold">{{classes.max_slots}}</div>
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-3">
+            <div class="rounded-3 p-3 bg-light">
+              <i class="fa-solid fa-seedling icon"></i>
+            </div>
+            <div>
+              <div class="text-secondary small">{{ classes.name }}</div>
+              <div class="fw-bold">{{ classes.max_slots }}</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   {% endfor %}
 </div>
 
@@ -51,16 +52,20 @@ block content %}
             Tất cả
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Tất cả</a></li>
-            {%for class in classrooms%}
-            <li><a class="dropdown-item" href="#">{{class.name}}</a></li>
-            {%endfor%}
+            <li>
+              <a class="dropdown-item" href="#">Tất cả</a>
+            </li>
+            {% for class in classrooms %}
+              <li>
+                <a class="dropdown-item" href="#">{{ class.name }}</a>
+              </li>
+            {% endfor %}
           </ul>
         </div>
         <div class="input-group input-group-sm">
-          <span class="input-group-text bg-white"
-            ><i class="fa-solid fa-magnifying-glass icon"></i
-          ></span>
+          <span class="input-group-text bg-white">
+            <i class="fa-solid fa-magnifying-glass icon"></i>
+          </span>
           <input
             type="text"
             class="form-control"
@@ -83,16 +88,16 @@ block content %}
           </tr>
         </thead>
         <tbody>
-          {%for student in students%}
-          <tr>
-            <td>{{student.id}}</td>
-            <td>{{student.name}}</td>
-            <td>{{student.formatted_dob}}</td>
-            <td>{{student.gender.value}}</td>
-            <td>{{student.parent.name}}</td>
-            <td>0123456789</td>
-          </tr>
-          {%endfor%}
+          {% for student in students %}
+            <tr>
+              <td>{{ student.id }}</td>
+              <td>{{ student.name }}</td>
+              <td>{{ student.formatted_dob }}</td>
+              <td>{{ student.gender.value }}</td>
+              <td>{{ student.parent.name }}</td>
+              <td>0123456789</td>
+            </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
@@ -109,11 +114,21 @@ block content %}
           <li class="page-item disabled">
             <a class="page-link" href="#">‹</a>
           </li>
-          <li class="page-item active"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">...</a></li>
-          <li class="page-item"><a class="page-link" href="#">24</a></li>
-          <li class="page-item"><a class="page-link" href="#">›</a></li>
+          <li class="page-item active">
+            <a class="page-link" href="#">1</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">2</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">...</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">24</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">›</a>
+          </li>
         </ul>
       </nav>
     </div>

@@ -50,21 +50,6 @@ def health():
 
     return render_template('pages/health.html', Title='Sức khỏe',students=all_students,classrooms=all_classrooms)
 
-@routeController.route('/schedule')
-@roles_required('Teacher')
-def schedule():
-    return render_template('pages/schedule.html', Title='Lịch học')
-
-@routeController.route('/fee')
-@roles_required('Accountant')
-def fee():
-    return render_template('pages/fee.html', Title='Học phí')
-
-@routeController.route('/report')
-@roles_required('Accountant')
-def report():
-    return render_template('pages/report.html', Title='Doanh thu')
-
 @routeController.route('/classsize')
 @roles_required('Teacher')
 def classsize():
@@ -81,6 +66,15 @@ def classsize():
 
     return render_template('pages/classSize.html', Title = "Quản lý sĩ số lớp", classrooms=all_classrooms, students=all_students, classroom_student_count=classroom_student_count)
 
+@routeController.route('/fee')
+@roles_required('Accountant')
+def fee():
+    return render_template('pages/fee.html', Title='Học phí')
+
+@routeController.route('/report')
+@roles_required('Accountant')
+def report():
+    return render_template('pages/report.html', Title='Doanh thu')
 
 @routeController.route('/studentprofile')
 @roles_required('Parent')

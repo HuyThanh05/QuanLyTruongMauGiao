@@ -1,5 +1,6 @@
-{% extends 'pages/base.html' %} {% block title %}Sức khỏe{% endblock %} {% block
-content %}
+{% extends 'pages/base.html' %}
+{% block title %}Sức khỏe{% endblock %}
+{% block content %}
 <!-- Thống kê sức khỏe -->
 <div class="row g-3 mb-4">
   <div class="col-12 col-sm-6 col-lg-3">
@@ -71,9 +72,9 @@ content %}
               <a class="dropdown-item" href="#">Tất cả các lớp</a>
             </li>
             {% for classroom in classrooms %}
-            <li>
-              <a class="dropdown-item" href="#"> {{ classroom.name }} </a>
-            </li>
+              <li>
+                <a class="dropdown-item" href="#">{{ classroom.name }}</a>
+              </li>
             {% endfor %}
           </ul>
         </div>
@@ -106,48 +107,51 @@ content %}
           </tr>
         </thead>
         <tbody>
-          {% if students %} {% for student in students %}
-          <tr>
-            <td>{{ loop.index }}</td>
-            <td>
-              <div class="fw-semibold">{{ student.name }}</div>
-            </td>
-            <td>{{ student.formatted_dob }}</td>
-            <td>
-              <span class="badge bg-light text-dark"
-                >{{ student.gender.value }}</span
-              >
-            </td>
-            <td>
-              {% for classroom in classrooms %} {% if classroom.id ==
-              student.class_id %}
-              <span class="badge bg-info-subtle text-info"
-                >{{ classroom.name }}</span
-              >
-              {% endif %} {% endfor %}
-            </td>
-            <td>
-              <small class="text-muted">Chưa có</small>
-            </td>
-            <td>
-              <button
-                class="btn btn-sm btn-brand"
-                data-bs-toggle="modal"
-                data-bs-target="#healthRecordModal"
-                data-student-id="{{ student.id }}"
-                data-student-name="{{ student.name }}"
-              >
-                <i class="fa-solid fa-heart-pulse me-1"></i>Ghi nhận
-              </button>
-            </td>
-          </tr>
-          {% endfor %} {% else %}
-          <tr>
-            <td colspan="7" class="text-center text-muted py-4">
-              <i class="fa-solid fa-inbox fa-2x mb-2"></i>
-              <p class="mb-0">Không có học sinh nào</p>
-            </td>
-          </tr>
+          {% if students %}
+            {% for student in students %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>
+                  <div class="fw-semibold">{{ student.name }}</div>
+                </td>
+                <td>{{ student.formatted_dob }}</td>
+                <td>
+                  <span class="badge bg-light text-dark">
+                    {{ student.gender.value }}
+                  </span>
+                </td>
+                <td>
+                  {% for classroom in classrooms %}
+                    {% if classroom.id == student.class_id %}
+                      <span class="badge bg-info-subtle text-info">
+                        {{ classroom.name }}
+                      </span>
+                    {% endif %}
+                  {% endfor %}
+                </td>
+                <td>
+                  <small class="text-muted">Chưa có</small>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-brand"
+                    data-bs-toggle="modal"
+                    data-bs-target="#healthRecordModal"
+                    data-student-id="{{ student.id }}"
+                    data-student-name="{{ student.name }}"
+                  >
+                    <i class="fa-solid fa-heart-pulse me-1"></i>Ghi nhận
+                  </button>
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="7" class="text-center text-muted py-4">
+                <i class="fa-solid fa-inbox fa-2x mb-2"></i>
+                <p class="mb-0">Không có học sinh nào</p>
+              </td>
+            </tr>
           {% endif %}
         </tbody>
       </table>
@@ -164,7 +168,9 @@ content %}
           <li class="page-item active">
             <a class="page-link" href="#">1</a>
           </li>
-          <li class="page-item"><a class="page-link" href="#">›</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">›</a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -207,9 +213,9 @@ content %}
           </div>
           <div class="row">
             <div class="col-md-4 mb-3">
-              <label for="weight" class="form-label fw-semibold"
-                >Cân nặng (kg)</label
-              >
+              <label for="weight" class="form-label fw-semibold">
+                Cân nặng (kg)
+              </label>
               <input
                 type="number"
                 class="form-control"
@@ -222,9 +228,9 @@ content %}
               />
             </div>
             <div class="col-md-4 mb-3">
-              <label for="height" class="form-label fw-semibold"
-                >Chiều cao (cm)</label
-              >
+              <label for="height" class="form-label fw-semibold">
+                Chiều cao (cm)
+              </label>
               <input
                 type="number"
                 class="form-control"
@@ -237,9 +243,9 @@ content %}
               />
             </div>
             <div class="col-md-4 mb-3">
-              <label for="temperature" class="form-label fw-semibold"
-                >Nhiệt độ (°C)</label
-              >
+              <label for="temperature" class="form-label fw-semibold">
+                Nhiệt độ (°C)
+              </label>
               <input
                 type="number"
                 class="form-control"
