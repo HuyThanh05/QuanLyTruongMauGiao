@@ -4,7 +4,7 @@ from functools import wraps
 
 from app.models.Models import Classroom, Student
 
-routeController = Blueprint('routeController', __name__)
+page_routes = Blueprint('pages', __name__)
 
 #decorator wrap login_required for rbac
 def roles_required(*role_names):
@@ -13,9 +13,7 @@ def roles_required(*role_names):
         @wraps(f)
         @login_required
         def decorated_function(*args, **kwargs):
-            if not current_user.is_authenticated:
-                abort(403)
-            
+            # @login_required đã đảm bảo user đã authenticated
             # Check if user has any of the required roles
             user_roles = [role.name for role in current_user.roles]
             if not any(role in user_roles for role in role_names):
@@ -25,23 +23,21 @@ def roles_required(*role_names):
         return decorated_function
     return decorator
 
-@routeController.route('/')
+@page_routes.route('/')
 def home():
     return render_template('pages/home.html', Title='Trang chủ')
 
-@routeController.route('/student')
+@page_routes.route('/student')
 @roles_required('Teacher')
 def student():
     all_classrooms = Classroom.query.all()
     all_students = Student.query.all()
 
-    total_students = 0
-    for classroom in all_classrooms:
-         total_students += classroom.max_slots
+    total_students = sum(classroom.max_slots for classroom in all_classrooms)
 
     return render_template('pages/student.html', Title='Danh sách học sinh', students=all_students, classrooms=all_classrooms,total_students=total_students)
 
-@routeController.route('/health')
+@page_routes.route('/health')
 @roles_required('Teacher')
 def health():
     from app.models.Models import HealthRecord
@@ -50,7 +46,7 @@ def health():
 
     return render_template('pages/health.html', Title='Sức khỏe',students=all_students,classrooms=all_classrooms)
 
-@routeController.route('/classsize')
+@page_routes.route('/classsize')
 @roles_required('Teacher')
 def classsize():
     all_classrooms = Classroom.query.all()
@@ -66,41 +62,41 @@ def classsize():
 
     return render_template('pages/classSize.html', Title = "Quản lý sĩ số lớp", classrooms=all_classrooms, students=all_students, classroom_student_count=classroom_student_count)
 
-@routeController.route('/fee')
+@page_routes.route('/fee')
 @roles_required('Accountant')
 def fee():
     return render_template('pages/fee.html', Title='Học phí')
 
-@routeController.route('/report')
+@page_routes.route('/report')
 @roles_required('Accountant')
 def report():
     return render_template('pages/report.html', Title='Doanh thu')
 
-@routeController.route('/studentprofile')
+@page_routes.route('/studentprofile')
 @roles_required('Parent')
 def studentprofile():
     return render_template('pages/studentProfile.html', Title = "Quản lý hồ sơ")
 
-@routeController.route('/kidtracking')
+@page_routes.route('/kidtracking')
 @roles_required('Parent')
 def kid():
     return render_template('pages/kid.html',Title = "Thông tin trẻ")
 
-@routeController.route('/feetracking')
+@page_routes.route('/feetracking')
 @roles_required('Parent')
 def feetracking():
     return render_template('pages/feeTracking.html', Title = "Theo dõi học phí")
 
-@routeController.route('/parent/notification')
+@page_routes.route('/parent/notification')
 @roles_required('Parent')
 def parentnotification():
     return render_template('pages/parentNotification.html', Title = "Thông báo")
 
-@routeController.route('/signup', methods=['GET'])
+@page_routes.route('/signup', methods=['GET'])
 def signup():
     return render_template('pages/login.html')
 
-@routeController.route('/administrator')
+@page_routes.route('/administrator')
 @roles_required('Admin')
 def administrator():
     return redirect(url_for('admin.index'))

@@ -29,7 +29,7 @@ body {
 .container {
   position: relative;
   width: 850px;
-  height: 550px;
+  height: 620px; /* tăng thêm để không cần cuộn khi có trường mới */
   background: #fff;
   margin: 20px;
   border-radius: 30px;
@@ -65,7 +65,7 @@ body {
   align-items: center;
   text-align: center;
   color: #333;
-  padding: 40px;
+  padding: 32px; /* giảm padding để thoáng chỗ cho form */
   z-index: 1;
   transition: 0.6s ease-in-out 1.2s, visibility 0s 1s;
 }
@@ -102,7 +102,7 @@ body {
 /* Khoảng cách mỗi ô nhập. Giảm để sát hơn.tăng để thoáng hơn */
 .input-box {
   position: relative;
-  margin: 30px 0;
+  margin: 24px 0; /* giảm khoảng cách dọc để không tràn */
 }
 /* Cảm giác kích thước ô nhập = padding + font-size */
 .input-box input {

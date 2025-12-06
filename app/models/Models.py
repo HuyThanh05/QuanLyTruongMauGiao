@@ -1,4 +1,5 @@
 import enum
+from typing import List
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, column_property
@@ -6,6 +7,9 @@ from sqlalchemy.orm import relationship, column_property
 from app import db
 from datetime import datetime, date
 from flask_login import UserMixin
+
+from app.models.DTO import UserDTO
+
 
 #Enums
 class GenderEnum(enum.Enum):
@@ -36,7 +40,6 @@ class User(db.Model, UserMixin):
     #relationships
     roles = db.relationship('Role',secondary= roles_users,backref= 'roled')
     children = db.relationship('Student', back_populates='parent')
-
 
 class Role(db.Model):
     __tablename__ = "roles"
@@ -76,7 +79,6 @@ class Student(db.Model):
             return self.dob.strftime("%d/%m/%Y")
         return ""
 
-
 class HealthRecord(db.Model):
     __tablename__ = "health_records"
     id = db.Column(db.Integer, primary_key=True)
@@ -113,3 +115,25 @@ class Invoice(db.Model):
     content: db.Column = db.Column(db.String(255), nullable=False)
     #relationships
     accountant_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+#Mapping model to DTO
+def user_to_dto(user: User) -> UserDTO:
+    return UserDTO(
+        id = user.id,
+        name = user.name,
+        phone = user.phone,
+        email = user.email,
+        roles = [r.name for r in user.roles]
+    )
+
+def users_to_dto(users: List[User]) -> List[UserDTO]:
+    return [user_to_dto(u) for u in users]
+
+def dto_to_user(dto:UserDTO) -> User:
+    user = User(
+        name = dto.name,
+        phone = dto.phone,
+        email = dto.email
+    )
+    return user
+

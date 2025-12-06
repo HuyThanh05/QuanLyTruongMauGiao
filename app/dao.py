@@ -49,19 +49,50 @@ def create_users():
         parent_role = Role.query.filter_by(name='Parent').first()
         accountant_role = Role.query.filter_by(name='Accountant').first()
 
-        u1 = User(name = "khoideptrai",phone='0123456789', email='admin1@example.com', password_hash=generate_password_hash('123456'))
-        u1.roles.append(admin_role)
+        users = [
+            {
+                "name": "Admin One",
+                "phone": "0900000001",
+                "email": "admin1@example.com",
+                "password": "123456",
+                "role": admin_role,
+            },
+            {
+                "name": "Teacher One",
+                "phone": "0900000002",
+                "email": "teacher1@example.com",
+                "password": "123456",
+                "role": teacher_role,
+            },
+            {
+                "name": "Parent One",
+                "phone": "0900000003",
+                "email": "parent1@example.com",
+                "password": "123456",
+                "role": parent_role,
+            },
+            {
+                "name": "Accountant One",
+                "phone": "0900000004",
+                "email": "accountant1@example.com",
+                "password": "123456",
+                "role": accountant_role,
+            },
+        ]
 
-        u2 = User(name = "khoideptrai",phone='0123456788', email='teacher1@example.com', password_hash=generate_password_hash('123456'))
-        u2.roles.append(teacher_role)
+        user_entities = []
+        for u in users:
+            user = User(
+                name=u["name"],
+                phone=u["phone"],
+                email=u["email"],
+                password_hash=generate_password_hash(u["password"]),
+            )
+            if u["role"]:
+                user.roles.append(u["role"])
+            user_entities.append(user)
 
-        u3 = User(name = "khoideptrai",phone='0123456787', email='parent1@example.com', password_hash=generate_password_hash('123456'))
-        u3.roles.append(parent_role)
-
-        u4 = User(name = "khoideptrai",phone='0123456786', email='accountant1@example.com', password_hash=generate_password_hash('123456'))
-        u4.roles.append(accountant_role)
-
-        db.session.add_all([u1, u2, u3, u4])
+        db.session.add_all(user_entities)
         db.session.commit()
         print("Users created successfully!")
 
