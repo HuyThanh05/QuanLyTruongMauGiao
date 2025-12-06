@@ -1,10 +1,14 @@
 /*SIDEBAR*/
 .sidebar {
+  position: fixed; /* giữ sidebar cố định trên màn hình */
+  top: 0;
+  left: 0;
   width: 220px;
+  height: 100vh;
   flex: 0 0 220px; /* cố định chiều ngang, không co giãn theo flex */
   min-width: 220px;
-  align-self: stretch; /* kéo dài theo chiều cao của body (trang) */
-  min-height: 100vh; /* ít nhất bằng chiều cao màn hình */
+  overflow-y: auto; /* menu cuộn nếu quá dài */
+  z-index: 99;
 }
 
 /* Sidebar tím nhẹ */
@@ -21,6 +25,25 @@
 
 .sidebar-purple h4 {
   color: var(--sidebar-text);
+}
+
+.sidebar .brand-link {
+  text-decoration: none;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.sidebar .brand-title {
+  color: #5b4a8f;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #e6dcff; /* nhấn nhẹ, tách khỏi menu */
+}
+
+.sidebar .brand-link:hover .brand-title {
+  color: #6f42c1;
+  border-color: #d3c2ff;
 }
 
 .sidebar-purple .nav-link {
@@ -56,6 +79,15 @@
   padding: 0.65rem 1.25rem;
   box-shadow: 0 6px 16px rgba(111, 66, 193, 0.18);
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.sidebar .logout-container {
+  position: fixed;
+  left: 0;
+  bottom: 1rem; /* luôn hiển thị ở đáy màn hình */
+  width: 220px; /* khớp chiều rộng sidebar */
+  padding: 0 16px;
+  z-index: 1000;
 }
 
 .sidebar .logout-button i {

@@ -31,7 +31,7 @@ def create_app():
     db.init_app(app)
     migrate = Migrate(app, db)
     login_manager.init_app(app)
-    login_manager.login_view = "routeController.signup"
+    login_manager.login_view = "pages.signup"
     login_manager.login_message = "Bạn phải đăng nhập để xem chức năng này"
     babel.init_app(app)
     
@@ -46,11 +46,13 @@ def create_app():
     with app.app_context():
         db.create_all()
 
-    from app.controllers.routeController import routeController
-    from app.controllers.authController import authController
+    from app.controllers.page_routes import page_routes
+    from app.controllers.auth_routes import auth_service
+    from app.controllers.user_api import user_api
 
-    app.register_blueprint(routeController)
-    app.register_blueprint(authController)
+    app.register_blueprint(page_routes)
+    app.register_blueprint(auth_service)
+    app.register_blueprint(user_api, url_prefix='/api/users')
 
     # flask-admin
     admin.init_app(app)
