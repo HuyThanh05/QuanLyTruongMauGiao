@@ -1,4 +1,98 @@
-{% extends 'pages/base.html' %} {% block title %}Trang chủ{% endblock %} {%
-block content %}
-<p>Home</p>
+{% extends 'pages/base.html' %}
+{% block title %}Trang chủ{% endblock %}
+{% block breadcrumb %}{% endblock %}
+{% block head %}
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='Css/home.css') }}"
+  />
+{% endblock %}
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section">
+  <div class="container">
+    <div class="hero-content-wrapper">
+      <!-- Logo -->
+      <div class="logo-container">
+        <div class="logo-wrapper">
+          <i class="fa-solid fa-graduation-cap logo-icon"></i>
+          <h1 class="logo-text">Educa</h1>
+        </div>
+      </div>
+      <!-- Slogan -->
+      <div class="slogan-container">
+        <p class="slogan-text">
+          Nền tảng quản lý mầm non thông minh –
+          <span class="highlight-text">An toàn</span> –
+          <span class="highlight-text">Tiện lợi</span> –
+          <span class="highlight-text">Hiệu quả</span>
+        </p>
+      </div>
+      <!-- Features Icons -->
+      <div class="features-icons">
+        <div class="row g-4 justify-content-center">
+          <div class="col-6 col-md-4 col-lg-3 text-center">
+            <div class="feature-icon-wrapper">
+              <i class="fa-solid fa-shield-halved feature-icon"></i>
+              <small class="d-block mt-2 text-muted">An toàn</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3 text-center">
+            <div class="feature-icon-wrapper">
+              <i class="fa-solid fa-bolt feature-icon"></i>
+              <small class="d-block mt-2 text-muted">Tiện lợi</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3 text-center">
+            <div class="feature-icon-wrapper">
+              <i class="fa-solid fa-chart-line feature-icon"></i>
+              <small class="d-block mt-2 text-muted">Hiệu quả</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Welcome Cards Section -->
+<div class="welcome-cards-section py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="welcome-card">
+          <div class="welcome-card-icon">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <h5 class="welcome-card-title">Quản lý học sinh</h5>
+          <p class="welcome-card-text">
+            Theo dõi thông tin học sinh một cách chi tiết và chính xác
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="welcome-card">
+          <div class="welcome-card-icon">
+            <i class="fa-solid fa-calendar-days"></i>
+          </div>
+          <h5 class="welcome-card-title">Lịch học & Hoạt động</h5>
+          <p class="welcome-card-text">
+            Quản lý thời khóa biểu và các hoạt động hàng ngày
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="welcome-card">
+          <div class="welcome-card-icon">
+            <i class="fa-solid fa-heart-pulse"></i>
+          </div>
+          <h5 class="welcome-card-title">Sức khỏe & Dinh dưỡng</h5>
+          <p class="welcome-card-text">
+            Ghi nhận và theo dõi tình trạng sức khỏe của trẻ
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

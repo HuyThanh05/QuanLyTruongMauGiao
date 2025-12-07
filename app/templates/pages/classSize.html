@@ -1,0 +1,162 @@
+{% extends 'pages/base.html' %}
+{% block title %}Sĩ số lớp{% endblock %}
+{% block content %}
+<!-- Bộ lọc chọn lớp -->
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <div
+      class="d-flex flex-wrap gap-2 align-items-center justify-content-between"
+    >
+      <h5 class="mb-0">
+        <i class="fa-solid fa-filter icon me-2"></i>Lọc theo lớp
+      </h5>
+      <div class="d-flex gap-2">
+        <!-- Dropdown chọn lớp -->
+        <div class="btn-group">
+          <button
+            class="btn btn-outline-secondary btn-sm dropdown-toggle"
+            type="button"
+            id="classroomFilterBtn"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Tất cả các lớp
+          </button>
+          <ul class="dropdown-menu" id="classroomFilterMenu">
+            <li>
+              <a
+                class="dropdown-item active"
+                href="#"
+                data-classroom-id="all"
+                data-classroom-name="Tất cả các lớp"
+              >
+                <i class="fa-solid fa-check me-2"></i>Tất cả các lớp
+              </a>
+            </li>
+            {% if classrooms %}
+              {% for classroom in classrooms %}
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    data-classroom-id="{{ classroom.id }}"
+                    data-classroom-name="{{ classroom.name }}"
+                  >
+                    {{ classroom.name }}
+                  </a>
+                </li>
+              {% endfor %}
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Thống kê sĩ số các lớp -->
+<div class="row g-3 mb-4">
+  {% if classrooms %}
+    {% for classroom in classrooms %}
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-3 p-3 bg-light">
+                <i class="fa-solid fa-users icon"></i>
+              </div>
+              <div class="flex-grow-1">
+                <div class="text-secondary small mb-1">{{ classroom.name }}</div>
+                <div class="fw-bold fs-5">
+                  <span id="current-{{ classroom.id }}">
+                    {{ classroom_student_count.get(classroom.id) }}
+                  </span>
+                  /
+                  <span class="text-muted">{{ classroom.max_slots }}</span>
+                </div>
+                <div class="progress mt-2" style="height: 6px">
+                  <div
+                    class="progress-bar"
+                    role="progressbar"
+                    id="progress-{{ classroom.id }}"
+                    style="width: 0%"
+                    aria-valuenow="0"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+
+<!-- Biểu đồ và thống kê -->
+<div class="row g-3 mb-4">
+  <!-- Biểu đồ giới tính -->
+  <div class="col-12 col-lg-8">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="mb-4">
+          <i class="fa-solid fa-chart-pie icon me-2"></i>Biểu đồ phân bố giới tính
+        </h5>
+        <div class="position-relative" style="height: 400px">
+          <canvas id="genderChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Thống kê tổng quan -->
+  <div class="col-12 col-lg-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="mb-4">
+          <i class="fa-solid fa-chart-bar icon me-2"></i>Thống kê tổng quan
+        </h5>
+        <div class="d-flex flex-column gap-3">
+          <div
+            class="d-flex align-items-center justify-content-between p-3 bg-light rounded"
+          >
+            <div>
+              <div class="text-secondary small">Tổng số học sinh</div>
+              <div class="fw-bold fs-4" id="total-students">0</div>
+            </div>
+            <div class="rounded-circle bg-primary bg-opacity-10 p-3">
+              <i class="fa-solid fa-users icon fs-4"></i>
+            </div>
+          </div>
+          <div
+            class="d-flex align-items-center justify-content-between p-3 bg-light rounded"
+          >
+            <div>
+              <div class="text-secondary small">Tổng sức chứa</div>
+              <div class="fw-bold fs-4" id="total-capacity">0</div>
+            </div>
+            <div class="rounded-circle bg-info bg-opacity-10 p-3">
+              <i class="fa-solid fa-door-open icon fs-4"></i>
+            </div>
+          </div>
+          <div
+            class="d-flex align-items-center justify-content-between p-3 bg-light rounded"
+          >
+            <div>
+              <div class="text-secondary small">Tỷ lệ sử dụng</div>
+              <div class="fw-bold fs-4" id="usage-rate">0%</div>
+            </div>
+            <div class="rounded-circle bg-success bg-opacity-10 p-3">
+              <i class="fa-solid fa-gauge-high icon fs-4"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Script cho Chart.js (người dùng sẽ tự thêm code chart) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{% endblock %}
