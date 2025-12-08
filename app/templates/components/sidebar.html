@@ -1,4 +1,4 @@
-<nav class="sidebar vh-100 p-3 sidebar-purple">
+<nav class="sidebar vh-100 p-3 sidebar-purple d-flex flex-column">
   <h4 class="text-center mb-4"><i class="fa-solid fa-school me-2"></i>Educa</h4>
   <ul class="nav flex-column">
     <li class="nav-item">
@@ -13,10 +13,10 @@
     </li>
     <li class="nav-item">
       <a href="{{url_for('routeController.health')}}" class="nav-link"
-        ><i class="fa-solid fa-weight-scale me-2"></i></i>Sức khỏe</a
+        ><i class="fa-solid fa-weight-scale me-2"></i>Sức khỏe</a
       >
     </li>
-  
+
     <li class="nav-item">
       <a href="{{url_for('routeController.schedule')}}" class="nav-link"
         ><i class="fa-solid fa-calendar-days me-2"></i>Lịch học</a
@@ -33,4 +33,15 @@
       >
     </li>
   </ul>
+  {% if current_user.is_authenticated %}
+  <div class="mt-auto pt-3">
+    <a
+      href="{{ url_for('authController.logout') }}"
+      class="btn logout-button w-100 d-flex align-items-center justify-content-center gap-2 fw-semibold"
+    >
+      <i class="fa-solid fa-right-from-bracket"></i>
+      Đăng xuất
+    </a>
+  </div>
+  {% endif %}
 </nav>
