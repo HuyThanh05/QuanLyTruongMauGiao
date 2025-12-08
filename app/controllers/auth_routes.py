@@ -2,7 +2,6 @@ from flask import Blueprint, request, url_for, redirect, flash, current_app
 from flask_login import login_user, logout_user, current_user
 from flask_principal import identity_changed, Identity
 
-from app.models.Models import User
 from app.services.auth_service import (
     authenticate_user,
     signup_parent_user,

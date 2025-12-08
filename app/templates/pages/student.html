@@ -1,6 +1,5 @@
-{% extends 'pages/base.html' %}
-{% block title %}Trang chủ{% endblock %}
-{% block content %}
+{% extends 'pages/base.html' %} {% block title %}Trang chủ{% endblock %} {%
+block content %}
 <div class="row g-3 mb-4">
   <div class="col-12 col-sm-6 col-lg-3">
     <div class="card shadow-sm border-0 h-100">
@@ -19,21 +18,23 @@
   </div>
 
   {% for classes in classrooms %}
-    <div class="col-12 col-sm-6 col-lg-3">
-      <div class="card shadow-sm border-0 h-100">
-        <div class="card-body">
-          <div class="d-flex align-items-center gap-3">
-            <div class="rounded-3 p-3 bg-light">
-              <i class="fa-solid fa-seedling icon"></i>
-            </div>
-            <div>
-              <div class="text-secondary small">{{ classes.name }}</div>
-              <div class="fw-bold">{{ classes.max_slots }}</div>
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body">
+        <div class="d-flex align-items-center gap-3">
+          <div class="rounded-3 p-3 bg-light">
+            <i class="fa-solid fa-seedling icon"></i>
+          </div>
+          <div>
+            <div class="text-secondary small">{{ classes.name }}</div>
+            <div class="fw-bold">
+              {{ classroom_student_counts[classes.id] }}
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
   {% endfor %}
 </div>
 
@@ -43,36 +44,41 @@
       class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3"
     >
       <h5 class="mb-0">Danh sách học sinh</h5>
-      <div class="d-flex gap-2">
-        <div class="btn-group">
-          <button
-            class="btn btn-outline-secondary btn-sm dropdown-toggle"
-            data-bs-toggle="dropdown"
-          >
-            Tất cả
-          </button>
-          <ul class="dropdown-menu">
-            <li>
-              <a class="dropdown-item" href="#">Tất cả</a>
-            </li>
-            {% for class in classrooms %}
+      <form method="GET" action="{{ url_for('pages.student') }}">
+        <div class="d-flex gap-2">
+          <div class="btn-group">
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm dropdown-toggle"
+              data-bs-toggle="dropdown"
+            >
+              Tất cả
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="#">Tất cả</a>
+              </li>
+              {% for class in classrooms %}
               <li>
                 <a class="dropdown-item" href="#">{{ class.name }}</a>
               </li>
-            {% endfor %}
-          </ul>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="input-group input-group-sm">
+            <span class="input-group-text bg-white">
+              <i class="fa-solid fa-magnifying-glass icon"></i>
+            </span>
+            <input
+              type="text"
+              name="q"
+              class="form-control"
+              placeholder="Tìm kiếm học sinh"
+              value="{{ request.args.get('q', '') }}"
+            />
+          </div>
         </div>
-        <div class="input-group input-group-sm">
-          <span class="input-group-text bg-white">
-            <i class="fa-solid fa-magnifying-glass icon"></i>
-          </span>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Tìm kiếm học sinh"
-          />
-        </div>
-      </div>
+      </form>
     </div>
 
     <div class="table-responsive">
@@ -83,20 +89,25 @@
             <th>Họ tên trẻ</th>
             <th>Ngày sinh</th>
             <th>Giới tính</th>
+            <th>Lớp</th>
             <th>Phụ huynh</th>
             <th>Số điện thoại liên hệ</th>
           </tr>
         </thead>
         <tbody>
           {% for student in students %}
-            <tr>
-              <td>{{ student.id }}</td>
-              <td>{{ student.name }}</td>
-              <td>{{ student.formatted_dob }}</td>
-              <td>{{ student.gender.value }}</td>
-              <td>{{ student.parent.name }}</td>
-              <td>0123456789</td>
-            </tr>
+          <tr>
+            <td>{{ student.id }}</td>
+            <td>{{ student.name }}</td>
+            <td>{{ student.formatted_dob }}</td>
+            <td>{{ student.gender.value }}</td>
+            <td>
+              {{ student.classroom.name if student.classroom else 'Chưa phân
+              lớp' }}
+            </td>
+            <td>{{ student.parent.name }}</td>
+            <td>0123456789</td>
+          </tr>
           {% endfor %}
         </tbody>
       </table>

@@ -1,6 +1,4 @@
 from flask import Blueprint, jsonify, request
-from flask_security import hash_password
-
 from app import db
 from app.models.DTO import UserDTO
 from app.models.Models import User, users_to_dto, user_to_dto

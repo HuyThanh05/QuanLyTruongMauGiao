@@ -19,23 +19,22 @@ Hệ thống quản lý toàn diện cho trường mẫu giáo, được xây d�
 ```
 QuanLyTruongMauGiao/
 ├── app/
-│   ├── controllers/    # Xử lý logic nghiệp vụ
-│   ├── models/        # Mô hình dữ liệu
-│   └── views/         # Giao diện người dùng
-├── static/           # File tĩnh (CSS, JS, images)
-├── templates/        # Templates HTML
-├── requirements.txt  # Các thư viện cần thiết
-└── run.py           # File khởi chạy ứng dụng
+│   ├── controllers/      # route/view layer (pages, auth_routes, user_api)
+│   ├── services/         # nghiệp vụ (auth_service, user_service)
+│   ├── models/           # Models, DTO, enums
+│   └── static/, templates/ (được Flask cấu hình ở ngoài)
+├── static/               # File tĩnh (Css, Js)
+├── templates/            # Templates HTML
+├── migrations/           # Alembic migration
+├── instance/database.sqlite3
+├── requirements.txt      # Thư viện
+└── run.py                # Khởi chạy ứng dụng
 ```
 
 ## Yêu Cầu Hệ Thống
 
-- Python 3.7+
-- Các thư viện Python (được liệt kê trong `requirements.txt`):
-  - Flask==3.0.0
-  - Werkzeug==3.0.1
-  - Jinja2==3.1.2
-  - và các thư viện phụ thuộc khác
+- Python 3.11+
+- Cài đặt qua `pip install -r requirements.txt`
 
 ## Hướng Dẫn Cài Đặt
 
@@ -94,6 +93,13 @@ Mọi đóng góp đều được chào đón! Vui lòng:
 3. Commit thay đổi (`git commit -m 'Add some AmazingFeature'`)
 4. Push lên branch (`git push origin feature/AmazingFeature`)
 5. Mở Pull Request
+
+## Ghi chú nhanh
+
+- Blueprint: `pages` (UI), `auth` (signup/login/logout), `user_api` (REST, prefix `/api/users`).
+- Đăng ký người dùng luôn gán role `Parent`; role khác cấp qua admin.
+- Seeder `app/dao.py` tạo 4 user mẫu (Admin/Teacher/Parent/Accountant) mật khẩu `123456`.
+- Chạy: `python run.py` (Flask debug). DB mặc định `instance/database.sqlite3`. Config DB/SECRET_KEY nên tách ENV khi deploy.
 
 ## Giấy Phép
 

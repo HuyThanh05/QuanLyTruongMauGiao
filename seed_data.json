@@ -1,0 +1,1026 @@
+{
+  "roles": [
+    { "id": 1, "name": "Admin" },
+    { "id": 2, "name": "Teacher" },
+    { "id": 3, "name": "Accountant" },
+    { "id": 4, "name": "Parent" }
+  ],
+  "users": [
+    {
+      "name": "Nguyễn Văn Minh",
+      "phone": "0123456789",
+      "email": "admin1@example.com",
+      "password": "123456",
+      "role": "Admin"
+    },
+    {
+      "name": "Trần Thị Lan",
+      "phone": "0123456788",
+      "email": "teacher1@example.com",
+      "password": "123456",
+      "role": "Teacher"
+    },
+    {
+      "name": "Lê Văn Hùng",
+      "phone": "0123456787",
+      "email": "parent1@example.com",
+      "password": "123456",
+      "role": "Parent"
+    },
+    {
+      "name": "Phạm Thị Mai",
+      "phone": "0123456786",
+      "email": "accountant1@example.com",
+      "password": "123456",
+      "role": "Accountant"
+    }
+  ],
+  "classrooms": [
+    {
+      "name": "Lớp Mầm 1",
+      "term": "2024-2025",
+      "max_slots": 30,
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "name": "Lớp Chồi 1",
+      "term": "2024-2025",
+      "max_slots": 30,
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "name": "Lớp Lá 1",
+      "term": "2024-2025",
+      "max_slots": 30,
+      "teacher_email": "teacher1@example.com"
+    }
+  ],
+  "students": [
+    {
+      "name": "Nguyễn Minh Anh",
+      "age": 5,
+      "dob": "2020-05-10",
+      "gender": "Nam",
+      "address": "123 Đường Nguyễn Huệ, Quận 1, TP.HCM",
+      "entry_date": "2024-08-15",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Mầm 1"
+    },
+    {
+      "name": "Trần Thảo Linh",
+      "age": 4,
+      "dob": "2021-03-22",
+      "gender": "Nữ",
+      "address": "456 Đường Lê Lợi, Quận 3, TP.HCM",
+      "entry_date": "2024-08-20",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Chồi 1"
+    },
+    {
+      "name": "Lê Đức An",
+      "age": 5,
+      "dob": "2020-07-15",
+      "gender": "Nam",
+      "address": "789 Đường Võ Văn Tần, Quận 5, TP.HCM",
+      "entry_date": "2024-08-18",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Mầm 1"
+    },
+    {
+      "name": "Phạm Ngọc Mai",
+      "age": 4,
+      "dob": "2021-01-08",
+      "gender": "Nữ",
+      "address": "321 Đường Nguyễn Trãi, Quận 7, TP.HCM",
+      "entry_date": "2024-08-22",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Chồi 1"
+    },
+    {
+      "name": "Hoàng Minh Khang",
+      "age": 6,
+      "dob": "2019-09-25",
+      "gender": "Nam",
+      "address": "654 Đường Điện Biên Phủ, Quận 2, TP.HCM",
+      "entry_date": "2024-08-16",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Lá 1"
+    },
+    {
+      "name": "Vũ Thảo Vy",
+      "age": 4,
+      "dob": "2021-04-12",
+      "gender": "Nữ",
+      "address": "987 Đường Cách Mạng Tháng 8, Quận 10, TP.HCM",
+      "entry_date": "2024-08-25",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Mầm 1"
+    },
+    {
+      "name": "Đặng Quang Huy",
+      "age": 5,
+      "dob": "2020-06-30",
+      "gender": "Nam",
+      "address": "147 Đường Nguyễn Thị Minh Khai, Quận 4, TP.HCM",
+      "entry_date": "2024-08-19",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Chồi 1"
+    },
+    {
+      "name": "Bùi Ngọc Hân",
+      "age": 4,
+      "dob": "2021-02-14",
+      "gender": "Nữ",
+      "address": "258 Đường Lý Thường Kiệt, Quận 6, TP.HCM",
+      "entry_date": "2024-08-21",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Mầm 1"
+    },
+    {
+      "name": "Ngô Minh Tuấn",
+      "age": 5,
+      "dob": "2020-08-05",
+      "gender": "Nam",
+      "address": "369 Đường Trần Hưng Đạo, Quận 8, TP.HCM",
+      "entry_date": "2024-08-17",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Chồi 1"
+    },
+    {
+      "name": "Đỗ Ngọc Nhi",
+      "age": 4,
+      "dob": "2021-05-18",
+      "gender": "Nữ",
+      "address": "741 Đường Nguyễn Văn Cừ, Quận 11, TP.HCM",
+      "entry_date": "2024-08-23",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Lá 1"
+    },
+    {
+      "name": "Võ Minh Đức",
+      "age": 5,
+      "dob": "2020-03-20",
+      "gender": "Nam",
+      "address": "852 Đường Pasteur, Quận 1, TP.HCM",
+      "entry_date": "2024-08-24",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Mầm 1"
+    },
+    {
+      "name": "Lý Thảo My",
+      "age": 4,
+      "dob": "2021-06-15",
+      "gender": "Nữ",
+      "address": "963 Đường Nam Kỳ Khởi Nghĩa, Quận 3, TP.HCM",
+      "entry_date": "2024-08-26",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Chồi 1"
+    },
+    {
+      "name": "Trịnh Quang Hải",
+      "age": 5,
+      "dob": "2020-02-28",
+      "gender": "Nam",
+      "address": "159 Đường Nguyễn Đình Chiểu, Quận 5, TP.HCM",
+      "entry_date": "2024-08-27",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Mầm 1"
+    },
+    {
+      "name": "Dương Thị Hương",
+      "age": 4,
+      "dob": "2021-07-10",
+      "gender": "Nữ",
+      "address": "357 Đường Huỳnh Tấn Phát, Quận 7, TP.HCM",
+      "entry_date": "2024-08-28",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Chồi 1"
+    },
+    {
+      "name": "Cao Minh Quân",
+      "age": 6,
+      "dob": "2019-10-05",
+      "gender": "Nam",
+      "address": "468 Đường Nguyễn Thị Định, Quận 2, TP.HCM",
+      "entry_date": "2024-08-29",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Lá 1"
+    },
+    {
+      "name": "Lương Thị Hoa",
+      "age": 4,
+      "dob": "2021-08-22",
+      "gender": "Nữ",
+      "address": "579 Đường Lạc Long Quân, Quận 10, TP.HCM",
+      "entry_date": "2024-08-30",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Mầm 1"
+    },
+    {
+      "name": "Đinh Văn Long",
+      "age": 5,
+      "dob": "2020-04-14",
+      "gender": "Nam",
+      "address": "680 Đường Khánh Hội, Quận 4, TP.HCM",
+      "entry_date": "2024-09-01",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Chồi 1"
+    },
+    {
+      "name": "Hồ Thị Lan Anh",
+      "age": 4,
+      "dob": "2021-09-30",
+      "gender": "Nữ",
+      "address": "791 Đường Hậu Giang, Quận 6, TP.HCM",
+      "entry_date": "2024-09-02",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Mầm 1"
+    },
+    {
+      "name": "Phan Minh Tuấn",
+      "age": 5,
+      "dob": "2020-05-25",
+      "gender": "Nam",
+      "address": "802 Đường Tạ Quang Bửu, Quận 8, TP.HCM",
+      "entry_date": "2024-09-03",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Chồi 1"
+    },
+    {
+      "name": "Vương Thị Thanh",
+      "age": 4,
+      "dob": "2021-10-12",
+      "gender": "Nữ",
+      "address": "913 Đường Tân Hương, Quận 11, TP.HCM",
+      "entry_date": "2024-09-04",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Lá 1"
+    },
+    {
+      "name": "Tạ Văn Hưng",
+      "age": 5,
+      "dob": "2020-06-18",
+      "gender": "Nam",
+      "address": "124 Đường Đinh Tiên Hoàng, Quận 1, TP.HCM",
+      "entry_date": "2024-09-05",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Mầm 1"
+    },
+    {
+      "name": "Chu Thị Ngọc",
+      "age": 4,
+      "dob": "2021-11-05",
+      "gender": "Nữ",
+      "address": "235 Đường Điện Biên Phủ, Quận 3, TP.HCM",
+      "entry_date": "2024-09-06",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Chồi 1"
+    },
+    {
+      "name": "Lưu Minh Đạt",
+      "age": 5,
+      "dob": "2020-07-22",
+      "gender": "Nam",
+      "address": "346 Đường Nguyễn Văn Cừ, Quận 5, TP.HCM",
+      "entry_date": "2024-09-07",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Mầm 1"
+    },
+    {
+      "name": "Tôn Thị Hạnh",
+      "age": 4,
+      "dob": "2021-12-15",
+      "gender": "Nữ",
+      "address": "457 Đường Nguyễn Thị Minh Khai, Quận 7, TP.HCM",
+      "entry_date": "2024-09-08",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Chồi 1"
+    },
+    {
+      "name": "Đào Văn Thành",
+      "age": 6,
+      "dob": "2019-11-08",
+      "gender": "Nam",
+      "address": "568 Đường Nguyễn Văn Linh, Quận 2, TP.HCM",
+      "entry_date": "2024-09-09",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Lá 1"
+    },
+    {
+      "name": "Lâm Thị Yến",
+      "age": 4,
+      "dob": "2021-01-20",
+      "gender": "Nữ",
+      "address": "679 Đường Hoàng Văn Thụ, Quận 10, TP.HCM",
+      "entry_date": "2024-09-10",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Mầm 1"
+    },
+    {
+      "name": "Mai Văn Kiên",
+      "age": 5,
+      "dob": "2020-08-30",
+      "gender": "Nam",
+      "address": "780 Đường Võ Văn Kiệt, Quận 4, TP.HCM",
+      "entry_date": "2024-09-11",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Chồi 1"
+    },
+    {
+      "name": "Tăng Thị Hồng",
+      "age": 4,
+      "dob": "2021-02-14",
+      "gender": "Nữ",
+      "address": "891 Đường Nguyễn Oanh, Quận 6, TP.HCM",
+      "entry_date": "2024-09-12",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Mầm 1"
+    },
+    {
+      "name": "Hà Văn Nam",
+      "age": 5,
+      "dob": "2020-09-25",
+      "gender": "Nam",
+      "address": "902 Đường Dương Bá Trạc, Quận 8, TP.HCM",
+      "entry_date": "2024-09-13",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Chồi 1"
+    },
+    {
+      "name": "Lý Thị Phương",
+      "age": 4,
+      "dob": "2021-03-10",
+      "gender": "Nữ",
+      "address": "103 Đường Lý Thường Kiệt, Quận 11, TP.HCM",
+      "entry_date": "2024-09-14",
+      "parent_email": "parent1@example.com",
+      "classroom_name": "Lớp Lá 1"
+    }
+  ],
+  "health_records": [
+    {
+      "weight": 18.5,
+      "height": 105.0,
+      "temperature": 36.8,
+      "note": "Khỏe mạnh, không có dấu hiệu bất thường.",
+      "date": "2024-09-01",
+      "student_name": "Nguyễn Minh Anh",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 19.2,
+      "height": 107.5,
+      "temperature": 36.9,
+      "note": "Tình trạng sức khỏe tốt, ăn uống bình thường.",
+      "date": "2024-09-05",
+      "student_name": "Trần Thảo Linh",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 17.8,
+      "height": 103.0,
+      "temperature": 36.7,
+      "note": "Cần bổ sung dinh dưỡng, hơi nhẹ cân so với tuổi.",
+      "date": "2024-09-08",
+      "student_name": "Lê Đức An",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 20.1,
+      "height": 109.0,
+      "temperature": 37.0,
+      "note": "Phát triển tốt, cân nặng và chiều cao phù hợp.",
+      "date": "2024-09-12",
+      "student_name": "Phạm Ngọc Mai",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 18.9,
+      "height": 106.2,
+      "temperature": 36.6,
+      "note": "Sức khỏe ổn định, vui vẻ, hoạt động bình thường.",
+      "date": "2024-09-15",
+      "student_name": "Hoàng Minh Khang",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 19.5,
+      "height": 108.0,
+      "temperature": 36.8,
+      "note": "Khỏe mạnh, tham gia các hoạt động tích cực.",
+      "date": "2024-09-18",
+      "student_name": "Vũ Thảo Vy",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 17.5,
+      "height": 102.5,
+      "temperature": 36.9,
+      "note": "Cần theo dõi thêm về dinh dưỡng.",
+      "date": "2024-09-20",
+      "student_name": "Đặng Quang Huy",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 20.3,
+      "height": 110.0,
+      "temperature": 36.7,
+      "note": "Phát triển tốt, không có vấn đề sức khỏe.",
+      "date": "2024-09-22",
+      "student_name": "Bùi Ngọc Hân",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 19.0,
+      "height": 107.0,
+      "temperature": 36.8,
+      "note": "Tình trạng sức khỏe ổn định, ăn ngủ tốt.",
+      "date": "2024-09-25",
+      "student_name": "Ngô Minh Tuấn",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 18.7,
+      "height": 105.5,
+      "temperature": 36.9,
+      "note": "Khỏe mạnh, năng động, hòa đồng với bạn bè.",
+      "date": "2024-09-28",
+      "student_name": "Đỗ Ngọc Nhi",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 19.8,
+      "height": 108.5,
+      "temperature": 36.8,
+      "note": "Phát triển tốt, cân nặng và chiều cao đạt chuẩn.",
+      "date": "2024-10-02",
+      "student_name": "Võ Minh Đức",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 17.2,
+      "height": 102.0,
+      "temperature": 36.7,
+      "note": "Cần bổ sung thêm canxi và vitamin D.",
+      "date": "2024-10-05",
+      "student_name": "Lý Thảo My",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 20.5,
+      "height": 110.5,
+      "temperature": 36.9,
+      "note": "Sức khỏe tốt, tham gia hoạt động tích cực.",
+      "date": "2024-10-08",
+      "student_name": "Trịnh Quang Hải",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 18.3,
+      "height": 104.8,
+      "temperature": 36.6,
+      "note": "Tình trạng sức khỏe ổn định, ăn uống đều đặn.",
+      "date": "2024-10-10",
+      "student_name": "Dương Thị Hương",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 21.0,
+      "height": 112.0,
+      "temperature": 37.0,
+      "note": "Phát triển vượt trội so với độ tuổi.",
+      "date": "2024-10-12",
+      "student_name": "Cao Minh Quân",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 17.6,
+      "height": 103.2,
+      "temperature": 36.8,
+      "note": "Cần tăng cường dinh dưỡng cho trẻ.",
+      "date": "2024-10-15",
+      "student_name": "Lương Thị Hoa",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 19.4,
+      "height": 107.8,
+      "temperature": 36.7,
+      "note": "Khỏe mạnh, vui vẻ, hòa đồng.",
+      "date": "2024-10-18",
+      "student_name": "Đinh Văn Long",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 18.1,
+      "height": 105.0,
+      "temperature": 36.9,
+      "note": "Sức khỏe tốt, phát triển bình thường.",
+      "date": "2024-10-20",
+      "student_name": "Hồ Thị Lan Anh",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 20.2,
+      "height": 109.5,
+      "temperature": 36.8,
+      "note": "Tình trạng sức khỏe tốt, không có vấn đề.",
+      "date": "2024-10-22",
+      "student_name": "Phan Minh Tuấn",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 17.9,
+      "height": 103.8,
+      "temperature": 36.6,
+      "note": "Cần theo dõi thêm về cân nặng.",
+      "date": "2024-10-25",
+      "student_name": "Vương Thị Thanh",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 19.6,
+      "height": 108.2,
+      "temperature": 36.9,
+      "note": "Phát triển tốt, cân đối.",
+      "date": "2024-10-28",
+      "student_name": "Tạ Văn Hưng",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 18.4,
+      "height": 106.0,
+      "temperature": 36.7,
+      "note": "Sức khỏe ổn định, ăn ngủ tốt.",
+      "date": "2024-11-01",
+      "student_name": "Chu Thị Ngọc",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 20.0,
+      "height": 109.0,
+      "temperature": 36.8,
+      "note": "Khỏe mạnh, năng động.",
+      "date": "2024-11-03",
+      "student_name": "Lưu Minh Đạt",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 17.7,
+      "height": 104.2,
+      "temperature": 36.9,
+      "note": "Cần bổ sung thêm chất dinh dưỡng.",
+      "date": "2024-11-05",
+      "student_name": "Tôn Thị Hạnh",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 21.2,
+      "height": 112.5,
+      "temperature": 37.0,
+      "note": "Phát triển tốt, vượt chuẩn.",
+      "date": "2024-11-08",
+      "student_name": "Đào Văn Thành",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 18.0,
+      "height": 105.3,
+      "temperature": 36.7,
+      "note": "Tình trạng sức khỏe tốt.",
+      "date": "2024-11-10",
+      "student_name": "Lâm Thị Yến",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 19.7,
+      "height": 108.8,
+      "temperature": 36.8,
+      "note": "Khỏe mạnh, phát triển đều.",
+      "date": "2024-11-12",
+      "student_name": "Mai Văn Kiên",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 17.8,
+      "height": 104.5,
+      "temperature": 36.9,
+      "note": "Sức khỏe ổn định, cần theo dõi.",
+      "date": "2024-11-15",
+      "student_name": "Tăng Thị Hồng",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 20.3,
+      "height": 110.0,
+      "temperature": 36.8,
+      "note": "Phát triển tốt, không có vấn đề.",
+      "date": "2024-11-18",
+      "student_name": "Hà Văn Nam",
+      "teacher_email": "teacher1@example.com"
+    },
+    {
+      "weight": 18.2,
+      "height": 106.5,
+      "temperature": 36.7,
+      "note": "Khỏe mạnh, vui vẻ, tích cực.",
+      "date": "2024-11-20",
+      "student_name": "Lý Thị Phương",
+      "teacher_email": "teacher1@example.com"
+    }
+  ],
+  "invoices": [
+    {
+      "date": "2024-09-01",
+      "amount": 2500000,
+      "content": "Học phí tháng 9/2024 - lớp Mầm 1",
+      "accountant_email": "accountant1@example.com"
+    },
+    {
+      "date": "2024-09-01",
+      "amount": 2600000,
+      "content": "Học phí tháng 9/2024 - lớp Chồi 1",
+      "accountant_email": "accountant1@example.com"
+    },
+    {
+      "date": "2024-10-01",
+      "amount": 2500000,
+      "content": "Học phí tháng 10/2024 - lớp Mầm 1",
+      "accountant_email": "accountant1@example.com"
+    },
+    {
+      "date": "2024-10-01",
+      "amount": 2600000,
+      "content": "Học phí tháng 10/2024 - lớp Chồi 1",
+      "accountant_email": "accountant1@example.com"
+    },
+    {
+      "date": "2024-11-01",
+      "amount": 2550000,
+      "content": "Học phí tháng 11/2024 - lớp Mầm 1",
+      "accountant_email": "accountant1@example.com"
+    },
+    {
+      "date": "2024-11-01",
+      "amount": 2650000,
+      "content": "Học phí tháng 11/2024 - lớp Chồi 1",
+      "accountant_email": "accountant1@example.com"
+    },
+    {
+      "date": "2024-12-01",
+      "amount": 2500000,
+      "content": "Học phí tháng 12/2024 - lớp Mầm 1",
+      "accountant_email": "accountant1@example.com"
+    },
+    {
+      "date": "2024-12-01",
+      "amount": 2600000,
+      "content": "Học phí tháng 12/2024 - lớp Chồi 1",
+      "accountant_email": "accountant1@example.com"
+    },
+    {
+      "date": "2025-01-01",
+      "amount": 2700000,
+      "content": "Học phí tháng 1/2025 - lớp Mầm 1",
+      "accountant_email": "accountant1@example.com"
+    },
+    {
+      "date": "2025-01-01",
+      "amount": 2800000,
+      "content": "Học phí tháng 1/2025 - lớp Chồi 1",
+      "accountant_email": "accountant1@example.com"
+    }
+  ],
+  "tuition_fees": [
+    {
+      "month": 9,
+      "year": 2024,
+      "fee_base": 2000000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-09-05",
+      "status": "Paid",
+      "student_name": "Nguyễn Minh Anh",
+      "invoice_index": 0
+    },
+    {
+      "month": 9,
+      "year": 2024,
+      "fee_base": 2100000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-09-06",
+      "status": "Paid",
+      "student_name": "Trần Thảo Linh",
+      "invoice_index": 1
+    },
+    {
+      "month": 10,
+      "year": 2024,
+      "fee_base": 2000000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-10-05",
+      "status": "Paid",
+      "student_name": "Lê Đức An",
+      "invoice_index": 2
+    },
+    {
+      "month": 10,
+      "year": 2024,
+      "fee_base": 2100000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-10-07",
+      "status": "Paid",
+      "student_name": "Phạm Ngọc Mai",
+      "invoice_index": 3
+    },
+    {
+      "month": 11,
+      "year": 2024,
+      "fee_base": 2050000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-11-05",
+      "status": "Paid",
+      "student_name": "Hoàng Minh Khang",
+      "invoice_index": 4
+    },
+    {
+      "month": 11,
+      "year": 2024,
+      "fee_base": 2150000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": null,
+      "status": "Unpaid",
+      "student_name": "Vũ Thảo Vy",
+      "invoice_index": 5
+    },
+    {
+      "month": 12,
+      "year": 2024,
+      "fee_base": 2000000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-12-05",
+      "status": "Paid",
+      "student_name": "Đặng Quang Huy",
+      "invoice_index": 6
+    },
+    {
+      "month": 12,
+      "year": 2024,
+      "fee_base": 2100000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": null,
+      "status": "Unpaid",
+      "student_name": "Bùi Ngọc Hân",
+      "invoice_index": 7
+    },
+    {
+      "month": 1,
+      "year": 2025,
+      "fee_base": 2200000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2025-01-05",
+      "status": "Paid",
+      "student_name": "Ngô Minh Tuấn",
+      "invoice_index": 8
+    },
+    {
+      "month": 1,
+      "year": 2025,
+      "fee_base": 2300000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": null,
+      "status": "Unpaid",
+      "student_name": "Đỗ Ngọc Nhi",
+      "invoice_index": 9
+    },
+    {
+      "month": 9,
+      "year": 2024,
+      "fee_base": 2000000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-09-10",
+      "status": "Paid",
+      "student_name": "Võ Minh Đức",
+      "invoice_index": 0
+    },
+    {
+      "month": 9,
+      "year": 2024,
+      "fee_base": 2100000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-09-12",
+      "status": "Paid",
+      "student_name": "Lý Thảo My",
+      "invoice_index": 1
+    },
+    {
+      "month": 10,
+      "year": 2024,
+      "fee_base": 2000000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-10-08",
+      "status": "Paid",
+      "student_name": "Trịnh Quang Hải",
+      "invoice_index": 2
+    },
+    {
+      "month": 10,
+      "year": 2024,
+      "fee_base": 2100000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": null,
+      "status": "Unpaid",
+      "student_name": "Dương Thị Hương",
+      "invoice_index": 3
+    },
+    {
+      "month": 11,
+      "year": 2024,
+      "fee_base": 2050000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-11-10",
+      "status": "Paid",
+      "student_name": "Cao Minh Quân",
+      "invoice_index": 4
+    },
+    {
+      "month": 11,
+      "year": 2024,
+      "fee_base": 2150000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-11-15",
+      "status": "Paid",
+      "student_name": "Lương Thị Hoa",
+      "invoice_index": 5
+    },
+    {
+      "month": 12,
+      "year": 2024,
+      "fee_base": 2000000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": null,
+      "status": "Unpaid",
+      "student_name": "Đinh Văn Long",
+      "invoice_index": 6
+    },
+    {
+      "month": 12,
+      "year": 2024,
+      "fee_base": 2100000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-12-10",
+      "status": "Paid",
+      "student_name": "Hồ Thị Lan Anh",
+      "invoice_index": 7
+    },
+    {
+      "month": 1,
+      "year": 2025,
+      "fee_base": 2200000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": null,
+      "status": "Unpaid",
+      "student_name": "Phan Minh Tuấn",
+      "invoice_index": 8
+    },
+    {
+      "month": 1,
+      "year": 2025,
+      "fee_base": 2300000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2025-01-10",
+      "status": "Paid",
+      "student_name": "Vương Thị Thanh",
+      "invoice_index": 9
+    },
+    {
+      "month": 9,
+      "year": 2024,
+      "fee_base": 2000000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-09-15",
+      "status": "Paid",
+      "student_name": "Tạ Văn Hưng",
+      "invoice_index": 0
+    },
+    {
+      "month": 9,
+      "year": 2024,
+      "fee_base": 2100000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": null,
+      "status": "Unpaid",
+      "student_name": "Chu Thị Ngọc",
+      "invoice_index": 1
+    },
+    {
+      "month": 10,
+      "year": 2024,
+      "fee_base": 2000000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-10-12",
+      "status": "Paid",
+      "student_name": "Lưu Minh Đạt",
+      "invoice_index": 2
+    },
+    {
+      "month": 10,
+      "year": 2024,
+      "fee_base": 2100000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-10-15",
+      "status": "Paid",
+      "student_name": "Tôn Thị Hạnh",
+      "invoice_index": 3
+    },
+    {
+      "month": 11,
+      "year": 2024,
+      "fee_base": 2050000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": null,
+      "status": "Unpaid",
+      "student_name": "Đào Văn Thành",
+      "invoice_index": 4
+    },
+    {
+      "month": 11,
+      "year": 2024,
+      "fee_base": 2150000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-11-20",
+      "status": "Paid",
+      "student_name": "Lâm Thị Yến",
+      "invoice_index": 5
+    },
+    {
+      "month": 12,
+      "year": 2024,
+      "fee_base": 2000000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2024-12-12",
+      "status": "Paid",
+      "student_name": "Mai Văn Kiên",
+      "invoice_index": 6
+    },
+    {
+      "month": 12,
+      "year": 2024,
+      "fee_base": 2100000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": null,
+      "status": "Unpaid",
+      "student_name": "Tăng Thị Hồng",
+      "invoice_index": 7
+    },
+    {
+      "month": 1,
+      "year": 2025,
+      "fee_base": 2200000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": "2025-01-15",
+      "status": "Paid",
+      "student_name": "Hà Văn Nam",
+      "invoice_index": 8
+    },
+    {
+      "month": 1,
+      "year": 2025,
+      "fee_base": 2300000,
+      "meal_fee": 300000,
+      "extra_fee": 200000,
+      "payment_date": null,
+      "status": "Unpaid",
+      "student_name": "Lý Thị Phương",
+      "invoice_index": 9
+    }
+  ]
+}
