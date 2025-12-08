@@ -1,8 +1,10 @@
-from flask import Blueprint, render_template, redirect, url_for, abort
+from flask import Blueprint, render_template, redirect, url_for, abort, request
 from flask_login import login_required, current_user
 from functools import wraps
 
 from app.models.Models import Classroom, Student
+from app.services.class_service import get_all_class
+from app.services.student_service import get_all_students, total_student, search_students
 
 page_routes = Blueprint('pages', __name__)
 
@@ -27,15 +29,18 @@ def roles_required(*role_names):
 def home():
     return render_template('pages/home.html', Title='Trang chủ')
 
-@page_routes.route('/student')
+
+@page_routes.route('/student',methods=['POST','GET'])
 @roles_required('Teacher')
 def student():
-    all_classrooms = Classroom.query.all()
-    all_students = Student.query.all()
+    all_classrooms = get_all_class()
+    all_students = get_all_students()
+    total_students = total_student(all_classrooms)
 
-    total_students = sum(classroom.max_slots for classroom in all_classrooms)
+    q = request.args.get('q','',type = str).strip()
+    students = search_students(q)
 
-    return render_template('pages/student.html', Title='Danh sách học sinh', students=all_students, classrooms=all_classrooms,total_students=total_students)
+    return render_template('pages/student.html', Title='Danh sách học sinh', students=students, classrooms=all_classrooms,total_students=total_students)
 
 @page_routes.route('/health')
 @roles_required('Teacher')
