@@ -1,0 +1,284 @@
+{% extends 'pages/base.html' %}
+{% block title %}Sức khỏe{% endblock %}
+{% block content %}
+<!-- Thống kê sức khỏe -->
+<div class="row g-3 mb-4">
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body">
+        <div class="d-flex align-items-center gap-3">
+          <div class="rounded-3 p-3 bg-light">
+            <i class="fa-solid fa-heart-pulse icon"></i>
+          </div>
+          <div>
+            <div class="text-secondary small">Tổng số học sinh</div>
+            <div class="fw-bold fs-5">{{ students|length }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body">
+        <div class="d-flex align-items-center gap-3">
+          <div class="rounded-3 p-3 bg-light">
+            <i class="fa-solid fa-check-circle icon"></i>
+          </div>
+          <div>
+            <div class="text-secondary small">Đã ghi nhận hôm nay</div>
+            <div class="fw-bold fs-5">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body">
+        <div class="d-flex align-items-center gap-3">
+          <div class="rounded-3 p-3 bg-light">
+            <i class="fa-solid fa-clock icon"></i>
+          </div>
+          <div>
+            <div class="text-secondary small">Chưa ghi nhận</div>
+            <div class="fw-bold fs-5">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- main content -->
+<div class="card border-0 shadow-sm">
+  <div class="card-body">
+    <div
+      class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3"
+    >
+      <h5 class="mb-0">Ghi nhận sức khỏe học sinh</h5>
+      <div class="d-flex gap-2">
+        <!-- Dropdown filter -->
+        <div class="btn-group">
+          <button
+            class="btn btn-outline-secondary btn-sm dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Chọn lớp
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="#">Tất cả các lớp</a>
+            </li>
+            {% for classroom in classrooms %}
+              <li>
+                <a class="dropdown-item" href="#">{{ classroom.name }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <!-- Search -->
+        <div class="input-group input-group-sm">
+          <span class="input-group-text bg-white">
+            <i class="fa-solid fa-magnifying-glass icon"></i>
+          </span>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Tìm kiếm học sinh"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- List of students -->
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th style="width: 5%">STT</th>
+            <th style="width: 20%">Họ tên trẻ</th>
+            <th style="width: 12%">Ngày sinh</th>
+            <th style="width: 10%">Giới tính</th>
+            <th style="width: 15%">Lớp</th>
+            <th style="width: 18%">Ghi nhận gần nhất</th>
+            <th style="width: 20%">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if students %}
+            {% for student in students %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>
+                  <div class="fw-semibold">{{ student.name }}</div>
+                </td>
+                <td>{{ student.formatted_dob }}</td>
+                <td>
+                  <span class="badge bg-light text-dark">
+                    {{ student.gender.value }}
+                  </span>
+                </td>
+                <td>
+                  {% for classroom in classrooms %}
+                    {% if classroom.id == student.class_id %}
+                      <span class="badge bg-info-subtle text-info">
+                        {{ classroom.name }}
+                      </span>
+                    {% endif %}
+                  {% endfor %}
+                </td>
+                <td>
+                  <small class="text-muted">Chưa có</small>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-brand"
+                    data-bs-toggle="modal"
+                    data-bs-target="#healthRecordModal"
+                    data-student-id="{{ student.id }}"
+                    data-student-name="{{ student.name }}"
+                  >
+                    <i class="fa-solid fa-heart-pulse me-1"></i>Ghi nhận
+                  </button>
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="7" class="text-center text-muted py-4">
+                <i class="fa-solid fa-inbox fa-2x mb-2"></i>
+                <p class="mb-0">Không có học sinh nào</p>
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex align-items-center justify-content-between pt-3">
+      <div></div>
+      <nav>
+        <ul class="pagination pagination-sm mb-0">
+          <li class="page-item disabled">
+            <a class="page-link" href="#">‹</a>
+          </li>
+          <li class="page-item active">
+            <a class="page-link" href="#">1</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">›</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<!-- Modal health recoding -->
+<div
+  class="modal fade"
+  id="healthRecordModal"
+  tabindex="-1"
+  aria-labelledby="healthRecordModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="healthRecordModalLabel">
+          Ghi nhận sức khỏe
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="health-record-form">
+          <input type="hidden" id="student-id" name="student_id" />
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Học sinh</label>
+            <input
+              type="text"
+              class="form-control"
+              id="student-name"
+              readonly
+              disabled
+            />
+          </div>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="weight" class="form-label fw-semibold">
+                Cân nặng (kg)
+              </label>
+              <input
+                type="number"
+                class="form-control"
+                id="weight"
+                name="weight"
+                step="0.1"
+                min="0"
+                placeholder="VD: 18.5"
+                required
+              />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="height" class="form-label fw-semibold">
+                Chiều cao (cm)
+              </label>
+              <input
+                type="number"
+                class="form-control"
+                id="height"
+                name="height"
+                step="0.1"
+                min="0"
+                placeholder="VD: 105.0"
+                required
+              />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="temperature" class="form-label fw-semibold">
+                Nhiệt độ (°C)
+              </label>
+              <input
+                type="number"
+                class="form-control"
+                id="temperature"
+                name="temperature"
+                step="0.1"
+                min="0"
+                placeholder="VD: 36.8"
+                required
+              />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="note" class="form-label fw-semibold">Ghi chú</label>
+            <textarea
+              class="form-control"
+              id="note"
+              name="note"
+              rows="3"
+              placeholder="Nhập ghi chú về tình trạng sức khỏe..."
+            ></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Hủy
+        </button>
+        <button type="button" class="btn btn-brand" id="save-health-record">
+          <i class="fa-solid fa-floppy-disk me-1"></i>Lưu ghi nhận
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

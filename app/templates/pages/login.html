@@ -22,7 +22,7 @@
     <div class="container">
       <!--Login Form-->
       <div class="form-box login">
-        <form action="{{ url_for('authController.login') }}" method="post">
+        <form action="{{ url_for('auth.login') }}" method="post">
           <h1 style="color: #6f42c1">Đăng nhập</h1>
           <div class="input-box">
             <input type="email" name="email" placeholder="Email" required />
@@ -35,7 +35,9 @@
               required
             />
           </div>
-          <div class="forgot-link"><a href="#">Quên mật khẩu?</a></div>
+          <div class="forgot-link">
+            <a href="#">Quên mật khẩu?</a>
+          </div>
           <button type="submit" class="btn">Đăng nhập</button>
           {% if flashed_messages %} {% for category, message in flashed_messages
           %}
@@ -52,8 +54,16 @@
       </div>
       <!--Register Form-->
       <div class="form-box register">
-        <form action="{{ url_for('authController.signup') }}" method="post">
+        <form action="{{ url_for('auth.signup') }}" method="post">
           <h1 style="color: #6f42c1">Đăng ký</h1>
+          <div class="input-box">
+            <input
+              type="text"
+              name="username"
+              placeholder="Họ và tên"
+              required
+            />
+          </div>
           <div class="input-box">
             <input
               type="text"
