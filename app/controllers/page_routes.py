@@ -4,7 +4,7 @@ from functools import wraps
 
 from app.models.Models import Classroom, Student
 from app.services.class_service import get_all_class
-from app.services.student_service import get_all_students, total_student, search_students
+from app.services.student_service import get_all_students, total_student, search_students, get_student_count_by_classroom
 
 page_routes = Blueprint('pages', __name__)
 
@@ -34,13 +34,17 @@ def home():
 @roles_required('Teacher')
 def student():
     all_classrooms = get_all_class()
-    all_students = get_all_students()
     total_students = total_student(all_classrooms)
+    
+    # Tính số học sinh cho mỗi lớp
+    classroom_student_counts = {}
+    for classroom in all_classrooms:
+        classroom_student_counts[classroom.id] = get_student_count_by_classroom(classroom.id)
 
     q = request.args.get('q','',type = str).strip()
     students = search_students(q)
 
-    return render_template('pages/student.html', Title='Danh sách học sinh', students=students, classrooms=all_classrooms,total_students=total_students)
+    return render_template('pages/student.html', Title='Danh sách học sinh', students=students, classrooms=all_classrooms, total_students=total_students, classroom_student_counts=classroom_student_counts)
 
 @page_routes.route('/health')
 @roles_required('Teacher')
