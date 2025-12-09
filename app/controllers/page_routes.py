@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, abort, request
+from flask import Blueprint, render_template, redirect, url_for, abort, request, jsonify
 from flask_login import login_required, current_user
 from functools import wraps
 
@@ -35,8 +35,7 @@ def home():
 def student():
     all_classrooms = get_all_class()
     total_students = total_student(all_classrooms)
-    
-    # Tính số học sinh cho mỗi lớp
+
     classroom_student_counts = {}
     for classroom in all_classrooms:
         classroom_student_counts[classroom.id] = get_student_count_by_classroom(classroom.id)
@@ -45,6 +44,33 @@ def student():
     students = search_students(q)
 
     return render_template('pages/student.html', Title='Danh sách học sinh', students=students, classrooms=all_classrooms, total_students=total_students, classroom_student_counts=classroom_student_counts)
+
+@page_routes.route('/api/students', methods=['GET'])
+@roles_required('Teacher')
+def api_students():
+    """API endpoint để lấy danh sách học sinh dưới dạng JSON"""
+    q = request.args.get('q', '', type=str).strip()
+    students = search_students(q)
+    
+    students_data = []
+    for student in students:
+        students_data.append({
+            'id': student.id,
+            'name': student.name,
+            'formatted_dob': student.formatted_dob,
+            'gender': {
+                'value': student.gender.value
+            },
+            'classroom': {
+                'name': student.classroom.name
+            } if student.classroom else None,
+            'parent': {
+                'name': student.parent.name,
+                'phone': '0123456789'  # Có thể lấy từ parent.phone nếu có
+            } if student.parent else None
+        })
+    
+    return jsonify(students_data), 200
 
 @page_routes.route('/health')
 @roles_required('Teacher')
@@ -109,3 +135,23 @@ def signup():
 @roles_required('Admin')
 def administrator():
     return redirect(url_for('admin.index'))
+
+# Admin custom pages (Flask-Admin style layout)
+@page_routes.route('/admin/fee')
+@roles_required('Admin')
+def admin_fee():
+    return render_template('admin/fee.html', Title='Cấu hình học phí')
+
+
+@page_routes.route('/admin/class-size')
+@roles_required('Admin')
+def admin_class_size():
+    return render_template('admin/class_size.html', Title='Cấu hình sĩ số lớp')
+
+
+@page_routes.route('/admin/user')
+@roles_required('Admin')
+def admin_user_list():
+    return render_template('admin/list.html', Title='Quản lý user')
+
+
