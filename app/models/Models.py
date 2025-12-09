@@ -72,6 +72,7 @@ class Student(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('classrooms.id'))
     tuitionfee = relationship("TuitionFee", uselist=False, back_populates="student")
     parent = db.relationship("User", back_populates="children")
+    classroom = db.relationship("Classroom", foreign_keys=[class_id])
 
     @property
     def formatted_dob(self):

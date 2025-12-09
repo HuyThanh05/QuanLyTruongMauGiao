@@ -1,4 +1,5 @@
 import sys
+import json
 import os
 from pathlib import Path
 from datetime import datetime, date
@@ -26,120 +27,104 @@ from app.models.Models import (
 
 app = create_app()
 
+# Load seed data from JSON
+def load_seed_data():
+    """Load seed data from JSON file."""
+    seed_file = project_root / 'seed_data.json'
+    with open(seed_file, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
 
 def create_roles():
     with app.app_context():
-        admin = Role(id=1, name='Admin')
-        teacher = Role(id=2, name='Teacher')
-        accountant = Role(id=3, name='Accountant')
-        parent = Role(id=4, name='Parent')
-
-        db.session.add(admin)
-        db.session.add(teacher)
-        db.session.add(accountant)
-        db.session.add(parent)
-
+        seed_data = load_seed_data()
+        roles_data = seed_data['roles']
+        
+        roles = []
+        for role_data in roles_data:
+            role = Role(id=role_data['id'], name=role_data['name'])
+            roles.append(role)
+        
+        db.session.add_all(roles)
         db.session.commit()
-        print("Roles created successfully!")
+        print(f"Roles created successfully! ({len(roles)} roles)")
 
 def create_users():
     with app.app_context():
-        admin_role = Role.query.filter_by(name='Admin').first()
-        teacher_role = Role.query.filter_by(name='Teacher').first()
-        parent_role = Role.query.filter_by(name='Parent').first()
-        accountant_role = Role.query.filter_by(name='Accountant').first()
-
-        users = [
-            {
-                "name": "Admin One",
-                "phone": "0900000001",
-                "email": "admin1@example.com",
-                "password": "123456",
-                "role": admin_role,
-            },
-            {
-                "name": "Teacher One",
-                "phone": "0900000002",
-                "email": "teacher1@example.com",
-                "password": "123456",
-                "role": teacher_role,
-            },
-            {
-                "name": "Parent One",
-                "phone": "0900000003",
-                "email": "parent1@example.com",
-                "password": "123456",
-                "role": parent_role,
-            },
-            {
-                "name": "Accountant One",
-                "phone": "0900000004",
-                "email": "accountant1@example.com",
-                "password": "123456",
-                "role": accountant_role,
-            },
-        ]
-
+        seed_data = load_seed_data()
+        users_data = seed_data['users']
+        
+        # Get role mappings
+        role_map = {
+            'Admin': Role.query.filter_by(name='Admin').first(),
+            'Teacher': Role.query.filter_by(name='Teacher').first(),
+            'Parent': Role.query.filter_by(name='Parent').first(),
+            'Accountant': Role.query.filter_by(name='Accountant').first(),
+        }
+        
         user_entities = []
-        for u in users:
+        for user_data in users_data:
             user = User(
-                name=u["name"],
-                phone=u["phone"],
-                email=u["email"],
-                password_hash=generate_password_hash(u["password"]),
+                name=user_data['name'],
+                phone=user_data['phone'],
+                email=user_data['email'],
+                password_hash=generate_password_hash(user_data['password']),
             )
-            if u["role"]:
-                user.roles.append(u["role"])
+            role = role_map.get(user_data['role'])
+            if role:
+                user.roles.append(role)
             user_entities.append(user)
 
         db.session.add_all(user_entities)
         db.session.commit()
-        print("Users created successfully!")
+        print(f"Users created successfully! ({len(user_entities)} users)")
 
 def create_students():
     """Tạo một số học sinh demo, gán vào phụ huynh và lớp học."""
     with app.app_context():
-        # Lấy phụ huynh và lớp để gán
-        parent_role = Role.query.filter_by(name='Parent').first()
-        parent_users = (
-            User.query.join(User.roles)
-            .filter(Role.id == parent_role.id)
-            .all()
-            if parent_role
-            else []
-        )
-        classrooms = Classroom.query.all()
-
-        if not parent_users or not classrooms:
-            print("Vui lòng tạo Parent user và Classroom trước khi tạo Student.")
-            return
-
-        students_data = [
-            {"name": "Nguyễn Văn A", "age": 5, "dob": date(2020, 5, 10), "gender": GenderEnum.Nam, "address": "123 Đường ABC, Quận 1, TP.HCM", "entry_date": date(2024, 8, 15)},
-            {"name": "Trần Thị B", "age": 4, "dob": date(2021, 3, 22), "gender": GenderEnum.Nu, "address": "456 Đường DEF, Quận 3, TP.HCM", "entry_date": date(2024, 8, 20)},
-            {"name": "Lê Văn C", "age": 5, "dob": date(2020, 7, 15), "gender": GenderEnum.Nam, "address": "789 Đường GHI, Quận 5, TP.HCM", "entry_date": date(2024, 8, 18)},
-            {"name": "Phạm Thị D", "age": 4, "dob": date(2021, 1, 8), "gender": GenderEnum.Nu, "address": "321 Đường JKL, Quận 7, TP.HCM", "entry_date": date(2024, 8, 22)},
-            {"name": "Hoàng Văn E", "age": 6, "dob": date(2019, 9, 25), "gender": GenderEnum.Nam, "address": "654 Đường MNO, Quận 2, TP.HCM", "entry_date": date(2024, 8, 16)},
-            {"name": "Vũ Thị F", "age": 4, "dob": date(2021, 4, 12), "gender": GenderEnum.Nu, "address": "987 Đường PQR, Quận 10, TP.HCM", "entry_date": date(2024, 8, 25)},
-            {"name": "Đặng Văn G", "age": 5, "dob": date(2020, 6, 30), "gender": GenderEnum.Nam, "address": "147 Đường STU, Quận 4, TP.HCM", "entry_date": date(2024, 8, 19)},
-            {"name": "Bùi Thị H", "age": 4, "dob": date(2021, 2, 14), "gender": GenderEnum.Nu, "address": "258 Đường VWX, Quận 6, TP.HCM", "entry_date": date(2024, 8, 21)},
-            {"name": "Ngô Văn I", "age": 5, "dob": date(2020, 8, 5), "gender": GenderEnum.Nam, "address": "369 Đường YZ, Quận 8, TP.HCM", "entry_date": date(2024, 8, 17)},
-            {"name": "Đỗ Thị K", "age": 4, "dob": date(2021, 5, 18), "gender": GenderEnum.Nu, "address": "741 Đường Main, Quận 11, TP.HCM", "entry_date": date(2024, 8, 23)},
-        ]
+        seed_data = load_seed_data()
+        students_data = seed_data['students']
+        
+        # Get parent by email
+        parent_map = {}
+        for student_data in students_data:
+            parent_email = student_data.get('parent_email')
+            if parent_email and parent_email not in parent_map:
+                parent = User.query.filter_by(email=parent_email).first()
+                if parent:
+                    parent_map[parent_email] = parent.id
+        
+        # Get classroom by name
+        classroom_map = {}
+        for student_data in students_data:
+            classroom_name = student_data.get('classroom_name')
+            if classroom_name and classroom_name not in classroom_map:
+                classroom = Classroom.query.filter_by(name=classroom_name).first()
+                if classroom:
+                    classroom_map[classroom_name] = classroom.id
+        
+        # Gender enum mapping
+        gender_map = {
+            'Nam': GenderEnum.Nam,
+            'Nữ': GenderEnum.Nu,
+        }
 
         students = []
-        for idx, data in enumerate(students_data):
-            parent_idx = idx % len(parent_users)
-            class_idx = idx % len(classrooms)
+        for student_data in students_data:
+            parent_email = student_data.get('parent_email')
+            classroom_name = student_data.get('classroom_name')
+            parent_id = parent_map.get(parent_email) if parent_email else None
+            class_id = classroom_map.get(classroom_name) if classroom_name else None
+            
             student = Student(
-                name=data["name"],
-                age=data["age"],
-                dob=data["dob"],
-                gender=data["gender"],
-                address=data["address"],
-                entry_date=data["entry_date"],
-                parent_id=parent_users[parent_idx].id,
-                class_id=classrooms[class_idx].id,
+                name=student_data['name'],
+                age=student_data['age'],
+                dob=date.fromisoformat(student_data['dob']),
+                gender=gender_map.get(student_data['gender'], GenderEnum.Nam),
+                address=student_data['address'],
+                entry_date=date.fromisoformat(student_data['entry_date']),
+                parent_id=parent_id,
+                class_id=class_id,
             )
             students.append(student)
 
@@ -150,88 +135,77 @@ def create_students():
 def create_classrooms():
     """Tạo một số lớp học demo, gán giáo viên chủ nhiệm nếu có."""
     with app.app_context():
-        teacher_role = Role.query.filter_by(name='Teacher').first()
-        teacher_users = (
-            User.query.join(User.roles)
-            .filter(Role.id == teacher_role.id)
-            .all()
-            if teacher_role
-            else []
-        )
+        seed_data = load_seed_data()
+        classrooms_data = seed_data['classrooms']
+        
+        # Get teacher by email
+        teacher_users = {}
+        for classroom_data in classrooms_data:
+            teacher_email = classroom_data.get('teacher_email')
+            if teacher_email and teacher_email not in teacher_users:
+                teacher = User.query.filter_by(email=teacher_email).first()
+                if teacher:
+                    teacher_users[teacher_email] = teacher.id
+        
+        classrooms = []
+        for classroom_data in classrooms_data:
+            teacher_email = classroom_data.get('teacher_email')
+            teacher_id = teacher_users.get(teacher_email) if teacher_email else None
+            
+            classroom = Classroom(
+                name=classroom_data['name'],
+                term=classroom_data['term'],
+                max_slots=classroom_data['max_slots'],
+                teacher_id=teacher_id,
+            )
+            classrooms.append(classroom)
 
-        teacher_id_1 = teacher_users[0].id if len(teacher_users) > 0 else None
-        teacher_id_2 = teacher_users[1].id if len(teacher_users) > 1 else teacher_id_1
-
-        c1 = Classroom(
-            name="Lớp Mầm 1",
-            term="2024-2025",
-            max_slots=30,
-            teacher_id=teacher_id_1,
-        )
-
-        c2 = Classroom(
-            name="Lớp Chồi 1",
-            term="2024-2025",
-            max_slots=30,
-            teacher_id=teacher_id_2,
-        )
-
-        c3 = Classroom(
-            name = "Lớp Lá 1",
-            term = "2024-2025",
-            max_slots = 30,
-            teacher_id = 1
-        )
-
-        db.session.add_all([c1, c2,c3])
+        db.session.add_all(classrooms)
         db.session.commit()
-        print("Classrooms created successfully!")
+        print(f"Classrooms created successfully! ({len(classrooms)} classrooms)")
 
 def create_healthRecords():
     """Tạo một số phiếu sức khỏe demo cho học sinh."""
     with app.app_context():
-        students = Student.query.all()
-        teacher_role = Role.query.filter_by(name='Teacher').first()
-        teacher_users = (
-            User.query.join(User.roles)
-            .filter(Role.id == teacher_role.id)
-            .all()
-            if teacher_role
-            else []
-        )
-
-        if not students or not teacher_users:
-            print("Vui lòng tạo Student và Teacher user trước khi tạo HealthRecord.")
-            return
-
-        # Tạo 10 phiếu sức khỏe với dữ liệu đa dạng
-        health_records_data = [
-            {"weight": 18.5, "height": 105.0, "temperature": 36.8, "note": "Khỏe mạnh, không có dấu hiệu bất thường.", "date": datetime(2024, 9, 1)},
-            {"weight": 19.2, "height": 107.5, "temperature": 36.9, "note": "Tình trạng sức khỏe tốt, ăn uống bình thường.", "date": datetime(2024, 9, 5)},
-            {"weight": 17.8, "height": 103.0, "temperature": 36.7, "note": "Cần bổ sung dinh dưỡng, hơi nhẹ cân so với tuổi.", "date": datetime(2024, 9, 8)},
-            {"weight": 20.1, "height": 109.0, "temperature": 37.0, "note": "Phát triển tốt, cân nặng và chiều cao phù hợp.", "date": datetime(2024, 9, 12)},
-            {"weight": 18.9, "height": 106.2, "temperature": 36.6, "note": "Sức khỏe ổn định, vui vẻ, hoạt động bình thường.", "date": datetime(2024, 9, 15)},
-            {"weight": 19.5, "height": 108.0, "temperature": 36.8, "note": "Khỏe mạnh, tham gia các hoạt động tích cực.", "date": datetime(2024, 9, 18)},
-            {"weight": 17.5, "height": 102.5, "temperature": 36.9, "note": "Cần theo dõi thêm về dinh dưỡng.", "date": datetime(2024, 9, 20)},
-            {"weight": 20.3, "height": 110.0, "temperature": 36.7, "note": "Phát triển tốt, không có vấn đề sức khỏe.", "date": datetime(2024, 9, 22)},
-            {"weight": 19.0, "height": 107.0, "temperature": 36.8, "note": "Tình trạng sức khỏe ổn định, ăn ngủ tốt.", "date": datetime(2024, 9, 25)},
-            {"weight": 18.7, "height": 105.5, "temperature": 36.9, "note": "Khỏe mạnh, năng động, hòa đồng với bạn bè.", "date": datetime(2024, 9, 28)},
-        ]
+        seed_data = load_seed_data()
+        health_records_data = seed_data['health_records']
+        
+        # Get student by name
+        student_map = {}
+        for record_data in health_records_data:
+            student_name = record_data.get('student_name')
+            if student_name and student_name not in student_map:
+                student = Student.query.filter_by(name=student_name).first()
+                if student:
+                    student_map[student_name] = student.id
+        
+        # Get teacher by email
+        teacher_map = {}
+        for record_data in health_records_data:
+            teacher_email = record_data.get('teacher_email')
+            if teacher_email and teacher_email not in teacher_map:
+                teacher = User.query.filter_by(email=teacher_email).first()
+                if teacher:
+                    teacher_map[teacher_email] = teacher.id
 
         records = []
-        for idx, data in enumerate(health_records_data):
-            # Phân bổ đều cho các học sinh và giáo viên
-            student_idx = idx % len(students) if students else 0
-            teacher_idx = idx % len(teacher_users) if teacher_users else 0
+        for record_data in health_records_data:
+            student_name = record_data.get('student_name')
+            teacher_email = record_data.get('teacher_email')
+            student_id = student_map.get(student_name) if student_name else None
+            teacher_id = teacher_map.get(teacher_email) if teacher_email else None
+            
+            if not student_id or not teacher_id:
+                continue
             
             r = HealthRecord(
-                weight=data["weight"],
-                height=data["height"],
-                temperature=data["temperature"],
-                date_created=data["date"],
-                note=data["note"],
-                student_id=students[student_idx].id,
-                teacher_id=teacher_users[teacher_idx].id,
+                weight=record_data['weight'],
+                height=record_data['height'],
+                temperature=record_data['temperature'],
+                date_created=datetime.fromisoformat(record_data['date']),
+                note=record_data['note'],
+                student_id=student_id,
+                teacher_id=teacher_id,
             )
             records.append(r)
 
@@ -242,43 +216,31 @@ def create_healthRecords():
 def create_invoices():
     """Tạo một số hóa đơn học phí demo cho phụ huynh."""
     with app.app_context():
-        # Chọn accountant
-        accountant_role = Role.query.filter_by(name='Accountant').first()
-        accountant_user = (
-            User.query.join(User.roles)
-            .filter(Role.id == accountant_role.id)
-            .first()
-            if accountant_role
-            else None
-        )
-
-        if not accountant_user:
-            print("Vui lòng tạo user Accountant trước khi tạo Invoice.")
-            return
-
-        classrooms = Classroom.query.all()
+        seed_data = load_seed_data()
+        invoices_data = seed_data['invoices']
         
-        # Tạo 10 hóa đơn với dữ liệu đa dạng
-        invoices_data = [
-            {"date": datetime(2024, 9, 1), "amount": 2500000, "content": "Học phí tháng 9/2024 - lớp Mầm 1"},
-            {"date": datetime(2024, 9, 1), "amount": 2600000, "content": "Học phí tháng 9/2024 - lớp Chồi 1"},
-            {"date": datetime(2024, 10, 1), "amount": 2500000, "content": "Học phí tháng 10/2024 - lớp Mầm 1"},
-            {"date": datetime(2024, 10, 1), "amount": 2600000, "content": "Học phí tháng 10/2024 - lớp Chồi 1"},
-            {"date": datetime(2024, 11, 1), "amount": 2550000, "content": "Học phí tháng 11/2024 - lớp Mầm 1"},
-            {"date": datetime(2024, 11, 1), "amount": 2650000, "content": "Học phí tháng 11/2024 - lớp Chồi 1"},
-            {"date": datetime(2024, 12, 1), "amount": 2500000, "content": "Học phí tháng 12/2024 - lớp Mầm 1"},
-            {"date": datetime(2024, 12, 1), "amount": 2600000, "content": "Học phí tháng 12/2024 - lớp Chồi 1"},
-            {"date": datetime(2025, 1, 1), "amount": 2700000, "content": "Học phí tháng 1/2025 - lớp Mầm 1"},
-            {"date": datetime(2025, 1, 1), "amount": 2800000, "content": "Học phí tháng 1/2025 - lớp Chồi 1"},
-        ]
+        # Get accountant by email
+        accountant_map = {}
+        for invoice_data in invoices_data:
+            accountant_email = invoice_data.get('accountant_email')
+            if accountant_email and accountant_email not in accountant_map:
+                accountant = User.query.filter_by(email=accountant_email).first()
+                if accountant:
+                    accountant_map[accountant_email] = accountant.id
 
         invoices = []
-        for data in invoices_data:
+        for invoice_data in invoices_data:
+            accountant_email = invoice_data.get('accountant_email')
+            accountant_id = accountant_map.get(accountant_email) if accountant_email else None
+            
+            if not accountant_id:
+                continue
+            
             inv = Invoice(
-                date_created=data["date"],
-                amount=data["amount"],
-                content=data["content"],
-                accountant_id=accountant_user.id,
+                date_created=datetime.fromisoformat(invoice_data['date']),
+                amount=invoice_data['amount'],
+                content=invoice_data['content'],
+                accountant_id=accountant_id,
             )
             invoices.append(inv)
 
@@ -289,43 +251,54 @@ def create_invoices():
 def create_tuitionfees():
     """Tạo dữ liệu học phí chi tiết cho từng học sinh, gắn với Invoice."""
     with app.app_context():
-        students = Student.query.all()
+        seed_data = load_seed_data()
+        fees_data = seed_data['tuition_fees']
+        
+        # Get student by name
+        student_map = {}
+        for fee_data in fees_data:
+            student_name = fee_data.get('student_name')
+            if student_name and student_name not in student_map:
+                student = Student.query.filter_by(name=student_name).first()
+                if student:
+                    student_map[student_name] = student.id
+        
+        # Get invoices list for indexing
         invoices = Invoice.query.all()
-
-        if not students or not invoices:
-            print("Vui lòng tạo Student và Invoice trước khi tạo TuitionFee.")
-            return
-
-        # Tạo 10 học phí với dữ liệu đa dạng
-        fees_data = [
-            {"month": 9, "year": 2024, "fee_base": 2000000, "meal_fee": 300000, "extra_fee": 200000, "payment_date": datetime(2024, 9, 5), "status": PaymentStatusEnum.Paid},
-            {"month": 9, "year": 2024, "fee_base": 2100000, "meal_fee": 300000, "extra_fee": 200000, "payment_date": datetime(2024, 9, 6), "status": PaymentStatusEnum.Paid},
-            {"month": 10, "year": 2024, "fee_base": 2000000, "meal_fee": 300000, "extra_fee": 200000, "payment_date": datetime(2024, 10, 5), "status": PaymentStatusEnum.Paid},
-            {"month": 10, "year": 2024, "fee_base": 2100000, "meal_fee": 300000, "extra_fee": 200000, "payment_date": datetime(2024, 10, 7), "status": PaymentStatusEnum.Paid},
-            {"month": 11, "year": 2024, "fee_base": 2050000, "meal_fee": 300000, "extra_fee": 200000, "payment_date": datetime(2024, 11, 5), "status": PaymentStatusEnum.Paid},
-            {"month": 11, "year": 2024, "fee_base": 2150000, "meal_fee": 300000, "extra_fee": 200000, "payment_date": None, "status": PaymentStatusEnum.Unpaid},
-            {"month": 12, "year": 2024, "fee_base": 2000000, "meal_fee": 300000, "extra_fee": 200000, "payment_date": datetime(2024, 12, 5), "status": PaymentStatusEnum.Paid},
-            {"month": 12, "year": 2024, "fee_base": 2100000, "meal_fee": 300000, "extra_fee": 200000, "payment_date": None, "status": PaymentStatusEnum.Unpaid},
-            {"month": 1, "year": 2025, "fee_base": 2200000, "meal_fee": 300000, "extra_fee": 200000, "payment_date": datetime(2025, 1, 5), "status": PaymentStatusEnum.Paid},
-            {"month": 1, "year": 2025, "fee_base": 2300000, "meal_fee": 300000, "extra_fee": 200000, "payment_date": None, "status": PaymentStatusEnum.Unpaid},
-        ]
+        
+        # Status enum mapping
+        status_map = {
+            'Paid': PaymentStatusEnum.Paid,
+            'Unpaid': PaymentStatusEnum.Unpaid,
+        }
 
         fees = []
-        for idx, data in enumerate(fees_data):
-            # Phân bổ đều cho các học sinh và hóa đơn
-            student_idx = idx % len(students) if students else 0
-            invoice_idx = idx % len(invoices) if invoices else None
+        for fee_data in fees_data:
+            student_name = fee_data.get('student_name')
+            invoice_index = fee_data.get('invoice_index')
+            student_id = student_map.get(student_name) if student_name else None
+            
+            if not student_id:
+                continue
+            
+            payment_date = None
+            if fee_data.get('payment_date'):
+                payment_date = datetime.fromisoformat(fee_data['payment_date'])
+            
+            invoice_id = None
+            if invoice_index is not None and invoice_index < len(invoices):
+                invoice_id = invoices[invoice_index].id
 
             fee = TuitionFee(
-                month=data["month"],
-                year=data["year"],
-                fee_base=data["fee_base"],
-                meal_fee=data["meal_fee"],
-                extra_fee=data["extra_fee"],
-                payment_date=data["payment_date"],
-                status=data["status"],
-                invoice_id=invoices[invoice_idx].id if invoice_idx is not None and invoice_idx < len(invoices) else None,
-                student_id=students[student_idx].id,
+                month=fee_data['month'],
+                year=fee_data['year'],
+                fee_base=fee_data['fee_base'],
+                meal_fee=fee_data['meal_fee'],
+                extra_fee=fee_data['extra_fee'],
+                payment_date=payment_date,
+                status=status_map.get(fee_data['status'], PaymentStatusEnum.Unpaid),
+                invoice_id=invoice_id,
+                student_id=student_id,
             )
             fees.append(fee)
 
