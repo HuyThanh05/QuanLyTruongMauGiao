@@ -1,5 +1,97 @@
-{% extends 'pages/base.html' %}
-{% block title %}Trang chủ{% endblock %}
-{% block content %}
-<p>Home</p>
+{% extends 'pages/base.html' %} {% block title %}Trang chủ{% endblock %} {%
+block content %}
+<div class="container py-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h2 class="mb-0">Báo cáo doanh thu</h2>
+      <small class="text-muted"
+        >Theo dõi doanh thu học phí theo tháng/năm</small
+      >
+    </div>
+    <div class="d-flex gap-2">
+      <select class="form-select" style="width: 140px">
+        <option>2025</option>
+        <option>2024</option>
+        <option>2023</option>
+      </select>
+      <select class="form-select" style="width: 140px">
+        <option>Theo tháng</option>
+        <option>Theo quý</option>
+        <option>Theo năm</option>
+      </select>
+      <button class="btn btn-primary">Xem</button>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-md-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="text-muted mb-2">Tổng doanh thu</h6>
+          <div class="fs-4 fw-semibold text-primary">1.280.000.000 đ</div>
+          <small class="text-muted">Năm 2025 (tính tới hiện tại)</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="text-muted mb-2">Tháng hiện tại</h6>
+          <div class="fs-4 fw-semibold text-success">125.500.000 đ</div>
+          <small class="text-muted">Đã thu 82% kế hoạch tháng</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="text-muted mb-2">Còn phải thu</h6>
+          <div class="fs-4 fw-semibold text-danger">27.800.000 đ</div>
+          <small class="text-muted">Cần nhắc phụ huynh hoàn tất</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="text-muted mb-2">Số bé đã đóng</h6>
+          <div class="fs-4 fw-semibold">142 / 170</div>
+          <small class="text-muted">Tỷ lệ 83.5%</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h5 class="card-title mb-0">Doanh thu theo tháng</h5>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge text-bg-primary">2025</span>
+          <span class="badge text-bg-secondary">Đơn vị: triệu đồng</span>
+        </div>
+      </div>
+      {# Placeholder cho Chart.js #}
+      <div class="bg-light border rounded p-3 text-center text-muted">
+        Biểu đồ doanh thu theo tháng (Chart.js) sẽ hiển thị ở đây.
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h5 class="card-title mb-0">Xuất báo cáo</h5>
+        <div class="d-flex gap-2">
+          <select class="form-select" style="width: 160px">
+            <option>PDF</option>
+            <option>Excel</option>
+          </select>
+          <button class="btn btn-outline-secondary">Xuất file</button>
+        </div>
+      </div>
+      <p class="text-muted mb-0">Tổng hợp doanh thu theo tháng/quý/năm.</p>
+    </div>
+  </div>
+</div>
 {% endblock %}
