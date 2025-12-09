@@ -51,3 +51,4 @@
   // Cập nhật lại khi navigate (nếu dùng SPA routing hoặc sau khi load trang mới)
   window.addEventListener("popstate", setActiveSidebarItem);
 })();
+

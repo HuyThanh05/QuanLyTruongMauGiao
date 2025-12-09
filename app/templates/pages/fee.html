@@ -1,5 +1,134 @@
-{% extends 'pages/base.html' %}
-{% block title %}Trang chủ{% endblock %}
-{% block content %}
-<p>Home</p>
+{% extends 'pages/base.html' %} {% block title %}Trang chủ{% endblock %} {%
+block content %}
+<div class="container py-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h2 class="mb-0">Thống kê học phí</h2>
+      <small class="text-muted">Tổng quan thu học phí theo tháng</small>
+    </div>
+    <div class="d-flex gap-2">
+      <input
+        type="month"
+        class="form-control"
+        style="width: 200px"
+        aria-label="Chọn tháng"
+      />
+      <button class="btn btn-primary">Xem</button>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="mb-0 text-muted">Tổng thu</h6>
+            <span class="badge text-bg-success">Tháng này</span>
+          </div>
+          <div class="fs-3 fw-semibold text-primary">125.500.000 đ</div>
+          <small class="text-muted">Học phí cơ bản + tiền ăn + phụ thu</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="mb-2 text-muted">Đã thu</h6>
+          <div class="fs-4 fw-semibold text-success">102.300.000 đ</div>
+          <small class="text-muted">82% khoản thu đã hoàn tất</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="mb-2 text-muted">Chưa thu</h6>
+          <div class="fs-4 fw-semibold text-danger">23.200.000 đ</div>
+          <small class="text-muted">Cần nhắc phụ huynh sớm</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h5 class="card-title mb-0">Chi tiết thu học phí</h5>
+        <div class="btn-group" role="group">
+          <button class="btn btn-outline-secondary active">Tất cả</button>
+          <button class="btn btn-outline-secondary">Đã thu</button>
+          <button class="btn btn-outline-secondary">Chưa thu</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Học sinh</th>
+              <th class="text-end">Học phí cơ bản</th>
+              <th class="text-end">Tiền ăn</th>
+              <th class="text-end">Phụ thu</th>
+              <th class="text-end">Tổng</th>
+              <th class="text-center">Trạng thái</th>
+              <th class="text-end">Hạn đóng</th>
+              <th class="text-end">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Minh Anh - Chồi 1</td>
+              <td class="text-end">6.000.000</td>
+              <td class="text-end">2.500.000</td>
+              <td class="text-end">0</td>
+              <td class="text-end fw-semibold">8.500.000</td>
+              <td class="text-center">
+                <span class="badge text-bg-success">Đã thu</span>
+              </td>
+              <td class="text-end">05/12/2025</td>
+              <td class="text-end">
+                <div class="btn-group btn-group-sm" role="group">
+                  <a class="btn btn-outline-secondary">Xem</a>
+                  <button class="btn btn-outline-danger">Hoàn tiền</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Gia Huy - Lá 2</td>
+              <td class="text-end">6.000.000</td>
+              <td class="text-end">2.300.000</td>
+              <td class="text-end">150.000</td>
+              <td class="text-end fw-semibold">8.450.000</td>
+              <td class="text-center">
+                <span class="badge text-bg-warning">Chưa thu</span>
+              </td>
+              <td class="text-end">05/12/2025</td>
+              <td class="text-end">
+                <div class="btn-group btn-group-sm" role="group">
+                  <button class="btn btn-outline-primary">Thu</button>
+                  <a class="btn btn-outline-secondary">Chi tiết</a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h5 class="card-title mb-0">Xuất báo cáo</h5>
+        <div class="d-flex gap-2">
+          <select class="form-select" style="width: 160px">
+            <option>PDF</option>
+            <option>Excel</option>
+          </select>
+          <button class="btn btn-outline-secondary">Xuất file</button>
+        </div>
+      </div>
+      <p class="text-muted mb-0">Tổng hợp thu/chi tiết khoản thu theo tháng.</p>
+    </div>
+  </div>
+</div>
 {% endblock %}
