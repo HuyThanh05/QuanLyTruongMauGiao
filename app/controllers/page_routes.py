@@ -41,36 +41,11 @@ def student():
         classroom_student_counts[classroom.id] = get_student_count_by_classroom(classroom.id)
 
     q = request.args.get('q','',type = str).strip()
+    
     students = search_students(q)
 
     return render_template('pages/student.html', Title='Danh sách học sinh', students=students, classrooms=all_classrooms, total_students=total_students, classroom_student_counts=classroom_student_counts)
 
-@page_routes.route('/api/students', methods=['GET'])
-@roles_required('Teacher')
-def api_students():
-    """API endpoint để lấy danh sách học sinh dưới dạng JSON"""
-    q = request.args.get('q', '', type=str).strip()
-    students = search_students(q)
-    
-    students_data = []
-    for student in students:
-        students_data.append({
-            'id': student.id,
-            'name': student.name,
-            'formatted_dob': student.formatted_dob,
-            'gender': {
-                'value': student.gender.value
-            },
-            'classroom': {
-                'name': student.classroom.name
-            } if student.classroom else None,
-            'parent': {
-                'name': student.parent.name,
-                'phone': '0123456789'  # Có thể lấy từ parent.phone nếu có
-            } if student.parent else None
-        })
-    
-    return jsonify(students_data), 200
 
 @page_routes.route('/health')
 @roles_required('Teacher')
