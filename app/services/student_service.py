@@ -1,5 +1,6 @@
 from typing import List
 
+from app.models.DTO import StudentDTO
 from app.models.Models import Student, Classroom
 
 
@@ -30,3 +31,5 @@ def search_students(q=None, class_id=None) -> List[Student]:
         student_query = student_query.filter_by(class_id=class_id)
 
     return student_query.all()
+
+# def student_to_dto(student: Student) -> StudentDTO:
