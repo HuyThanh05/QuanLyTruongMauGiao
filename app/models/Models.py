@@ -71,7 +71,7 @@ class Student(db.Model):
     parent_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     class_id = db.Column(db.Integer, db.ForeignKey('classrooms.id'))
     tuitionfee = relationship("TuitionFee", uselist=False, back_populates="student")
-    parent = db.relationship("User", back_populates="children")
+    parent = db.relationship("User", foreign_keys = [parent_id],back_populates="children")
     classroom = db.relationship("Classroom", foreign_keys=[class_id])
 
     @property

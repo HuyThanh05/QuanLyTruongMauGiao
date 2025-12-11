@@ -3,12 +3,9 @@ from app import db
 from app.models.DTO import UserDTO
 from app.models.Models import User, users_to_dto, user_to_dto
 from app.services.user_service import create_user_account, EmailAlreadyExists
-
+from app.utils import _get_payload
 user_api = Blueprint('user_api', __name__)
 
-
-def _get_payload():
-    return request.get_json(silent=True) or request.form
 
 #GET ALL: GET/api/users
 @user_api.route('/', methods=['GET'])

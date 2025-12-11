@@ -27,6 +27,7 @@ class UserCreateDTO:
     email:str
     password:str
 
+# student
 @dataclasses.dataclass
 class StudentDTO:
     id:int

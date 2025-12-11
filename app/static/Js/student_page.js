@@ -2,6 +2,9 @@ const studentsPerPage = 15;
 let currentPage = 1;
 let data = [];
 let totalPages = 1;
+let selectedClass = "all";
+let searchTerm = "";
+let studentPaginator = null;
 
 async function fetchStudents() {
   const student_list = document.getElementById("student_list");
@@ -13,12 +16,10 @@ async function fetchStudents() {
 
   try {
     // Lấy query parameter từ URL nếu có
-    const urlParams = new URLSearchParams(window.location.search);
-    const query = urlParams.get("q") || "";
+    let apiUrl = `/api/students?`;
+    if (searchTerm) apiUrl += `q=${encodeURIComponent(searchTerm)}&`;
+    if (selectedClass !== "all") apiUrl += `class_id=${selectedClass}`;
 
-    const apiUrl = `/api/students${
-      query ? `?q=${encodeURIComponent(query)}` : ""
-    }`;
     const response = await fetch(apiUrl);
 
     if (!response.ok) {
@@ -26,16 +27,23 @@ async function fetchStudents() {
     }
 
     data = await response.json();
+    currentPage = 1;
     totalPages = Math.ceil(data.length / studentsPerPage);
 
     if (data.length === 0) {
       student_list.innerHTML =
         '<tr><td colspan="7" class="text-center text-muted">Không có dữ liệu học sinh</td></tr>';
+      if (studentPaginator) studentPaginator.setTotalPages(1);
       return;
     }
 
-    RenderStudentList();
-    UpdatePaginationUI();
+    totalPages = Math.max(1, totalPages);
+    if (studentPaginator) {
+      studentPaginator.setTotalPages(totalPages);
+      studentPaginator.goTo(1);
+    } else {
+      RenderStudentList();
+    }
   } catch (error) {
     console.error("Error fetching students:", error);
     student_list.innerHTML =
@@ -68,92 +76,42 @@ function RenderStudentList() {
   });
 }
 
-function RenderPagination() {
-  const pagination = document.getElementById("pagination");
-  if (!pagination) return;
-
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
-
-  if (!prevBtn || !nextBtn) return;
-
-  // Xóa các nút số trang cũ (giữ lại prev và next)
-  const pageItems = pagination.querySelectorAll(
-    ".page-item:not(#prevBtn):not(#nextBtn)"
-  );
-  pageItems.forEach((item) => item.remove());
-
-  // Render các nút số trang
-  let paginationHTML = "";
-
-  // Tính toán số trang hiển thị
-  let startPage = Math.max(1, currentPage - 2);
-  let endPage = Math.min(totalPages, currentPage + 2);
-
-  if (startPage > 1) {
-    paginationHTML += `<li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>`;
-    if (startPage > 2) {
-      paginationHTML += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
-    }
-  }
-
-  for (let i = startPage; i <= endPage; i++) {
-    const activeClass = i === currentPage ? "active" : "";
-    paginationHTML += `<li class="page-item ${activeClass}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
-  }
-
-  if (endPage < totalPages) {
-    if (endPage < totalPages - 1) {
-      paginationHTML += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
-    }
-    paginationHTML += `<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a></li>`;
-  }
-
-  // Chèn vào trước nút next
-  nextBtn.insertAdjacentHTML("beforebegin", paginationHTML);
-
-  // Cập nhật trạng thái prev/next
-  prevBtn.classList.toggle("disabled", currentPage === 1);
-  nextBtn.classList.toggle("disabled", currentPage === totalPages);
-}
-
-function UpdatePaginationUI() {
-  RenderPagination();
-}
-
-function handlePaginationClick(e) {
-  const link = e.target.closest(".page-link");
-  if (!link || link.classList.contains("disabled")) return;
-
-  e.preventDefault();
-  const page = link.dataset.page;
-
-  if (page === "prev" && currentPage > 1) {
-    currentPage--;
-  } else if (page === "next" && currentPage < totalPages) {
-    currentPage++;
-  } else if (!isNaN(page)) {
-    currentPage = Number(page);
-  }
-
-  RenderStudentList();
-  UpdatePaginationUI();
-}
-
-function AttachPaginationListeners() {
-  const pagination = document.getElementById("pagination");
-  if (!pagination) return;
-
-  // Chỉ attach một lần bằng cách kiểm tra flag
-  if (pagination.dataset.listenerAttached === "true") return;
-
-  // Sử dụng event delegation
-  pagination.addEventListener("click", handlePaginationClick);
-  pagination.dataset.listenerAttached = "true";
-}
-
 function init() {
-  AttachPaginationListeners();
+  // đọc q từ URL nếu có
+  const urlParams = new URLSearchParams(window.location.search);
+  searchTerm = (urlParams.get("q") || "").trim();
+
+  studentPaginator = createPaginator({
+    paginationId: "pagination",
+    prevId: "prevBtn",
+    nextId: "nextBtn",
+    onPageChange: (page) => {
+      currentPage = page;
+      RenderStudentList();
+    },
+  });
+
+  // dropdown filter lớp dùng chung
+  initDropdownFilter({
+    containerSelector: "#classFilter",
+    dataAttr: "class",
+    defaultValue: "all",
+    onChange: (val) => {
+      selectedClass = val;
+      fetchStudents();
+    },
+  });
+
+  // tìm kiếm dùng chung
+  initSearchInput({
+    formSelector: "#studentSearchForm",
+    inputSelector: "#studentSearchInput",
+    onSearch: (val) => {
+      searchTerm = val;
+      fetchStudents();
+    },
+  }).setValue(searchTerm);
+
   fetchStudents();
 }
 
