@@ -38,7 +38,7 @@ def get_all_health_record():
 #GET: GET /api/health/<int:student_id>
 @health_api.route('/api/health/<int:student_id>', methods=['GET'])
 def get_health_record_by_student_id(student_id):
-    health_records = HealthRecord.query.filter_by(student_id=student_id).all()
+    health_records = HealthRecord.query.filter_by(student_id=student_id).order_by(HealthRecord.date_created.asc()).all()
     if not health_records:
         return jsonify({
             "messgage": "no health record"
@@ -56,10 +56,16 @@ def get_health_record_by_student_id(student_id):
             "weight": record.weight,
             "temperature" : record.temperature,
             "note" : record.note,
-            "date_created": record.date_created,
-            "time_ago": time_ago(record.date_created)
+            "date_created": format_date(record.date_created),
+            "time_ago": time_ago(record.date_created),
+            "teacher":{
+                "id": record.teacher.id if record.teacher else None,
+                "name": record.teacher.name if record.teacher else None,
+            }
         })
     return jsonify(health_records_data),200
+
+
 
 #POST: POST /api/health/<int:student_id>/health-records/<int:record_id>
 @health_api.route('/api/health/<int:student_id>/health-records', methods=['POST'])

@@ -359,9 +359,9 @@
   ],
   "health_records": [
     {
-      "weight": 18.5,
-      "height": 105.0,
-      "temperature": 36.8,
+      "weight": 19,
+      "height": 100.0,
+      "temperature": 35.8,
       "note": "Khỏe mạnh, không có dấu hiệu bất thường.",
       "date": "2024-09-01",
       "student_name": "Nguyễn Minh Anh",
