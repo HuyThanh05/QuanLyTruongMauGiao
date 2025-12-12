@@ -5,7 +5,8 @@ from functools import wraps
 from app.models.Models import Classroom, Student
 from app.services.class_service import get_all_class
 from app.services.health_record_service import count_students_recorded_today, count_students_not_recorded_today
-from app.services.student_service import get_all_students, total_student, search_students, get_student_count_by_classroom
+from app.services.student_service import get_all_students, total_student, search_students, \
+    get_student_count_by_classroom, total_male_count, total_female_count, classroom_student_count, get_gender_stats_by_class
 
 page_routes = Blueprint('pages', __name__)
 
@@ -64,16 +65,15 @@ def health():
 def classsize():
     all_classrooms = Classroom.query.all()
     all_students = Student.query.all()
+    capacity = 100
+    total_students = total_student(all_classrooms)
+    male_count = total_male_count()
+    female_count = total_female_count()
+    
 
-    classroom_student_count = {}
-    for student in all_students:
-        if student.class_id:
-            if student.class_id in classroom_student_count:
-                classroom_student_count[student.class_id] += 1
-            else:
-                classroom_student_count[student.class_id] = 1
-
-    return render_template('pages/classSize.html', Title = "Quản lý sĩ số lớp", classrooms=all_classrooms, students=all_students, classroom_student_count=classroom_student_count)
+    gender_stats_by_class = get_gender_stats_by_class(all_classrooms)
+    
+    return render_template('pages/classSize.html', Title="Quản lý sĩ số lớp", classrooms=all_classrooms, students=all_students, classroom_student_count=classroom_student_count(), male_count=male_count, female_count=female_count, total_students=total_students,capacity=capacity, get_gender_stats_by_class=gender_stats_by_class)
 
 @page_routes.route('/fee')
 @roles_required('Accountant')
