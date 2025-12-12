@@ -4,7 +4,7 @@ from functools import wraps
 
 from app.models.Models import Classroom, Student
 from app.services.class_service import get_all_class
-from app.services.health_record_service import count_students_recorded_today, count_students_not_recorded_today
+from app.services.health_record_service import count_student_record, count_students_recorded_today, count_students_not_recorded_today
 from app.services.student_service import get_all_students, total_student, search_students, \
     get_student_count_by_classroom, total_male_count, total_female_count, classroom_student_count, get_gender_stats_by_class
 
@@ -94,7 +94,9 @@ def studentprofile():
 @roles_required('Parent')
 def kid():
     parent_id = current_user.id
-    return render_template('pages/kid.html',Title = "Thông tin trẻ",parent_id=parent_id)
+    student = Student.query.filter_by(parent_id=parent_id).first()
+    count = count_student_record(student.id)
+    return render_template('pages/kid.html',Title = "Thông tin trẻ",parent_id=parent_id,student_id=student.id if student else None,count=count)
 
 @page_routes.route('/feetracking')
 @roles_required('Parent')

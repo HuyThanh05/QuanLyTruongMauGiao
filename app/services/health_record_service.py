@@ -22,3 +22,7 @@ def count_students_not_recorded_today():
     all_students = db.session.query(func.count(Student.id)).scalar()
     not_recorded_today = all_students - recorded_today
     return not_recorded_today
+
+def count_student_record(student_id):
+    health_record = HealthRecord.query.filter_by(student_id=student_id).count()
+    return health_record
