@@ -93,7 +93,8 @@ def studentprofile():
 @page_routes.route('/kidtracking')
 @roles_required('Parent')
 def kid():
-    return render_template('pages/kid.html',Title = "Thông tin trẻ")
+    parent_id = current_user.id
+    return render_template('pages/kid.html',Title = "Thông tin trẻ",parent_id=parent_id)
 
 @page_routes.route('/feetracking')
 @roles_required('Parent')

@@ -1,6 +1,7 @@
 import json
 from flask import Blueprint, request, jsonify
 from app.models.Models import Student
+from app.utils import format_date
 
 
 kid_api = Blueprint('kid_api', __name__)
@@ -12,13 +13,21 @@ def get_kids(parent_id):
     kids_data = []
     for kid in kids:
         kids_data.append({
-            "id": kid.id,
-            "name": kid.name,
-            "dob": kid.dob,
+            "id": kid.id if kid.id else "",
+            "name": kid.name if kid.name else "",
+            "dob": format_date(kid.dob) if kid.dob else "",
             "gender": kid.gender.value,
-            "parent_id": kid.parent_id,
-            "parent_phone": kid.parent_phone,
-            "address": kid.address
+            "address": kid.address if kid.address else "",
+            "class": {
+                "id": kid.classroom.id if kid.classroom else "",
+                "name": kid.classroom.name if kid.classroom else ""
+            },
+            "parent":{
+                "id": kid.parent.id if kid.parent else "",
+                "name": kid.parent.name if kid.parent else "",
+                "phone": kid.parent.phone if kid.parent else ""
+            }
+            
         })
     return jsonify(kids_data), 200
 
