@@ -1,4 +1,4 @@
-const studentsPerPage = 15;
+const studentsPerPage = 10;
 let currentPage = 1;
 let data = [];
 let totalPages = 1;
@@ -7,6 +7,15 @@ let searchTerm = "";
 let studentPaginator = null;
 let editModal = null;
 let parentOptions = [];
+
+// Helper function để xóa backdrop và reset body styles
+function removeModalBackdrop() {
+  const backdrop = document.querySelector(".modal-backdrop");
+  if (backdrop) backdrop.remove();
+  document.body.classList.remove("modal-open");
+  document.body.style.overflow = "";
+  document.body.style.paddingRight = "";
+}
 
 // Tải danh sách học sinh từ API theo bộ lọc tìm kiếm/lớp và cập nhật bảng + phân trang
 async function fetchStudents() {
@@ -76,13 +85,24 @@ function RenderStudentList() {
         <td>${student.parent?.name}</td>
         <td>${student.parent?.phone}</td>
         <td class="text-end">
-          <button
-            class="btn btn-sm btn-outline-primary"
-            data-id="${student.id}"
-            aria-label="Chỉnh sửa học sinh ${student.name}"
-          >
-            Chỉnh sửa
-          </button>
+          <div class="btn-group btn-group-sm" role="group">
+            <button
+              class="btn btn-outline-primary"
+              data-id="${student.id}"
+              data-action="edit"
+              aria-label="Chỉnh sửa học sinh ${student.name}"
+            >
+              Chỉnh sửa
+            </button>
+            <button
+              class="btn btn-outline-danger"
+              data-id="${student.id}"
+              data-action="delete"
+              aria-label="Xóa học sinh ${student.name}"
+            >
+              Xóa
+            </button>
+          </div>
         </td>
       </tr>
     `;
@@ -252,8 +272,13 @@ function init() {
       const btn = e.target.closest("button[data-id]");
       if (!btn) return;
       const id = btn.getAttribute("data-id");
-      const student = data.find((s) => String(s.id) === String(id));
-      openEditModal(student);
+      const action = btn.dataset.action || "edit";
+      if (action === "delete") {
+        deleteStudent(id);
+      } else {
+        const student = data.find((s) => String(s.id) === String(id));
+        openEditModal(student);
+      }
     });
   }
 
@@ -263,7 +288,7 @@ function init() {
     saveBtn.addEventListener("click", saveStudent);
   }
 
-  // Lọc & chọn phụ huynh bằng 1 ô nhập + datalist
+  // Lọc & chọn phụ huynh bằng 1 ô nhập + datalist (modal chỉnh sửa)
   const parentFilter = document.getElementById("editParentFilter");
   const parentIdHidden = document.getElementById("editStudentParentId");
   const parentDatalist = document.getElementById("parentOptions");
@@ -275,6 +300,176 @@ function init() {
       );
       parentIdHidden.value = opt ? opt.dataset.id : "";
     });
+  }
+
+  // Lọc & chọn phụ huynh bằng 1 ô nhập + datalist (modal tạo mới)
+  const createParentFilter = document.getElementById("createParentFilter");
+  const createParentIdHidden = document.getElementById("createStudentParentId");
+  const createParentDatalist = document.getElementById("createParentOptions");
+  if (createParentFilter && createParentIdHidden && createParentDatalist) {
+    createParentFilter.addEventListener("input", () => {
+      const val = createParentFilter.value;
+      const opt = Array.from(createParentDatalist.options).find(
+        (o) => o.value === val && o.dataset.id
+      );
+      createParentIdHidden.value = opt ? opt.dataset.id : "";
+    });
+  }
+
+  // Sự kiện lưu trong modal tạo mới
+  const saveCreateBtn = document.getElementById("saveCreateStudentBtn");
+  if (saveCreateBtn) {
+    saveCreateBtn.addEventListener("click", createStudent);
+  }
+
+  // Mở modal tạo mới và reset form
+  const createModalEl = document.getElementById("createStudentModal");
+  if (createModalEl) {
+    createModalEl.addEventListener("show.bs.modal", () => {
+      resetCreateForm();
+      buildCreateParentOptions();
+    });
+  }
+}
+
+// Reset form tạo mới
+function resetCreateForm() {
+  document.getElementById("createStudentName").value = "";
+  document.getElementById("createStudentDob").value = "";
+  document.getElementById("createStudentGender").value = "";
+  document.getElementById("createStudentAddress").value = "";
+  document.getElementById("createStudentClassSelect").value = "";
+  document.getElementById("createParentFilter").value = "";
+  document.getElementById("createStudentParentId").value = "";
+  document.getElementById("createStudentError").textContent = "";
+}
+
+// Gom danh sách phụ huynh cho modal tạo mới
+function buildCreateParentOptions() {
+  const seen = new Set();
+  const parentOptions = [];
+
+  data.forEach((s) => {
+    if (s.parent?.id && !seen.has(s.parent.id)) {
+      seen.add(s.parent.id);
+      parentOptions.push({
+        id: s.parent.id,
+        name: s.parent.name || "",
+        phone: s.parent.phone || "",
+      });
+    }
+  });
+
+  const datalist = document.getElementById("createParentOptions");
+  if (!datalist) return;
+
+  datalist.innerHTML = "";
+
+  parentOptions.forEach((p) => {
+    const label = `${p.name || "Không tên"} - ${p.phone || "Không số"}`;
+    const opt = document.createElement("option");
+    opt.value = label;
+    opt.dataset.id = p.id;
+    datalist.appendChild(opt);
+  });
+}
+
+// Tạo học sinh mới qua API POST
+async function createStudent() {
+  const name = document.getElementById("createStudentName")?.value.trim();
+  const dob = document.getElementById("createStudentDob")?.value.trim();
+  const gender = document.getElementById("createStudentGender")?.value;
+  const address = document.getElementById("createStudentAddress")?.value.trim();
+  const classId = document.getElementById("createStudentClassSelect")?.value;
+  const parentId = document.getElementById("createStudentParentId")?.value;
+  const errorEl = document.getElementById("createStudentError");
+  if (errorEl) errorEl.textContent = "";
+
+  // Validation
+  if (!name || !dob || !gender || !address) {
+    if (errorEl)
+      errorEl.textContent = "Vui lòng điền đầy đủ thông tin bắt buộc";
+    return;
+  }
+
+  let payload = {
+    name,
+    dob,
+    gender,
+    address,
+    class_id: classId ? Number(classId) : null,
+    parent_id: parentId ? Number(parentId) : null,
+  };
+
+  // Xóa các field null
+  Object.keys(payload).forEach(
+    (key) => payload[key] == null && delete payload[key]
+  );
+
+  try {
+    const res = await fetch(`/api/students`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      if (errorEl)
+        errorEl.textContent = data.message || "Tạo học sinh thất bại";
+      else alert("Lỗi: " + (data.message || "Tạo học sinh thất bại"));
+      return;
+    }
+
+    // Đóng modal và reload danh sách
+    const createModalEl = document.getElementById("createStudentModal");
+    if (createModalEl) {
+      const modal = bootstrap.Modal.getInstance(createModalEl);
+      if (modal) {
+        // Đợi modal đóng hoàn toàn rồi mới reload và xóa backdrop
+        createModalEl.addEventListener(
+          "hidden.bs.modal",
+          async () => {
+            removeModalBackdrop();
+            await fetchStudents();
+          },
+          { once: true }
+        );
+        modal.hide();
+      } else {
+        removeModalBackdrop();
+        await fetchStudents();
+      }
+    } else {
+      removeModalBackdrop();
+      await fetchStudents();
+    }
+  } catch (err) {
+    console.error(err);
+    if (errorEl) errorEl.textContent = err.message || "Có lỗi xảy ra";
+    else alert("Có lỗi xảy ra");
+  }
+}
+
+// Xóa học sinh
+async function deleteStudent(studentId) {
+  if (!studentId) return;
+  const confirmed = window.confirm("Bạn chắc chắn muốn xóa học sinh này?");
+  if (!confirmed) return;
+
+  try {
+    const res = await fetch(`/api/students/${studentId}`, {
+      method: "DELETE",
+    });
+    const dataRes = await res.json();
+    if (!res.ok) {
+      alert(dataRes.message || "Xóa học sinh thất bại");
+      return;
+    }
+    await fetchStudents();
+  } catch (err) {
+    console.error(err);
+    alert(err.message || "Có lỗi xảy ra khi xóa học sinh");
   }
 }
 

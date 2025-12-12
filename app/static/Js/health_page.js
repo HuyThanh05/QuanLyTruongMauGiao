@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 setInterval(() => {
     loadAllLatestRecords();
-}, 30000);
+}, 60000);
 
 
 //Xử healthModal

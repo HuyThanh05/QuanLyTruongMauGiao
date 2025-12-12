@@ -116,6 +116,8 @@ block content %}
       <button
         class="btn btn-sm rounded-circle btn-brand btn-fab"
         aria-label="Thêm"
+        data-bs-toggle="modal"
+        data-bs-target="#createStudentModal"
       >
         <i class="fa-solid fa-plus"></i>
       </button>
@@ -216,6 +218,122 @@ block content %}
         </button>
         <button type="button" class="btn btn-primary" id="saveStudentBtn">
           Lưu
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal tạo học sinh mới-->
+<div
+  class="modal fade"
+  id="createStudentModal"
+  tabindex="-1"
+  aria-labelledby="createStudentModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createStudentModalLabel">
+          Thêm học sinh mới
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="createStudentForm" class="vstack gap-3">
+          <div>
+            <label for="createStudentName" class="form-label"
+              >Họ tên <span class="text-danger">*</span></label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="createStudentName"
+              required
+            />
+          </div>
+
+          <div>
+            <label for="createStudentDob" class="form-label"
+              >Ngày sinh (dd/mm/yyyy) <span class="text-danger">*</span></label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="createStudentDob"
+              placeholder="VD: 01/01/2020"
+              required
+            />
+          </div>
+
+          <div>
+            <label for="createStudentGender" class="form-label"
+              >Giới tính <span class="text-danger">*</span></label
+            >
+            <select class="form-select" id="createStudentGender" required>
+              <option value="">-- Chọn giới tính --</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="createStudentAddress" class="form-label"
+              >Địa chỉ <span class="text-danger">*</span></label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="createStudentAddress"
+              required
+            />
+          </div>
+
+          <div>
+            <label for="createStudentClassSelect" class="form-label">Lớp</label>
+            <select class="form-select" id="createStudentClassSelect">
+              <option value="">-- Chọn lớp --</option>
+              {% for class in classrooms %}
+              <option value="{{ class.id }}">{{ class.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="vstack gap-2">
+            <div>
+              <label for="createParentFilter" class="form-label"
+                >Phụ huynh</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="createParentFilter"
+                placeholder="Nhập tên/số điện thoại để tìm"
+                list="createParentOptions"
+              />
+              <datalist id="createParentOptions"></datalist>
+            </div>
+            <input type="hidden" id="createStudentParentId" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div
+          class="me-auto text-danger small"
+          id="createStudentError"
+          aria-live="polite"
+        ></div>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Đóng
+        </button>
+        <button type="button" class="btn btn-primary" id="saveCreateStudentBtn">
+          Thêm
         </button>
       </div>
     </div>
