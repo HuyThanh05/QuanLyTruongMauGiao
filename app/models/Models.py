@@ -88,9 +88,12 @@ class HealthRecord(db.Model):
     temperature = db.Column(db.Float, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     note = db.Column(db.String(255), nullable=False)
-    #relationships
+    #FK
     student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
     teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    #relationships
+    student = db.relationship("Student",backref="health_records")
+    teacher = db.relationship("User",backref="health_records_made")
 
 class TuitionFee(db.Model):
     __tablename__ = "fees"

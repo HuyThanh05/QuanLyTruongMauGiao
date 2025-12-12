@@ -161,13 +161,18 @@ async function saveStudent() {
   const errorEl = document.getElementById("editStudentError");
   if (errorEl) errorEl.textContent = "";
 
-  const payload = {
-    ...(name ? { name } : {}),
-    ...(dob ? { dob } : {}),
-    ...(gender ? { gender } : {}),
-    ...(classId ? { class_id: Number(classId) } : {}),
-    ...(parentId ? { parent_id: Number(parentId) } : {}),
+  let payload = {
+    name,
+    dob,
+    gender,
+    class_id: classId ? Number(classId) : null,
+    parent_id: parentId ? Number(parentId) : null,
   };
+
+  // Xóa các field không có giá trị
+  Object.keys(payload).forEach(
+    (key) => payload[key] == null && delete payload[key]
+  );
 
   try {
     const res = await fetch(`/api/students/${studentId}`, {

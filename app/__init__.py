@@ -51,12 +51,14 @@ def create_app():
     from app.controllers.user_api import user_api
     from app.controllers.student_api import student_api
     from app.controllers.kid_api import kid_api
+    from app.controllers.health_api import health_api
 
     app.register_blueprint(page_routes)
     app.register_blueprint(auth_service)
     app.register_blueprint(user_api, url_prefix='/api/users')
     app.register_blueprint(student_api)
     app.register_blueprint(kid_api)
+    app.register_blueprint(health_api)
 
     # flask-admin
     admin.init_app(app)
