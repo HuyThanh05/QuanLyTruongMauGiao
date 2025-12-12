@@ -104,8 +104,8 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
               </div>
               <div class="stat-content">
                 <div class="stat-label">Cân nặng</div>
-                <div class="stat-value">18.5 kg</div>
-                <div class="stat-date">Gần nhất: 15/01/2025</div>
+                <div class="stat-value" id="weightValue">18.5 kg</div>
+                <div class="stat-date currentRecordDate">Gần nhất: 15/01/2025</div>
               </div>
             </div>
           </div>
@@ -116,8 +116,8 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
               </div>
               <div class="stat-content">
                 <div class="stat-label">Chiều cao</div>
-                <div class="stat-value">105 cm</div>
-                <div class="stat-date">Gần nhất: 15/01/2025</div>
+                <div class="stat-value" id="heightValue">105 cm</div>
+                <div class="stat-date currentRecordDate">Gần nhất: 15/01/2025</div>
               </div>
             </div>
           </div>
@@ -128,8 +128,8 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
               </div>
               <div class="stat-content">
                 <div class="stat-label">Nhiệt độ</div>
-                <div class="stat-value">36.8°C</div>
-                <div class="stat-date">Gần nhất: 15/01/2025</div>
+                <div class="stat-value" id="tempValue">36.8°C</div>
+                <div class="stat-date currentRecordDate">Gần nhất: 15/01/2025</div>
               </div>
             </div>
           </div>
@@ -140,7 +140,7 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
               </div>
               <div class="stat-content">
                 <div class="stat-label">Tổng ghi nhận</div>
-                <div class="stat-value">12 lần</div>
+                <div class="stat-value" >{{count}} lần</div>
                 <div class="stat-date">Trong tháng này</div>
               </div>
             </div>
@@ -274,6 +274,45 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
                 </div>
               </div>
             </div>
+            <!-- Ghi nhận 4 -->
+            <div
+              class="list-group-item health-record-item px-0 py-2 border-bottom"
+            >
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="flex-grow-1">
+                  <div class="d-flex align-items-center mb-1 flex-wrap gap-2">
+                    <span class="badge bg-light text-dark">
+                      <i class="fas fa-calendar me-1"></i>15/01/2025 - 08:30
+                    </span>
+                    <span class="badge bg-success-subtle text-success">
+                      <i class="fas fa-check-circle me-1"></i>Bình thường
+                    </span>
+                  </div>
+                  <div class="row g-2 text-muted small mb-1">
+                    <div class="col-12 col-md-4">
+                      <i class="fas fa-weight me-1"></i>
+                      <strong>Cân nặng:</strong> 18.5 kg
+                    </div>
+                    <div class="col-12 col-md-4">
+                      <i class="fas fa-ruler-vertical me-1"></i>
+                      <strong>Chiều cao:</strong> 105 cm
+                    </div>
+                    <div class="col-12 col-md-4">
+                      <i class="fas fa-thermometer-half me-1"></i>
+                      <strong>Nhiệt độ:</strong> 36.8°C
+                    </div>
+                  </div>
+                  <div class="text-muted small">
+                    <i class="fas fa-user-md me-1"></i>
+                    <strong>Người ghi nhận:</strong> Cô Nguyễn Thị A
+                  </div>
+                  <div class="text-muted small mt-1">
+                    <i class="fas fa-sticky-note me-1"></i>
+                    <strong>Ghi chú:</strong> Trẻ khỏe mạnh, ăn uống tốt
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -282,5 +321,6 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
 </div>
 <script src="{{ url_for('static', filename='Js/kid_page.js') }}"></script>
 <script>fetchKidDataById({{parent_id}})</script>
+<script>fetchHealthRecordById({{student_id}})</script>
 {% endblock %}
 

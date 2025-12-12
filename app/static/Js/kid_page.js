@@ -6,16 +6,15 @@ parentNameField = document.getElementById("parentNameField");
 parentPhoneField = document.getElementById("parentPhoneField");
 addressField = document.getElementById("addressField");
 
-console.log("kid_page.js loaded");
+weightValue = document.getElementById("weightValue");
+heightValue = document.getElementById("heightValue");
+tempValue = document.getElementById("tempValue");
+currentRecordDate = document.querySelectorAll(".currentRecordDate");
+
 
 async function fetchKidDataById(useId) {
-    const response = await fetch(`/api/kids/${useId}`);
-    const kidsData = await response.json();
-
-    if (!response.ok) {
-        console.log("Error fetching kid data:", kidsData.message);
-        return;
-    }
+    const kidsData = await fetchDataUrl(`/api/kids/${useId}`);
+    
 
     const kid = kidsData[0];
 
@@ -28,4 +27,20 @@ async function fetchKidDataById(useId) {
     addressField.textContent = kid.address??"";
 
     console.log(kid);
+}
+
+async function fetchHealthRecordById(kidId) {
+    const healthRecordData = await fetchDataUrl(`api/health/${kidId}`);
+
+    const healthRecord = healthRecordData.at(-1);
+
+    weightValue.textContent =  healthRecord.weight??"";
+    heightValue.textContent =   healthRecord.height??"";
+    tempValue.textContent = healthRecord.temperature??"";
+    currentRecordDate[0].textContent = healthRecord.date_created??"";
+    currentRecordDate[1].textContent = healthRecord.date_created??"";
+    currentRecordDate[2].textContent = healthRecord.date_created??"";
+
+    console.log("fetchHealthRecordById called with", kidId);
+console.log("healthRecordData =", healthRecordData);
 }
