@@ -44,38 +44,38 @@ block content %}
       class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3"
     >
       <h5 class="mb-0">Danh sách học sinh</h5>
-      <form id="studentSearchForm">
-        <div class="d-flex gap-2">
-          <div class="btn-group">
-            <button
-              type="button"
-              class="btn btn-outline-secondary btn-sm dropdown-toggle"
-              data-bs-toggle="dropdown"
-            >
-              Tất cả
-            </button>
-
-            <ul class="dropdown-menu" id="classFilter">
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="javascript:void(0)"
-                  data-class="all"
-                  >Tất cả</a
-                >
-              </li>
-              {% for class in classrooms %}
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="javascript:void(0)"
-                  data-class="{{class.id}}"
-                  >{{ class.name }}</a
-                >
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
+      <div class="d-flex gap-2">
+        <div class="btn-group">
+          <button
+            class="btn btn-outline-secondary btn-sm dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            id="classFilterToggle"
+          >
+            Chọn lớp
+          </button>
+          <ul class="dropdown-menu" id="classFilter">
+            <li>
+              <a
+                class="dropdown-item"
+                href="javascript:void(0)"
+                data-class="all"
+                >Tất cả</a
+              >
+            </li>
+            {% for classroom in classrooms %}
+            <li>
+              <a
+                class="dropdown-item"
+                href="javascript:void(0)"
+                data-class="{{ classroom.id }}"
+                >{{ classroom.name }}</a
+              >
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <form id="studentSearchForm">
           <div class="input-group input-group-sm">
             <span class="input-group-text bg-white">
               <i class="fa-solid fa-magnifying-glass icon"></i>
@@ -88,8 +88,8 @@ block content %}
               value="{{ request.args.get('q', '') }}"
             />
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
 
     <div class="table-responsive">
@@ -103,6 +103,7 @@ block content %}
             <th>Lớp</th>
             <th>Phụ huynh</th>
             <th>Số điện thoại liên hệ</th>
+            <th></th>
           </tr>
         </thead>
         <tbody id="student_list">
@@ -132,6 +133,100 @@ block content %}
   </div>
 </div>
 
+<!--Modal chỉnh sửa học sinh-->
+<div
+  class="modal fade"
+  id="editStudentModal"
+  tabindex="-1"
+  aria-labelledby="editStudentModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editStudentModalLabel">
+          Chỉnh sửa học sinh
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="editStudentForm" class="vstack gap-3">
+          <input type="hidden" id="editStudentId" />
+
+          <div>
+            <label for="editStudentName" class="form-label">Họ tên</label>
+            <input type="text" class="form-control" id="editStudentName" />
+          </div>
+
+          <div>
+            <label for="editStudentDob" class="form-label"
+              >Ngày sinh (dd/mm/yyyy)</label
+            >
+            <input type="text" class="form-control" id="editStudentDob" />
+          </div>
+
+          <div>
+            <label for="editStudentGender" class="form-label">Giới tính</label>
+            <select class="form-select" id="editStudentGender">
+              <option value="">-- Chọn giới tính --</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="editStudentClassSelect" class="form-label">Lớp</label>
+            <select class="form-select" id="editStudentClassSelect">
+              <option value="">-- Chọn lớp --</option>
+              {% for class in classrooms %}
+              <option value="{{ class.id }}">{{ class.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="vstack gap-2">
+            <div>
+              <label for="editParentFilter" class="form-label">Phụ huynh</label>
+              <input
+                type="text"
+                class="form-control"
+                id="editParentFilter"
+                placeholder="Nhập tên/số điện thoại để tìm"
+                list="parentOptions"
+              />
+              <datalist id="parentOptions"></datalist>
+            </div>
+            <input type="hidden" id="editStudentParentId" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div
+          class="me-auto text-danger small"
+          id="editStudentError"
+          aria-live="polite"
+        ></div>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Đóng
+        </button>
+        <button type="button" class="btn btn-primary" id="saveStudentBtn">
+          Lưu
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+  crossorigin="anonymous"
+></script>
 <script src="{{ url_for('static', filename='Js/pagination.js') }}"></script>
 <script src="{{ url_for('static', filename='Js/filters.js') }}"></script>
 <script src="{{ url_for('static', filename='Js/student_page.js') }}"></script>

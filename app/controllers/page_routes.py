@@ -4,6 +4,7 @@ from functools import wraps
 
 from app.models.Models import Classroom, Student
 from app.services.class_service import get_all_class
+from app.services.health_record_service import count_students_recorded_today, count_students_not_recorded_today
 from app.services.student_service import get_all_students, total_student, search_students, get_student_count_by_classroom
 
 page_routes = Blueprint('pages', __name__)
@@ -53,8 +54,10 @@ def health():
     from app.models.Models import HealthRecord
     all_classrooms = Classroom.query.all()
     all_students = Student.query.all()
+    recorded_students = count_students_recorded_today()
+    unrecorded_students = count_students_not_recorded_today()
 
-    return render_template('pages/health.html', Title='Sức khỏe',students=all_students,classrooms=all_classrooms)
+    return render_template('pages/health.html', Title='Sức khỏe',students=all_students,classrooms=all_classrooms,recorded_students=recorded_students,unrecorded_students=unrecorded_students)
 
 @page_routes.route('/classsize')
 @roles_required('Teacher')

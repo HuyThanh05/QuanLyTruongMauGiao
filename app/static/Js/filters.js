@@ -13,9 +13,15 @@ function initDropdownFilter({
   dataAttr = "class",
   defaultValue = "all",
   onChange,
+  toggleSelector,
+  activeClass = "active",
 }) {
   const container = document.querySelector(containerSelector);
-  if (!container) return { setValue: () => {} };
+  const toggleBtn = toggleSelector
+    ? document.querySelector(toggleSelector)
+    : null;
+
+  if (!container) return { setValue: () => {}, getValue: () => defaultValue };
 
   let current = defaultValue;
 
@@ -25,19 +31,47 @@ function initDropdownFilter({
       e.stopPropagation();
       const value = this.dataset[dataAttr];
       current = value ?? defaultValue;
+
+      // cập nhật nhãn nút toggle nếu có
+      if (toggleBtn) {
+        toggleBtn.textContent = this.textContent.trim();
+      }
+
+      // cập nhật trạng thái active
+      if (activeClass) {
+        container.querySelectorAll(itemSelector).forEach((el) => {
+          el.classList.toggle(activeClass, el === this);
+        });
+      }
+
       onChange?.(current);
     });
   });
 
-  return {
+  const api = {
     setValue(val) {
       current = val ?? defaultValue;
       onChange?.(current);
+
+      // đồng bộ nhãn toggle theo item khớp
+      if (toggleBtn) {
+        const matched = Array.from(
+          container.querySelectorAll(itemSelector)
+        ).find((el) => el.dataset[dataAttr] === current);
+        if (matched) {
+          toggleBtn.textContent = matched.textContent.trim();
+        }
+      }
     },
     getValue() {
       return current;
     },
   };
+
+  // khởi tạo nhãn toggle mặc định
+  api.setValue(defaultValue);
+
+  return api;
 }
 
 /**
