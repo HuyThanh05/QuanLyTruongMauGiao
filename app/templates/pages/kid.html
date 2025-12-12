@@ -39,8 +39,8 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
               style="display: none"
             />
           </div>
-          <h5 class="mb-1">Nguyễn Văn An</h5>
-          <span class="badge bg-info-subtle text-info">Lớp Mầm 1</span>
+          <h5 class="mb-1" id="nameField"></h5>
+          <span class="badge bg-info-subtle text-info" id="classNameField"></span>
         </div>
 
         <div class="info-section">
@@ -48,35 +48,35 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
             <div class="info-label">
               <i class="fas fa-calendar-alt text-brand me-2"></i>Ngày sinh
             </div>
-            <div class="info-value">15/03/2020</div>
+            <div class="info-value" id="dobField"></div>
           </div>
 
           <div class="info-item">
             <div class="info-label">
               <i class="fas fa-venus-mars text-brand me-2"></i>Giới tính
             </div>
-            <div class="info-value">Nam</div>
+            <div class="info-value" id="genderField"></div>
           </div>
 
           <div class="info-item">
             <div class="info-label">
               <i class="fas fa-user-friends text-brand me-2"></i>Phụ huynh
             </div>
-            <div class="info-value">Nguyễn Văn Bố</div>
+            <div class="info-value" id="parentNameField"></div>
           </div>
 
           <div class="info-item">
             <div class="info-label">
               <i class="fas fa-phone text-brand me-2"></i>Số điện thoại
             </div>
-            <div class="info-value">0901234567</div>
+            <div class="info-value" id="parentPhoneField"></div>
           </div>
 
           <div class="info-item">
             <div class="info-label">
               <i class="fas fa-map-marker-alt text-brand me-2"></i>Địa chỉ
             </div>
-            <div class="info-value">123 Đường ABC, Quận 1, TP.HCM</div>
+            <div class="info-value" id="addressField"></div>
           </div>
         </div>
       </div>
@@ -280,4 +280,7 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
     </div>
   </div>
 </div>
+<script src="{{ url_for('static', filename='Js/kid_page.js') }}"></script>
+<script>fetchKidDataById({{parent_id}})</script>
 {% endblock %}
+
