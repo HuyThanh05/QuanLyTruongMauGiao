@@ -38,6 +38,61 @@ def get_students():
 
     return jsonify(students_data), 200
 
+#DELETE: DELETE api/students/<int:student_id>
+@student_api.route('/api/students/<int:student_id>', methods=['DELETE'])
+@roles_required('Teacher')
+def delete_student(student_id):
+    student = Student.query.get(student_id)
+    if not student:
+        return jsonify({"message": "student not found"}), 404
+
+    db.session.delete(student)
+    db.session.commit()
+    return jsonify({"message": "student deleted"}), 200
+
+#POST: POST api/students
+@student_api.route('/api/students', methods=['POST'])
+@roles_required('Teacher')
+def create_student():
+    from datetime import date
+    
+    payload = _get_payload()
+    required_fields = ['name', 'dob', 'gender', 'address']
+    for f in required_fields:
+        if f not in payload:
+            return jsonify({"message": f"{f} is required"}), 400
+
+    dob_value = _string_to_date(payload['dob'])
+    
+    # Tính tuổi từ ngày sinh
+    today = date.today()
+    age = today.year - dob_value.year - ((today.month, today.day) < (dob_value.month, dob_value.day))
+    
+    new_student = Student(
+        name=payload['name'],
+        age=age,
+        dob=dob_value,
+        gender=payload['gender'],
+        address=payload['address'],
+        class_id=payload.get('class_id'),
+        parent_id=payload.get('parent_id')
+    )
+
+    db.session.add(new_student)
+    db.session.commit()
+
+    return jsonify({
+        "message": "student created",
+        "student": {
+            "id": new_student.id,
+            "name": new_student.name,
+            "dob": new_student.formatted_dob,
+            "gender": new_student.gender.value,
+            "class_id": new_student.class_id,
+            "parent_id": new_student.parent_id
+        }
+    }), 201
+
 #PUT: api/students/<int:student_id>
 @student_api.route('/api/students/<int:student_id>', methods=['PUT'])
 @roles_required('Teacher')
