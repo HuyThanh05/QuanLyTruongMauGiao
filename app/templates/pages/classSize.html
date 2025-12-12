@@ -1,6 +1,5 @@
-{% extends 'pages/base.html' %}
-{% block title %}Sĩ số lớp{% endblock %}
-{% block content %}
+{% extends 'pages/base.html' %} {% block title %}Sĩ số lớp{% endblock %} {%
+block content %}
 <!-- Bộ lọc chọn lớp -->
 <div class="card border-0 shadow-sm mb-4">
   <div class="card-body">
@@ -33,20 +32,18 @@
                 <i class="fa-solid fa-check me-2"></i>Tất cả các lớp
               </a>
             </li>
-            {% if classrooms %}
-              {% for classroom in classrooms %}
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    data-classroom-id="{{ classroom.id }}"
-                    data-classroom-name="{{ classroom.name }}"
-                  >
-                    {{ classroom.name }}
-                  </a>
-                </li>
-              {% endfor %}
-            {% endif %}
+            {% if classrooms %} {% for classroom in classrooms %}
+            <li>
+              <a
+                class="dropdown-item"
+                href="#"
+                data-classroom-id="{{ classroom.id }}"
+                data-classroom-name="{{ classroom.name }}"
+              >
+                {{ classroom.name }}
+              </a>
+            </li>
+            {% endfor %} {% endif %}
           </ul>
         </div>
       </div>
@@ -56,42 +53,40 @@
 
 <!-- Thống kê sĩ số các lớp -->
 <div class="row g-3 mb-4">
-  {% if classrooms %}
-    {% for classroom in classrooms %}
-      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-        <div class="card shadow-sm border-0 h-100">
-          <div class="card-body">
-            <div class="d-flex align-items-center gap-3">
-              <div class="rounded-3 p-3 bg-light">
-                <i class="fa-solid fa-users icon"></i>
-              </div>
-              <div class="flex-grow-1">
-                <div class="text-secondary small mb-1">{{ classroom.name }}</div>
-                <div class="fw-bold fs-5">
-                  <span id="current-{{ classroom.id }}">
-                    {{ classroom_student_count.get(classroom.id) }}
-                  </span>
-                  /
-                  <span class="text-muted">{{ classroom.max_slots }}</span>
-                </div>
-                <div class="progress mt-2" style="height: 6px">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    id="progress-{{ classroom.id }}"
-                    style="width: 0%"
-                    aria-valuenow="0"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
-              </div>
+  {% if classrooms %} {% for classroom in classrooms %}
+  <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body">
+        <div class="d-flex align-items-center gap-3">
+          <div class="rounded-3 p-3 bg-light">
+            <i class="fa-solid fa-users icon"></i>
+          </div>
+          <div class="flex-grow-1">
+            <div class="text-secondary small mb-1">{{ classroom.name }}</div>
+            <div class="fw-bold fs-5">
+              <span id="current-{{ classroom.id }}">
+                {{ classroom_student_count.get(classroom.id) }}
+              </span>
+              /
+              <span class="text-muted">{{ classroom.max_slots }}</span>
+            </div>
+            <div class="progress mt-2" style="height: 6px">
+              <div
+                class="progress-bar"
+                role="progressbar"
+                id="progress-{{ classroom.id }}"
+                style="width: {{ (classroom_student_count.get(classroom.id) / classroom.max_slots * 100) | round(0) }}%"
+                aria-valuenow="{{ classroom_student_count.get(classroom.id) }}"
+                aria-valuemin="0"
+                aria-valuemax="{{ classroom.max_slots }}"
+              ></div>
             </div>
           </div>
         </div>
       </div>
-    {% endfor %}
-  {% endif %}
+    </div>
+  </div>
+  {% endfor %} {% endif %}
 </div>
 
 <!-- Biểu đồ và thống kê -->
@@ -101,7 +96,8 @@
     <div class="card border-0 shadow-sm h-100">
       <div class="card-body">
         <h5 class="mb-4">
-          <i class="fa-solid fa-chart-pie icon me-2"></i>Biểu đồ phân bố giới tính
+          <i class="fa-solid fa-chart-pie icon me-2"></i>Biểu đồ phân bố giới
+          tính
         </h5>
         <div class="position-relative" style="height: 400px">
           <canvas id="genderChart"></canvas>
@@ -123,7 +119,9 @@
           >
             <div>
               <div class="text-secondary small">Tổng số học sinh</div>
-              <div class="fw-bold fs-4" id="total-students">0</div>
+              <div class="fw-bold fs-4" id="total-students">
+                {{total_students}}
+              </div>
             </div>
             <div class="rounded-circle bg-primary bg-opacity-10 p-3">
               <i class="fa-solid fa-users icon fs-4"></i>
@@ -134,7 +132,7 @@
           >
             <div>
               <div class="text-secondary small">Tổng sức chứa</div>
-              <div class="fw-bold fs-4" id="total-capacity">0</div>
+              <div class="fw-bold fs-4" id="total-capacity">{{capacity}}</div>
             </div>
             <div class="rounded-circle bg-info bg-opacity-10 p-3">
               <i class="fa-solid fa-door-open icon fs-4"></i>
@@ -145,7 +143,9 @@
           >
             <div>
               <div class="text-secondary small">Tỷ lệ sử dụng</div>
-              <div class="fw-bold fs-4" id="usage-rate">0%</div>
+              <div class="fw-bold fs-4" id="usage-rate">
+                {{ (total_students / capacity * 100) | round(0) }}%
+              </div>
             </div>
             <div class="rounded-circle bg-success bg-opacity-10 p-3">
               <i class="fa-solid fa-gauge-high icon fs-4"></i>
@@ -156,7 +156,90 @@
     </div>
   </div>
 </div>
+<!--Script xử lý dropdown-->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const menu = document.getElementById("classroomFilterMenu");
+    const button = document.getElementById("classroomFilterBtn");
+    const cards = document.querySelectorAll(
+      ".col-12.col-sm-6.col-lg-4.col-xl-3"
+    );
 
-<!-- Script cho Chart.js (người dùng sẽ tự thêm code chart) -->
+    menu.addEventListener("click", (event) => {
+      const item = event.target.closest("a");
+      if (!item) return;
+
+      const classroomId = item.dataset.classroomId;
+      const classroomName = item.dataset.classroomName;
+
+      button.innerText = classroomName;
+
+      menu
+        .querySelectorAll(".dropdown-item")
+        .forEach((a) => a.classList.remove("active"));
+      item.classList.add("active");
+
+      cards.forEach((card) => {
+        const cardClassId = card
+          .querySelector("[id^='current-']")
+          ?.id.replace("current-", "");
+
+        if (classroomId === "all" || cardClassId === classroomId) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+
+      // Cập nhật biểu đồ giới tính
+      if (genderChart) {
+        let male = {{ male_count }};
+        let female = {{ female_count }};
+
+        if (classroomId !== "all") {
+          const stats = genderStatsByClass[classroomId];
+          if (stats) {
+            male = stats.male;
+            female = stats.female;
+          } else {
+            male = 0;
+            female = 0;
+          }
+        }
+
+        genderChart.data.datasets[0].data = [male, female];
+        genderChart.update();
+      }
+    });
+  });
+</script>
+<script>
+  const genderStatsByClass = {{ get_gender_stats_by_class | tojson }};
+</script>
+<!-- Script cho Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+  let genderChart = null;
+  const ctx = document.getElementById("genderChart");
+
+  if (ctx) {
+    genderChart = new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: ["Nam", "Nữ"],
+        datasets: [{
+          data: [{{ male_count }}, {{ female_count }}],
+          backgroundColor: [
+            "rgba(54, 162, 235, 0.8)",
+            "rgba(255, 99, 132, 0.8)",
+          ],
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+      },
+    });
+  }
+</script>
 {% endblock %}
