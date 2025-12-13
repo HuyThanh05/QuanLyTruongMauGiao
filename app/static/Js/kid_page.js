@@ -39,19 +39,29 @@ healthRecord4Temp = document.getElementById("healthRecord4Temp");
 healthRecord4Teacher = document.getElementById("healthRecord4Teacher");
 healthRecord4Note = document.getElementById("healthRecord4Note");
 
+
+checkRow1 = document.getElementById("checkRow1");
+checkRow2 = document.getElementById("checkRow2");
+checkRow3 = document.getElementById("checkRow3");
+checkRow4 = document.getElementById("checkRow4");
+
+checkRowArray = [checkRow1, checkRow2, checkRow3, checkRow4];
+
+
+
 async function fetchKidDataById(useId) {
     const kidsData = await fetchDataUrl(`/api/kids/${useId}`);
-    
+
 
     const kid = kidsData[0];
 
-    nameField.textContent = kid.name??"";
-    classNameField.textContent = kid.class.name??"";
-    dobField.textContent = kid.dob??"";
-    genderField.textContent = kid.gender??"";
-    parentNameField.textContent = kid.parent.name??"";
-    parentPhoneField.textContent = kid.parent.phone??"";
-    addressField.textContent = kid.address??"";
+    nameField.textContent = kid.name ?? "";
+    classNameField.textContent = kid.class.name ?? "";
+    dobField.textContent = kid.dob ?? "";
+    genderField.textContent = kid.gender ?? "";
+    parentNameField.textContent = kid.parent.name ?? "";
+    parentPhoneField.textContent = kid.parent.phone ?? "";
+    addressField.textContent = kid.address ?? "";
 
     console.log(kid);
 }
@@ -61,12 +71,12 @@ async function fetchHealthRecordById(kidId) {
 
     const healthRecord = healthRecordData.at(-1);
 
-    weightValue.textContent =  healthRecord.weight??"";
-    heightValue.textContent =   healthRecord.height??"";
-    tempValue.textContent = healthRecord.temperature??"";
-    currentRecordDate[0].textContent = healthRecord.date_created??"";
-    currentRecordDate[1].textContent = healthRecord.date_created??"";
-    currentRecordDate[2].textContent = healthRecord.date_created??"";
+    weightValue.textContent = healthRecord.weight ?? "";
+    heightValue.textContent = healthRecord.height ?? "";
+    tempValue.textContent = healthRecord.temperature ?? "";
+    currentRecordDate[0].textContent = healthRecord.date_created ?? "";
+    currentRecordDate[1].textContent = healthRecord.date_created ?? "";
+    currentRecordDate[2].textContent = healthRecord.date_created ?? "";
 }
 
 
@@ -78,38 +88,57 @@ async function fetchHealthHistoryById(kidId) {
     const healthRecord2 = healthHistoryData.at(-2);
     const healthRecord3 = healthHistoryData.at(-3);
     const healthRecord4 = healthHistoryData.at(-4);
+
+    healthRecordArray = [healthRecord1, healthRecord2, healthRecord3, healthRecord4];
+
+    console.log(healthRecord1.temperature);
+
     
 
-    healthRecord1Date.textContent = healthRecord1?.date_created??"";
-    healthRecord1Weight.textContent = healthRecord1?.weight??"";
-    healthRecord1Height.textContent = healthRecord1?.height??"";
-    healthRecord1Temp.textContent = healthRecord1?.temperature??"";
-    healthRecord1Teacher.textContent = healthRecord1?.teacher.name??"";
-    healthRecord1Note.textContent = healthRecord1?.note??"";
 
-    healthRecord2Date.textContent = healthRecord2?.date_created??"";
-    healthRecord2Weight.textContent = healthRecord2?.weight??"";
-    healthRecord2Height.textContent = healthRecord2?.height??"";
-    healthRecord2Temp.textContent = healthRecord2?.temperature??"";
-    healthRecord2Teacher.textContent = healthRecord2?.teacher.name??"";
-    healthRecord2Note.textContent = healthRecord2?.note??"";
+    healthRecord1Date.textContent = " " + healthRecord1?.date_created ?? "";
+    healthRecord1Weight.textContent = healthRecord1?.weight ?? "";
+    healthRecord1Height.textContent = healthRecord1?.height ?? "";
+    healthRecord1Temp.textContent = healthRecord1?.temperature ?? "";
+    healthRecord1Teacher.textContent = healthRecord1?.teacher.name ?? "";
+    healthRecord1Note.textContent = healthRecord1?.note ?? "";
 
-    healthRecord3Date.textContent = healthRecord3?.date_created??"";
-    healthRecord3Weight.textContent = healthRecord3?.weight??"";
-    healthRecord3Height.textContent = healthRecord3?.height??"";
-    healthRecord3Temp.textContent = healthRecord3?.temperature??"";
-    healthRecord3Teacher.textContent = healthRecord3?.teacher.name??"";
-    healthRecord3Note.textContent = healthRecord3?.note??"";
+    healthRecord2Date.textContent = " " + healthRecord2?.date_created ?? "";
+    healthRecord2Weight.textContent = healthRecord2?.weight ?? "";
+    healthRecord2Height.textContent = healthRecord2?.height ?? "";
+    healthRecord2Temp.textContent = healthRecord2?.temperature ?? "";
+    healthRecord2Teacher.textContent = healthRecord2?.teacher.name ?? "";
+    healthRecord2Note.textContent = healthRecord2?.note ?? "";
 
-    healthRecord4Date.textContent = healthRecord4?.date_created??"";
-    healthRecord4Weight.textContent = healthRecord4?.weight??"";
-    healthRecord4Height.textContent = healthRecord4?.height??"";
-    healthRecord4Temp.textContent = healthRecord4?.temperature??"";
-    healthRecord4Teacher.textContent = healthRecord4?.teacher.name??"";
-    healthRecord4Note.textContent = healthRecord4?.note??"";
+    healthRecord3Date.textContent = " " + healthRecord3?.date_created ?? "";
+    healthRecord3Weight.textContent = healthRecord3?.weight ?? "";
+    healthRecord3Height.textContent = healthRecord3?.height ?? "";
+    healthRecord3Temp.textContent = healthRecord3?.temperature ?? "";
+    healthRecord3Teacher.textContent = healthRecord3?.teacher.name ?? "";
+    healthRecord3Note.textContent = healthRecord3?.note ?? "";
 
-    console.log(healthRecord1);
+    healthRecord4Date.textContent = " " + healthRecord4?.date_created ?? "";
+    healthRecord4Weight.textContent = healthRecord4?.weight ?? "";
+    healthRecord4Height.textContent = healthRecord4?.height ?? "";
+    healthRecord4Temp.textContent = healthRecord4?.temperature ?? "";
+    healthRecord4Teacher.textContent = healthRecord4?.teacher.name ?? "";
+    healthRecord4Note.textContent = healthRecord4?.note ?? "";
 
 
+    for (let i = 0; i < healthRecordArray.length; i++) {
+        if (!healthRecordArray[i]) {
+            console.log("No data");
+        } else if (healthRecordArray[i].temperature >= 37.5) {
+            checkRowArray[i].innerHTML += `<span class="badge bg-danger-subtle text-danger">
+                      <i class="fas fa-exclamation-triangle me-1"></i>Sốt
+                    </span>`;
+            console.log("Sốt");
+        } else {
+            checkRowArray[i].innerHTML += `<span class="badge bg-success-subtle text-success">
+                      <i class="fas fa-check-circle me-1"></i>Bình thường
+                    </span>`;
+            console.log("Bình thường");
+        }
+    }
 
 }
