@@ -1,7 +1,9 @@
-console.log("js loaded")
-monthly_total_revenue = document.getElementById("monthly-total-revenue");
-monthly_collected_ammounts = document.getElementById("monthly-collected-ammounts");
-monthly_uncollected_ammounts = document.getElementById("monthly-uncollected-ammounts");
+console.log("js loaded");
+let totalsData=[];
+let tuitionsFee=[];
+const monthly_total_revenue = document.getElementById("monthly-total-revenue");
+const monthly_collected_ammounts = document.getElementById("monthly-collected-ammounts");
+const monthly_uncollected_ammounts = document.getElementById("monthly-uncollected-ammounts");
 
 baseFee= document.getElementById("base-fee");
 mealFee= document.getElementById("meal-fee");
@@ -9,19 +11,14 @@ extraFee = document.getElementById("extra-fee")
 totalFee=document.getElementById("total-fee")
 paymentStatus = document.getElementById("payment-status")
 
-async function fetchData(){
+async function initData(){
     totalsData = await fetchDataUrl(`/api/tuitions/totals`);
-    console.log(totalsData);
-
-    monthly_total_revenue.textContent = formatNumber(totalsData[0].monthly_revenue);
-    monthly_collected_ammounts.textContent = formatNumber(totalsData[0].monthly_collected_amounts);
-    monthly_uncollected_ammounts.textContent = formatNumber(totalsData[0].monthly_uncollected_amounts);
-
-    //xử lý học phí của học sinh
     tuitionsFee = await fetchDataUrl(`/api/tuitions`);
-    console.log(tuitionsFee);
+}
 
+function renderTuitionsTable(tuitionsFee){
     const tbody = document.querySelector(".tuition-body");
+    tbody.innerHTML = "";
     console.log(tbody);
 
     for (let tuition of tuitionsFee){
@@ -52,3 +49,50 @@ async function fetchData(){
         tbody.appendChild(row);
     }
 }
+
+function getMonthInput(){
+    const input = document.getElementById("month-input");
+    let value = input.value;
+
+    if(!value){
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth()+1).padStart(2,"0");
+        value = `${year}-${month}`;
+        input.value = value;
+    }
+    const [year,month] =value.split("-");
+    return {year,month};
+}
+
+async function renderUI(){
+    await initData();
+    renderTuitionsTable(tuitionsFee);
+    console.log(totalsData);
+    console.log(tuitionsFee);
+    //Lấy tháng
+    document.getElementById("month-btn").addEventListener("click",()=>{
+        const value = document.getElementById("month-input").value; //"2025-12"
+        const ym = getMonthInput();
+        if(!ym) return;
+
+        console.log("Year: ",ym.year);
+        console.log("Month: " ,ym.month);
+
+        const total = totalsData.find(
+        item => item.month === Number(ym.month) && item.year === Number(ym.year)
+        );
+        console.log(total)
+        if(total)
+        {
+            monthly_total_revenue.textContent = formatNumber(total.monthly_revenue);
+            monthly_collected_ammounts.textContent = formatNumber(total.monthly_collected_amounts);
+            monthly_uncollected_ammounts.textContent = formatNumber(total.monthly_uncollected_amounts);
+        }
+
+
+
+    });
+}
+
+

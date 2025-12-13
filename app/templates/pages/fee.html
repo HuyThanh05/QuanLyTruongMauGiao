@@ -9,11 +9,12 @@ block content %}
     <div class="d-flex gap-2">
       <input
         type="month"
+        id="month-input"
         class="form-control"
         style="width: 200px"
         aria-label="Chọn tháng"
       />
-      <button class="btn btn-primary">Xem</button>
+      <button class="btn btn-primary" id="month-btn">Xem</button>
     </div>
   </div>
 
@@ -26,7 +27,7 @@ block content %}
             <span class="badge text-bg-success">Tháng này</span>
           </div>
           <div class="fs-3 fw-semibold text-primary" id="monthly-total-revenue">
-            125.500.000 đ
+            None
           </div>
           <small class="text-muted">Học phí cơ bản + tiền ăn + phụ thu</small>
         </div>
@@ -40,7 +41,7 @@ block content %}
             class="fs-4 fw-semibold text-success"
             id="monthly-collected-ammounts"
           >
-            102.300.000 đ
+            None
           </div>
           <small class="text-muted">82% khoản thu đã hoàn tất</small>
         </div>
@@ -54,7 +55,7 @@ block content %}
             class="fs-4 fw-semibold text-danger"
             id="monthly-uncollected-ammounts"
           >
-            23.200.000 đ
+            None
           </div>
           <small class="text-muted">Cần nhắc phụ huynh sớm</small>
         </div>
@@ -134,6 +135,9 @@ block content %}
 </div>
 <script src="{{ url_for('static', filename='Js/fee_page.js') }}"></script>
 <script>
-  fetchData();
+  document.addEventListener("DOMContentLoaded", () => {
+    renderUI();
+  });
+
 </script>
 {% endblock %}
