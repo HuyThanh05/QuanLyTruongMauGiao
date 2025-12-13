@@ -104,8 +104,8 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
               </div>
               <div class="stat-content">
                 <div class="stat-label">Cân nặng</div>
-                <div class="stat-value" id="weightValue">18.5 kg</div>
-                <div class="stat-date currentRecordDate">Gần nhất: 15/01/2025</div>
+                <div class="stat-value" id="weightValue"></div>
+                <div class="stat-date currentRecordDate"></div>
               </div>
             </div>
           </div>
@@ -116,8 +116,8 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
               </div>
               <div class="stat-content">
                 <div class="stat-label">Chiều cao</div>
-                <div class="stat-value" id="heightValue">105 cm</div>
-                <div class="stat-date currentRecordDate">Gần nhất: 15/01/2025</div>
+                <div class="stat-value" id="heightValue"></div>
+                <div class="stat-date currentRecordDate"></div>
               </div>
             </div>
           </div>
@@ -128,8 +128,8 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
               </div>
               <div class="stat-content">
                 <div class="stat-label">Nhiệt độ</div>
-                <div class="stat-value" id="tempValue">36.8°C</div>
-                <div class="stat-date currentRecordDate">Gần nhất: 15/01/2025</div>
+                <div class="stat-value" id="tempValue"></div>
+                <div class="stat-date currentRecordDate"></div>
               </div>
             </div>
           </div>
@@ -156,38 +156,42 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
             <!-- Ghi nhận 1 -->
             <div
               class="list-group-item health-record-item px-0 py-2 border-bottom"
+              id ="healthRecord-1"
             >
               <div class="d-flex justify-content-between align-items-start">
                 <div class="flex-grow-1">
+
                   <div class="d-flex align-items-center mb-1 flex-wrap gap-2">
                     <span class="badge bg-light text-dark">
-                      <i class="fas fa-calendar me-1"></i>15/01/2025 - 08:30
+                      <i class="fas fa-calendar me-1"><span id="healthRecord1Date"></span></i>
                     </span>
-                    <span class="badge bg-success-subtle text-success">
+                    <!-- <span class="badge bg-success-subtle text-success">
                       <i class="fas fa-check-circle me-1"></i>Bình thường
-                    </span>
+                    </span> -->
                   </div>
+
                   <div class="row g-2 text-muted small mb-1">
                     <div class="col-12 col-md-4">
                       <i class="fas fa-weight me-1"></i>
-                      <strong>Cân nặng:</strong> 18.5 kg
+                      <strong>Cân nặng: </strong><span id="healthRecord1Weight"></span> kg
                     </div>
                     <div class="col-12 col-md-4">
                       <i class="fas fa-ruler-vertical me-1"></i>
-                      <strong>Chiều cao:</strong> 105 cm
+                      <strong>Chiều cao:</strong> <span id="healthRecord1Height"></span> cm
                     </div>
                     <div class="col-12 col-md-4">
                       <i class="fas fa-thermometer-half me-1"></i>
-                      <strong>Nhiệt độ:</strong> 36.8°C
+                      <strong>Nhiệt độ:</strong> <span id="healthRecord1Temp"></span> °C
                     </div>
                   </div>
+
                   <div class="text-muted small">
                     <i class="fas fa-user-md me-1"></i>
-                    <strong>Người ghi nhận:</strong> Cô Nguyễn Thị A
+                    <strong>Người ghi nhận:</strong> <span id="healthRecord1Teacher"></span>
                   </div>
                   <div class="text-muted small mt-1">
                     <i class="fas fa-sticky-note me-1"></i>
-                    <strong>Ghi chú:</strong> Trẻ khỏe mạnh, ăn uống tốt
+                    <strong>Ghi chú:</strong> <span id="healthRecord1Note"></span>
                   </div>
                 </div>
               </div>
@@ -196,38 +200,39 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
             <!-- Ghi nhận 2 -->
             <div
               class="list-group-item health-record-item px-0 py-2 border-bottom"
+              id ="healthRecord-2"
             >
               <div class="d-flex justify-content-between align-items-start">
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-center mb-1 flex-wrap gap-2">
                     <span class="badge bg-light text-dark">
-                      <i class="fas fa-calendar me-1"></i>12/01/2025 - 08:25
+                      <i class="fas fa-calendar me-1" id="healthRecord2Date"></i>
                     </span>
-                    <span class="badge bg-success-subtle text-success">
+                    <!-- <span class="badge bg-success-subtle text-success">
                       <i class="fas fa-check-circle me-1"></i>Bình thường
-                    </span>
+                    </span> -->
                   </div>
                   <div class="row g-2 text-muted small mb-1">
                     <div class="col-12 col-md-4">
                       <i class="fas fa-weight me-1"></i>
-                      <strong>Cân nặng:</strong> 18.3 kg
+                      <strong>Cân nặng:</strong> <span id="healthRecord2Weight"></span> kg
                     </div>
                     <div class="col-12 col-md-4">
                       <i class="fas fa-ruler-vertical me-1"></i>
-                      <strong>Chiều cao:</strong> 104.8 cm
+                      <strong>Chiều cao:</strong> <span id="healthRecord2Height"></span> cm
                     </div>
                     <div class="col-12 col-md-4">
                       <i class="fas fa-thermometer-half me-1"></i>
-                      <strong>Nhiệt độ:</strong> 36.7°C
+                      <strong>Nhiệt độ:</strong> <span id="healthRecord2Temp"></span>
                     </div>
                   </div>
                   <div class="text-muted small">
                     <i class="fas fa-user-md me-1"></i>
-                    <strong>Người ghi nhận:</strong> Cô Trần Thị B
+                    <strong>Người ghi nhận:</strong> <span id="healthRecord2Teacher"></span>
                   </div>
                   <div class="text-muted small mt-1">
                     <i class="fas fa-sticky-note me-1"></i>
-                    <strong>Ghi chú:</strong> Tình trạng sức khỏe ổn định
+                    <strong>Ghi chú:</strong> <span id="healthRecord2Note"></span>
                   </div>
                 </div>
               </div>
@@ -236,40 +241,40 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
             <!-- Ghi nhận 3 -->
             <div
               class="list-group-item health-record-item px-0 py-2 border-bottom"
+              id ="healthRecord-3"
             >
               <div class="d-flex justify-content-between align-items-start">
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-center mb-1 flex-wrap gap-2">
                     <span class="badge bg-light text-dark">
-                      <i class="fas fa-calendar me-1"></i>10/01/2025 - 08:20
+                      <i class="fas fa-calendar me-1" id="healthRecord3Date"></i>
                     </span>
-                    <span class="badge bg-warning-subtle text-warning">
+                    <!-- <span class="badge bg-warning-subtle text-warning">
                       <i class="fas fa-exclamation-triangle me-1"></i>Cần theo
                       dõi
-                    </span>
+                    </span> -->
                   </div>
                   <div class="row g-2 text-muted small mb-1">
                     <div class="col-12 col-md-4">
                       <i class="fas fa-weight me-1"></i>
-                      <strong>Cân nặng:</strong> 18.0 kg
+                      <strong>Cân nặng:</strong> <span id="healthRecord3Weight"></span> kg
                     </div>
                     <div class="col-12 col-md-4">
                       <i class="fas fa-ruler-vertical me-1"></i>
-                      <strong>Chiều cao:</strong> 104.5 cm
+                      <strong>Chiều cao:</strong> <span id="healthRecord3Height"></span> cm
                     </div>
                     <div class="col-12 col-md-4">
                       <i class="fas fa-thermometer-half me-1"></i>
-                      <strong>Nhiệt độ:</strong> 37.2°C
+                      <strong>Nhiệt độ:</strong> <span id="healthRecord3Temp"></span>
                     </div>
                   </div>
                   <div class="text-muted small">
                     <i class="fas fa-user-md me-1"></i>
-                    <strong>Người ghi nhận:</strong> Cô Lê Thị C
+                    <strong>Người ghi nhận:</strong> <span id="healthRecord3Teacher"></span>
                   </div>
                   <div class="text-muted small mt-1">
                     <i class="fas fa-sticky-note me-1"></i>
-                    <strong>Ghi chú:</strong> Nhiệt độ hơi cao, cần theo dõi
-                    thêm
+                    <strong>Ghi chú:</strong> <span id="healthRecord3Note"></span>
                   </div>
                 </div>
               </div>
@@ -277,38 +282,39 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
             <!-- Ghi nhận 4 -->
             <div
               class="list-group-item health-record-item px-0 py-2 border-bottom"
+              id ="healthRecord-4"
             >
               <div class="d-flex justify-content-between align-items-start">
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-center mb-1 flex-wrap gap-2">
                     <span class="badge bg-light text-dark">
-                      <i class="fas fa-calendar me-1"></i>15/01/2025 - 08:30
+                      <i class="fas fa-calendar me-1" id="healthRecord4Date"></i>
                     </span>
-                    <span class="badge bg-success-subtle text-success">
+                    <!-- <span class="badge bg-success-subtle text-success">
                       <i class="fas fa-check-circle me-1"></i>Bình thường
-                    </span>
+                    </span> -->
                   </div>
                   <div class="row g-2 text-muted small mb-1">
                     <div class="col-12 col-md-4">
                       <i class="fas fa-weight me-1"></i>
-                      <strong>Cân nặng:</strong> 18.5 kg
+                      <strong>Cân nặng:</strong> <span id="healthRecord4Weight"></span> kg
                     </div>
                     <div class="col-12 col-md-4">
                       <i class="fas fa-ruler-vertical me-1"></i>
-                      <strong>Chiều cao:</strong> 105 cm
+                      <strong>Chiều cao:</strong> <span id="healthRecord4Height"></span> cm
                     </div>
                     <div class="col-12 col-md-4">
                       <i class="fas fa-thermometer-half me-1"></i>
-                      <strong>Nhiệt độ:</strong> 36.8°C
+                      <strong>Nhiệt độ:</strong> <span id="healthRecord4Temp"></span>
                     </div>
                   </div>
                   <div class="text-muted small">
                     <i class="fas fa-user-md me-1"></i>
-                    <strong>Người ghi nhận:</strong> Cô Nguyễn Thị A
+                    <strong>Người ghi nhận:</strong> <span id="healthRecord4Teacher"></span>
                   </div>
                   <div class="text-muted small mt-1">
                     <i class="fas fa-sticky-note me-1"></i>
-                    <strong>Ghi chú:</strong> Trẻ khỏe mạnh, ăn uống tốt
+                    <strong>Ghi chú:</strong> <span id="healthRecord4Note"></span>
                   </div>
                 </div>
               </div>
@@ -322,5 +328,6 @@ block breadcrumb_current %}Thông tin trẻ{% endblock %} {% block head %}
 <script src="{{ url_for('static', filename='Js/kid_page.js') }}"></script>
 <script>fetchKidDataById({{parent_id}})</script>
 <script>fetchHealthRecordById({{student_id}})</script>
+<script>fetchHealthHistoryById({{student_id}})</script>
 {% endblock %}
 
