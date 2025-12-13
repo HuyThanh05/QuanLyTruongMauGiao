@@ -1,6 +1,5 @@
-{% extends 'pages/base.html' %}
-{% block title %}Sức khỏe{% endblock %}
-{% block content %}
+{% extends 'pages/base.html' %} {% block title %}Sức khỏe{% endblock %} {% block
+content %}
 <!-- Thống kê sức khỏe -->
 <div class="row g-3 mb-4">
   <div class="col-12 col-sm-6 col-lg-3">
@@ -27,7 +26,7 @@
           </div>
           <div>
             <div class="text-secondary small">Đã ghi nhận hôm nay</div>
-            <div class="fw-bold fs-5">0</div>
+            <div class="fw-bold fs-5">{{recorded_students}}</div>
           </div>
         </div>
       </div>
@@ -42,7 +41,7 @@
           </div>
           <div>
             <div class="text-secondary small">Chưa ghi nhận</div>
-            <div class="fw-bold fs-5">0</div>
+            <div class="fw-bold fs-5">{{unrecorded_students}}</div>
           </div>
         </div>
       </div>
@@ -67,28 +66,41 @@
           >
             Chọn lớp
           </button>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu" id="classFilterHealth">
             <li>
-              <a class="dropdown-item" href="#">Tất cả các lớp</a>
+              <a
+                class="dropdown-item"
+                href="javascript:void(0)"
+                data-class="all"
+                >Tất cả</a
+              >
             </li>
             {% for classroom in classrooms %}
-              <li>
-                <a class="dropdown-item" href="#">{{ classroom.name }}</a>
-              </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="javascript:void(0)"
+                data-class="{{ classroom.id }}"
+                >{{ classroom.name }}</a
+              >
+            </li>
             {% endfor %}
           </ul>
         </div>
         <!-- Search -->
-        <div class="input-group input-group-sm">
-          <span class="input-group-text bg-white">
-            <i class="fa-solid fa-magnifying-glass icon"></i>
-          </span>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Tìm kiếm học sinh"
-          />
-        </div>
+        <form id="healthSearchForm">
+          <div class="input-group input-group-sm">
+            <span class="input-group-text bg-white">
+              <i class="fa-solid fa-magnifying-glass icon"></i>
+            </span>
+            <input
+              type="text"
+              id="healthSearchInput"
+              class="form-control"
+              placeholder="Tìm kiếm học sinh"
+            />
+          </div>
+        </form>
       </div>
     </div>
 
@@ -106,52 +118,53 @@
             <th style="width: 20%">Thao tác</th>
           </tr>
         </thead>
-        <tbody>
-          {% if students %}
-            {% for student in students %}
-              <tr>
-                <td>{{ loop.index }}</td>
-                <td>
-                  <div class="fw-semibold">{{ student.name }}</div>
-                </td>
-                <td>{{ student.formatted_dob }}</td>
-                <td>
-                  <span class="badge bg-light text-dark">
-                    {{ student.gender.value }}
-                  </span>
-                </td>
-                <td>
-                  {% for classroom in classrooms %}
-                    {% if classroom.id == student.class_id %}
-                      <span class="badge bg-info-subtle text-info">
-                        {{ classroom.name }}
-                      </span>
-                    {% endif %}
-                  {% endfor %}
-                </td>
-                <td>
-                  <small class="text-muted">Chưa có</small>
-                </td>
-                <td>
-                  <button
-                    class="btn btn-sm btn-brand"
-                    data-bs-toggle="modal"
-                    data-bs-target="#healthRecordModal"
-                    data-student-id="{{ student.id }}"
-                    data-student-name="{{ student.name }}"
-                  >
-                    <i class="fa-solid fa-heart-pulse me-1"></i>Ghi nhận
-                  </button>
-                </td>
-              </tr>
-            {% endfor %}
-          {% else %}
-            <tr>
-              <td colspan="7" class="text-center text-muted py-4">
-                <i class="fa-solid fa-inbox fa-2x mb-2"></i>
-                <p class="mb-0">Không có học sinh nào</p>
-              </td>
-            </tr>
+        <tbody id="health_list">
+          {% if students %} {% for student in students %}
+          <tr
+            data-class-id="{{ student.class_id }}"
+            data-student-name="{{ student.name }}"
+          >
+            <td>{{ loop.index }}</td>
+            <td>
+              <div class="fw-semibold">{{ student.name }}</div>
+            </td>
+            <td>{{ student.formatted_dob }}</td>
+            <td>
+              <span class="badge bg-light text-dark">
+                {{ student.gender.value }}
+              </span>
+            </td>
+            <td>
+              {% for classroom in classrooms %} {% if classroom.id ==
+              student.class_id %}
+              <span class="badge bg-info-subtle text-info">
+                {{ classroom.name }}
+              </span>
+              {% endif %} {% endfor %}
+            </td>
+            <td id="latest-record-{{student.id}}">
+              <small class="text-muted">Chưa có</small>
+            </td>
+            <td>
+              <button
+                class="btn btn-sm btn-brand"
+                data-bs-toggle="modal"
+                data-bs-target="#healthRecordModal"
+                data-student-id="{{ student.id }}"
+                data-student-name="{{ student.name }}"
+                onclick="openHealthModal(this)"
+              >
+                <i class="fa-solid fa-heart-pulse me-1"></i>Ghi nhận
+              </button>
+            </td>
+          </tr>
+          {% endfor %} {% else %}
+          <tr>
+            <td colspan="7" class="text-center text-muted py-4">
+              <i class="fa-solid fa-inbox fa-2x mb-2"></i>
+              <p class="mb-0">Không có học sinh nào</p>
+            </td>
+          </tr>
           {% endif %}
         </tbody>
       </table>
@@ -159,17 +172,19 @@
 
     <!-- Pagination -->
     <div class="d-flex align-items-center justify-content-between pt-3">
-      <div></div>
+      <button
+        class="btn btn-sm rounded-circle btn-brand btn-fab"
+        aria-label="Thêm"
+      >
+        <i class="fa-solid fa-plus"></i>
+      </button>
       <nav>
-        <ul class="pagination pagination-sm mb-0">
-          <li class="page-item disabled">
-            <a class="page-link" href="#">‹</a>
+        <ul class="pagination pagination-sm mb-0" id="pagination-health">
+          <li class="page-item" id="prevBtnHealth">
+            <a class="page-link" href="#" data-page="prev">‹</a>
           </li>
-          <li class="page-item active">
-            <a class="page-link" href="#">1</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">›</a>
+          <li class="page-item" id="nextBtnHealth">
+            <a class="page-link" href="#" data-page="next">›</a>
           </li>
         </ul>
       </nav>
@@ -274,11 +289,20 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Hủy
         </button>
-        <button type="button" class="btn btn-brand" id="save-health-record">
+        <button
+          type="button"
+          class="btn btn-brand"
+          id="save-health-record"
+          onclick="createHealthRecord(document.getElementById('student-id').value)"
+        >
           <i class="fa-solid fa-floppy-disk me-1"></i>Lưu ghi nhận
         </button>
       </div>
     </div>
   </div>
 </div>
+
+<script src="{{ url_for('static', filename='Js/pagination.js') }}"></script>
+<script src="{{ url_for('static', filename='Js/filters.js') }}"></script>
+<script src="{{ url_for('static', filename='Js/health_page.js') }}"></script>
 {% endblock %}

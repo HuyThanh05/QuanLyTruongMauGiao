@@ -71,7 +71,7 @@ class Student(db.Model):
     parent_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     class_id = db.Column(db.Integer, db.ForeignKey('classrooms.id'))
     tuitionfee = relationship("TuitionFee", uselist=False, back_populates="student")
-    parent = db.relationship("User", back_populates="children")
+    parent = db.relationship("User", foreign_keys = [parent_id],back_populates="children")
     classroom = db.relationship("Classroom", foreign_keys=[class_id])
 
     @property
@@ -88,9 +88,12 @@ class HealthRecord(db.Model):
     temperature = db.Column(db.Float, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     note = db.Column(db.String(255), nullable=False)
-    #relationships
+    #FK
     student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
     teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    #relationships
+    student = db.relationship("Student",backref="health_records")
+    teacher = db.relationship("User",backref="health_records_made")
 
 class TuitionFee(db.Model):
     __tablename__ = "fees"

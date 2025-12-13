@@ -4,7 +4,9 @@ from functools import wraps
 
 from app.models.Models import Classroom, Student
 from app.services.class_service import get_all_class
-from app.services.student_service import get_all_students, total_student, search_students, get_student_count_by_classroom
+from app.services.health_record_service import count_student_record, count_students_recorded_today, count_students_not_recorded_today
+from app.services.student_service import get_all_students, total_student, search_students, \
+    get_student_count_by_classroom, total_male_count, total_female_count, classroom_student_count, get_gender_stats_by_class
 
 page_routes = Blueprint('pages', __name__)
 
@@ -41,36 +43,11 @@ def student():
         classroom_student_counts[classroom.id] = get_student_count_by_classroom(classroom.id)
 
     q = request.args.get('q','',type = str).strip()
+    
     students = search_students(q)
 
     return render_template('pages/student.html', Title='Danh sách học sinh', students=students, classrooms=all_classrooms, total_students=total_students, classroom_student_counts=classroom_student_counts)
 
-@page_routes.route('/api/students', methods=['GET'])
-@roles_required('Teacher')
-def api_students():
-    """API endpoint để lấy danh sách học sinh dưới dạng JSON"""
-    q = request.args.get('q', '', type=str).strip()
-    students = search_students(q)
-    
-    students_data = []
-    for student in students:
-        students_data.append({
-            'id': student.id,
-            'name': student.name,
-            'formatted_dob': student.formatted_dob,
-            'gender': {
-                'value': student.gender.value
-            },
-            'classroom': {
-                'name': student.classroom.name
-            } if student.classroom else None,
-            'parent': {
-                'name': student.parent.name,
-                'phone': '0123456789'  # Có thể lấy từ parent.phone nếu có
-            } if student.parent else None
-        })
-    
-    return jsonify(students_data), 200
 
 @page_routes.route('/health')
 @roles_required('Teacher')
@@ -78,24 +55,25 @@ def health():
     from app.models.Models import HealthRecord
     all_classrooms = Classroom.query.all()
     all_students = Student.query.all()
+    recorded_students = count_students_recorded_today()
+    unrecorded_students = count_students_not_recorded_today()
 
-    return render_template('pages/health.html', Title='Sức khỏe',students=all_students,classrooms=all_classrooms)
+    return render_template('pages/health.html', Title='Sức khỏe',students=all_students,classrooms=all_classrooms,recorded_students=recorded_students,unrecorded_students=unrecorded_students)
 
 @page_routes.route('/classsize')
 @roles_required('Teacher')
 def classsize():
     all_classrooms = Classroom.query.all()
     all_students = Student.query.all()
+    capacity = 100
+    total_students = total_student(all_classrooms)
+    male_count = total_male_count()
+    female_count = total_female_count()
+    
 
-    classroom_student_count = {}
-    for student in all_students:
-        if student.class_id:
-            if student.class_id in classroom_student_count:
-                classroom_student_count[student.class_id] += 1
-            else:
-                classroom_student_count[student.class_id] = 1
-
-    return render_template('pages/classSize.html', Title = "Quản lý sĩ số lớp", classrooms=all_classrooms, students=all_students, classroom_student_count=classroom_student_count)
+    gender_stats_by_class = get_gender_stats_by_class(all_classrooms)
+    
+    return render_template('pages/classSize.html', Title="Quản lý sĩ số lớp", classrooms=all_classrooms, students=all_students, classroom_student_count=classroom_student_count(), male_count=male_count, female_count=female_count, total_students=total_students,capacity=capacity, get_gender_stats_by_class=gender_stats_by_class)
 
 @page_routes.route('/fee')
 @roles_required('Accountant')
@@ -115,7 +93,10 @@ def studentprofile():
 @page_routes.route('/kidtracking')
 @roles_required('Parent')
 def kid():
-    return render_template('pages/kid.html',Title = "Thông tin trẻ")
+    parent_id = current_user.id
+    student = Student.query.filter_by(parent_id=parent_id).first()
+    count = count_student_record(student.id)
+    return render_template('pages/kid.html',Title = "Thông tin trẻ",parent_id=parent_id,student_id=student.id if student else None,count=count)
 
 @page_routes.route('/feetracking')
 @roles_required('Parent')
