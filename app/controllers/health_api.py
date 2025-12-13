@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify
-
+from sqlalchemy.sql.functions import current_user
+from flask_login import current_user
 from app import db
 from app.models.Models import HealthRecord, Student
 from app.utils import format_date, time_ago, _get_payload
@@ -71,13 +72,20 @@ def get_health_record_by_student_id(student_id):
 @health_api.route('/api/health/<int:student_id>/health-records', methods=['POST'])
 def create_health_record_by_id(student_id):
     payload = _get_payload()
+    if current_user.is_authenticated:
+        teacher = {
+            "id": current_user.id,
+            "name": current_user.name,
+        }
     health_record = HealthRecord(
         student_id=student_id,
         weight=payload['weight'],
         height=payload['height'],
         temperature=payload['temperature'],
         note=payload['note'],
+        teacher_id = teacher['id']
     )
+
     db.session.add(health_record)
     db.session.commit()
     return jsonify({
@@ -89,7 +97,8 @@ def create_health_record_by_id(student_id):
             "height": payload['height'],
             "temperature": payload['temperature'],
             "note": payload['note'],
-            "time_ago": time_ago(health_record.date_created)
+            "time_ago": time_ago(health_record.date_created),
+            "teacher": teacher
         }
     }),201
 
