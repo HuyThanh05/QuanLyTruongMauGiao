@@ -76,7 +76,7 @@ def create_health_record_by_id(student_id):
         weight=payload['weight'],
         height=payload['height'],
         temperature=payload['temperature'],
-        note=payload['note'],
+        note=payload['note']
     )
     db.session.add(health_record)
     db.session.commit()
