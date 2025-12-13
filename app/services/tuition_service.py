@@ -13,12 +13,10 @@ def total_revenue():
         total_revenue += tuition.total
     return total_revenue
 
-
 def monthly_revenue(month, year=None):
     collected = monthly_collected_amounts(month, year)
     uncollected = monthly_uncollected_amounts(month, year)
     return collected + uncollected
-
 
 def monthly_collected_amounts(month, year=None):
 
@@ -35,7 +33,6 @@ def monthly_collected_amounts(month, year=None):
     for tuition in paid_tuitions:
         collected_amounts += tuition.total
     return collected_amounts
-
 
 def monthly_uncollected_amounts(month, year=None):
     

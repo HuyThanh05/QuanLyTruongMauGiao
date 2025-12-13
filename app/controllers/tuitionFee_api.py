@@ -37,6 +37,7 @@ def get_totals():
         db.session.query(TuitionFee.month, TuitionFee.year)
         .distinct()
         .order_by(TuitionFee.year, TuitionFee.month)
+        .order_by(TuitionFee.year.asc(), TuitionFee.month.asc())
         .all()
     )
     totals_data = []
