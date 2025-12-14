@@ -47,6 +47,18 @@ checkRow4 = document.getElementById("checkRow4");
 
 checkRowArray = [checkRow1, checkRow2, checkRow3, checkRow4];
 
+kidSelect = document.getElementById("selectKid");
+
+kidSelect.addEventListener("change", async () => {
+  const kidId = kidSelect.value;
+  if (!kidId) return;
+
+  checkRowArray.forEach(row => row.innerHTML = ""); // reset check rows
+  
+  //await fetchKidDataById(kidId);       
+  await fetchHealthRecordById(kidId);  
+  await fetchHealthHistoryById(kidId); 
+});
 
 
 async function fetchKidDataById(useId) {
@@ -124,21 +136,52 @@ async function fetchHealthHistoryById(kidId) {
     healthRecord4Teacher.textContent = healthRecord4?.teacher.name ?? "";
     healthRecord4Note.textContent = healthRecord4?.note ?? "";
 
-
+    
     for (let i = 0; i < healthRecordArray.length; i++) {
         if (!healthRecordArray[i]) {
             console.log("No data");
         } else if (healthRecordArray[i].temperature >= 37.5) {
-            checkRowArray[i].innerHTML += `<span class="badge bg-danger-subtle text-danger">
+            checkRowArray[i].innerHTML += `
+            <span class="badge bg-light text-dark">
+                      <i class="fas fa-calendar me-1"><span id="healthRecord1Date"></span></i>
+                    </span>
+            <span class="badge bg-danger-subtle text-danger">
                       <i class="fas fa-exclamation-triangle me-1"></i>Sốt
                     </span>`;
             console.log("Sốt");
         } else {
-            checkRowArray[i].innerHTML += `<span class="badge bg-success-subtle text-success">
+            checkRowArray[i].innerHTML += `
+            <span class="badge bg-light text-dark">
+                      <i class="fas fa-calendar me-1"><span id="healthRecord1Date"></span></i>
+                    </span>
+            <span class="badge bg-success-subtle text-success">
                       <i class="fas fa-check-circle me-1"></i>Bình thường
                     </span>`;
             console.log("Bình thường");
         }
     }
+
+}
+
+async function loadKidSelectOptions(useId) {
+    const kids = await fetchDataUrl(`/api/kids/${useId}`);
+
+    kidSelect.innerHTML = ""; // clear cũ
+
+    kids.forEach(kid => {
+    const opt = document.createElement("option");
+    opt.value = kid.id;                         // dùng id để fetch tiếp
+    opt.textContent = `${kid.name} - ${kid.class.name}`;
+    kidSelect.appendChild(opt);
+  });
+
+  // tự load đứa đầu tiên
+   const firstId = kids[0].id;
+   await fetchKidDataById(useId);
+   await fetchHealthRecordById(firstId);
+   await fetchHealthHistoryById(firstId);
+
+  console.log("kids from API", kids);
+console.log("selected kidId", kidSelect.value);
 
 }
