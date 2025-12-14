@@ -289,14 +289,34 @@ def create_tuitionfees():
             if invoice_index is not None and invoice_index < len(invoices):
                 invoice_id = invoices[invoice_index].id
 
+            # Lấy status tổng thể
+            overall_status = status_map.get(fee_data['status'], PaymentStatusEnum.Unpaid)
+            
+            # Set base_status, meal_status, extra_status dựa trên status tổng thể
+            # Nếu status = "Paid" thì tất cả đều "Paid", nếu "Unpaid" thì tất cả đều "Unpaid"
+            base_status = overall_status
+            meal_status = overall_status
+            extra_status = overall_status
+            
+            # Có thể set riêng từng trường nếu có trong data
+            if 'base_status' in fee_data:
+                base_status = status_map.get(fee_data['base_status'], PaymentStatusEnum.Unpaid)
+            if 'meal_status' in fee_data:
+                meal_status = status_map.get(fee_data['meal_status'], PaymentStatusEnum.Unpaid)
+            if 'extra_status' in fee_data:
+                extra_status = status_map.get(fee_data['extra_status'], PaymentStatusEnum.Unpaid)
+
             fee = TuitionFee(
                 month=fee_data['month'],
                 year=fee_data['year'],
                 fee_base=fee_data['fee_base'],
                 meal_fee=fee_data['meal_fee'],
                 extra_fee=fee_data['extra_fee'],
+                base_status=base_status,
+                meal_status=meal_status,
+                extra_status=extra_status,
                 payment_date=payment_date,
-                status=status_map.get(fee_data['status'], PaymentStatusEnum.Unpaid),
+                status=overall_status,
                 invoice_id=invoice_id,
                 student_id=student_id,
             )
