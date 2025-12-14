@@ -118,3 +118,38 @@ function btnFilter(){
 }
 
 
+async function renderUI(){
+  await initData();
+
+  currentTuitions = tuitionsFee;
+  bindStatusButtons();
+  applyStatusFilter();
+
+  document.getElementById("month-btn").addEventListener("click", async () => {
+    const ym = getMonthInput();
+    if(!ym) return;
+
+    const total = totalsData.find(
+      item => item.month === Number(ym.month) && item.year === Number(ym.year)
+    );
+
+    if(total){
+      monthly_total_revenue.textContent = formatNumber(total.monthly_revenue);
+      monthly_collected_ammounts.textContent = formatNumber(total.monthly_collected_amounts);
+      monthly_uncollected_ammounts.textContent = formatNumber(total.monthly_uncollected_amounts);
+    } else {
+      monthly_total_revenue.textContent = "0";
+      monthly_collected_ammounts.textContent = "0";
+      monthly_uncollected_ammounts.textContent = "0";
+    }
+
+
+    currentTuitions = await fetchDataUrl(`/api/tuitions?year=${ym.year}&month=${ym.month}`);
+
+    applyStatusFilter();
+  });
+}
+
+
+
+
