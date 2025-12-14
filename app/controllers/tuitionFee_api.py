@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 
 from app import db
-from app.models.Models import TuitionFee
+from app.models.Models import TuitionFee, Student
 from app.services.tuition_service import total_revenue, monthly_revenue, monthly_collected_amounts, \
     monthly_uncollected_amounts
 
@@ -24,7 +24,7 @@ def get_tuition():
             "year": tuition.year,
             "student":{
                 "id": tuition.student.id,
-                "name":tuition.student.name,
+                "name":tuition.student.name
             }
         })
     return jsonify(tuitions_data),200
