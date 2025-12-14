@@ -1,110 +1,123 @@
 <nav class="sidebar p-3 sidebar-purple d-flex flex-column">
-  <a
-    href="{{ url_for('pages.home') }}"
-    class="brand-link text-center mb-4 d-block"
-  >
-    <h4 class="brand-title d-inline-flex align-items-center gap-2 px-3 py-2">
-      <i class="fa-solid fa-school"></i><span>Educa</span>
-    </h4>
-  </a>
+    <a
+            href="{{ url_for('pages.home') }}"
+            class="brand-link text-center mb-4 d-block"
+    >
+        <h4 class="brand-title d-inline-flex align-items-center gap-2 px-3 py-2">
+            <i class="fa-solid fa-school"></i><span>Educa</span>
+        </h4>
+    </a>
 
-  <ul class="nav flex-column">
-    {% if not "Admin" in current_user.roles| map(attribute="name") %}
+   <ul class="nav flex-column">
+  {% set roles = current_user.roles | map(attribute='name') | list if current_user.is_authenticated else [] %}
+
+  {# ADMIN MENU #}
+  {% if 'Admin' in roles %}
+    <li class="nav-item">
+      <a href="{{ url_for('pages.admin_settings') }}" class="nav-link">
+        <i class="fa-solid fa-gear me-2"></i>Quy định
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ url_for('pages.admin_teaching_assign') }}" class="nav-link">
+        <i class="fa-solid fa-chalkboard-user me-2"></i>Phân công giảng dạy
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ url_for('pages.admin_notifications') }}" class="nav-link">
+        <i class="fa-solid fa-bell me-2"></i>Gửi thông báo
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ url_for('pages.admin_reports') }}" class="nav-link">
+        <i class="fa-solid fa-chart-column me-2"></i>Xem báo cáo
+      </a>
+    </li>
+
+  {# NON-ADMIN MENU #}
+  {% else %}
+
     <li class="nav-item">
       <a href="{{ url_for('pages.home') }}" class="nav-link">
         <i class="fa-solid fa-house me-2"></i>Trang chủ
       </a>
     </li>
-    {% endif %} {% if "Teacher" in current_user.roles| map(attribute="name") %}
-    <li class="nav-item">
-      <a href="{{ url_for('pages.student') }}" class="nav-link">
-        <i class="fa-regular fa-face-smile me-2"></i>Học sinh
-      </a>
-    </li>
-    <li class="nav-item">
-      <a href="{{ url_for('pages.health') }}" class="nav-link">
-        <i class="fa-solid fa-weight-scale me-2"></i>Sức khỏe
-      </a>
-    </li>
-    <li class="nav-item">
-      <a href="{{ url_for('pages.classsize') }}" class="nav-link">
-        <i class="fa-solid fa-clipboard-user me-2"></i>Quản lý sĩ số lớp
-      </a>
-    </li>
-    {% endif %} {% if "Accountant" in current_user.roles| map(attribute="name")
-    %}
-    <li class="nav-item">
-      <a href="{{ url_for('pages.fee') }}" class="nav-link">
-        <i class="fa-solid fa-coins me-2"></i>Học phí
-      </a>
-    </li>
-    <li class="nav-item">
-      <a href="{{ url_for('pages.report') }}" class="nav-link">
-        <i class="fa-solid fa-chart-column me-2"></i>Doanh thu
-      </a>
-    </li>
-    {% endif %} {% if "Parent" in current_user.roles| map(attribute="name") %}
-    <li class="nav-item">
-      <a href="{{ url_for('pages.studentprofile') }}" class="nav-link">
-        <i class="fa-solid fa-folder-open me-2"></i>Quản lí hồ sơ
-      </a>
-    </li>
-    <li class="nav-item">
-      <a href="{{ url_for('pages.kid') }}" class="nav-link">
-        <i class="fa-solid fa-children me-2"></i>Thông tin trẻ
-      </a>
-    </li>
-    <li class="nav-item">
-      <a href="{{ url_for('pages.feetracking') }}" class="nav-link">
-        <i class="fa-solid fa-piggy-bank me-2"></i>Theo dõi học phí
-      </a>
-    </li>
-    <li class="nav-item">
-      <a href="{{ url_for('pages.parentnotification') }}" class="nav-link">
-        <i class="fa-solid fa-bell me-2"></i>Thông báo
-      </a>
-    </li>
-    {% endif %} {% if "Admin" in current_user.roles| map(attribute="name") %}
-    <li class="nav-item">
-      <a href="/admin/student" class="nav-link">
-        <i class="fa-solid fa-people-roof me-2"></i>Quản lý trẻ
-      </a>
-    </li>
-    <li class="nav-item">
-      <a href="/admin/fee" class="nav-link">
-        <i class="fa-solid fa-sack-dollar me-2"></i>Cấu hình học phí
-      </a>
-    </li>
-    <li class="nav-item">
-      <a href="/admin/class-size" class="nav-link">
-        <i class="fa-solid fa-users-gear me-2"></i>Cấu hình sĩ số lớp
-      </a>
-    </li>
-    <li class="nav-item">
-      <a href="/admin/user" class="nav-link">
-        <i class="fa-solid fa-user-shield me-2"></i>Quản lý user
-      </a>
-    </li>
-    {% endif %}
-  </ul>
 
-  <div class="logout-container mt-auto pt-3">
-    {% if current_user.is_authenticated %}
-    <a
-      href="{{ url_for('auth.logout') }}"
-      class="btn logout-button w-100 d-flex align-items-center justify-content-center gap-2 fw-semibold"
-    >
-      <i class="fa-solid fa-right-from-bracket"></i>
-      Đăng xuất
-    </a>
-    {% else %}
-    <a
-      href="{{ url_for('pages.signup') }}"
-      class="btn logout-button w-100 d-flex align-items-center justify-content-center gap-2 fw-semibold"
-    >
-      <i class="fa-solid fa-right-to-bracket"></i>
-      Đăng nhập
-    </a>
+    {% if 'Teacher' in roles %}
+      <li class="nav-item">
+        <a href="{{ url_for('pages.student') }}" class="nav-link">
+          <i class="fa-regular fa-face-smile me-2"></i>Học sinh
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('pages.health') }}" class="nav-link">
+          <i class="fa-solid fa-weight-scale me-2"></i>Sức khỏe
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('pages.classsize') }}" class="nav-link">
+          <i class="fa-solid fa-clipboard-user me-2"></i>Quản lý sĩ số lớp
+        </a>
+      </li>
     {% endif %}
-  </div>
+
+    {% if 'Accountant' in roles %}
+      <li class="nav-item">
+        <a href="{{ url_for('pages.fee') }}" class="nav-link">
+          <i class="fa-solid fa-coins me-2"></i>Học phí
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('pages.report') }}" class="nav-link">
+          <i class="fa-solid fa-chart-column me-2"></i>Doanh thu
+        </a>
+      </li>
+    {% endif %}
+
+    {% if 'Parent' in roles %}
+      <li class="nav-item">
+        <a href="{{ url_for('pages.studentprofile') }}" class="nav-link">
+          <i class="fa-solid fa-folder-open me-2"></i>Quản lí hồ sơ
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('pages.kid') }}" class="nav-link">
+          <i class="fa-solid fa-children me-2"></i>Thông tin trẻ
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('pages.feetracking') }}" class="nav-link">
+          <i class="fa-solid fa-piggy-bank me-2"></i>Theo dõi học phí
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('pages.parent_notifications') }}" class="nav-link">
+          <i class="fa-solid fa-bell me-2"></i>Thông báo
+        </a>
+      </li>
+    {% endif %}
+
+  {% endif %}
+</ul>
+
+
+    <div class="logout-container mt-auto pt-3">
+        {% if current_user.is_authenticated %}
+        <a
+                href="{{ url_for('auth.logout') }}"
+                class="btn logout-button w-100 d-flex align-items-center justify-content-center gap-2 fw-semibold"
+        >
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Đăng xuất
+        </a>
+        {% else %}
+        <a
+                href="{{ url_for('pages.signup') }}"
+                class="btn logout-button w-100 d-flex align-items-center justify-content-center gap-2 fw-semibold"
+        >
+            <i class="fa-solid fa-right-to-bracket"></i>
+            Đăng nhập
+        </a>
+        {% endif %}
+    </div>
 </nav>
