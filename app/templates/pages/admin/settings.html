@@ -1,0 +1,26 @@
+{% extends 'pages/base.html' %}
+{% block title %}Quy định{% endblock %}
+{% block content %}
+<h3>Quy định thu phí</h3>
+
+<form method="post" class="row g-3">
+  <div class="col-md-4">
+    <label class="form-label">Học phí cơ bản</label>
+    <input class="form-control" name="tuition_base" type="number" min="0" value="{{ s.tuition_base }}" required>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Tiền ăn 1 ngày</label>
+    <input class="form-control" name="meal_fee_per_day" type="number" min="0" value="{{ s.meal_fee_per_day }}" required>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Sĩ số tối đa/lớp</label>
+    <input class="form-control" name="max_students_per_class" type="number" min="1" value="{{ s.max_students_per_class }}" required>
+  </div>
+
+  <div class="col-12">
+    <button class="btn btn-primary">Lưu quy định</button>
+  </div>
+</form>
+{% endblock %}
