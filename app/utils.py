@@ -20,6 +20,8 @@ def get_filter_params():
         'class_id':class_id
     }
 
+from datetime import datetime
+
 def time_ago(dt: datetime):
     now = datetime.utcnow()
     diff = now - dt
