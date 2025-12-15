@@ -1,18 +1,13 @@
 import enum
 from typing import List
-from datetime import datetime
+from datetime import datetime, date
+
+from app.extensions import db
+from flask_login import UserMixin
 
 from sqlalchemy import case, and_
 from sqlalchemy.ext.hybrid import hybrid_property
-
-from app import db
-
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, column_property
-
-from app import db
-from datetime import datetime, date
-from flask_login import UserMixin
 
 from app.models.DTO import UserDTO
 
@@ -52,6 +47,13 @@ class Role(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
 
 class Classroom(db.Model):
     __tablename__ = "classrooms"
