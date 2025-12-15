@@ -55,10 +55,11 @@ def signup():
 @auth_service.route('/login', methods=['POST'])
 def login():
     if current_user.is_authenticated:
-            user_roles = [role.name for role in current_user.roles]
-            if 'Admin' in user_roles:
-                return redirect(url_for('pages.admin_settings'))
-            return redirect(url_for('pages.home'))
+        # Nếu đã đăng nhập, kiểm tra role để redirect
+        user_roles = [role.name for role in current_user.roles]
+        if 'Admin' in user_roles:
+            return redirect(url_for('admin.index'))
+        return redirect(url_for('pages.home'))
 
     # Get data from form
     email = request.form.get('email')
@@ -73,7 +74,7 @@ def login():
         # Kiểm tra role để redirect đúng trang
         user_roles = [role.name for role in user.roles]
         if 'Admin' in user_roles:
-            return redirect(url_for('pages.admin_settings'))
+            return redirect(url_for('admin.index'))
         return redirect(url_for('pages.home'))
     except MissingFieldError:
         flash('Vui lòng nhập đầy đủ thông tin', 'error')
