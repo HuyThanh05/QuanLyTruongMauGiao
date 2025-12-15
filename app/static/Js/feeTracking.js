@@ -147,3 +147,7 @@ function handleItemAction(tuitionId, itemType, status) {
     alert("Thanh toán");
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  main();
+});

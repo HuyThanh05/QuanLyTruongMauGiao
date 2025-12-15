@@ -60,10 +60,8 @@ class Classroom(db.Model):
     name = db.Column(db.String(100), nullable=False)
     term = db.Column(db.String(100), nullable=False)
     max_slots = db.Column(db.Integer, nullable=False)
-
-    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
-    teacher = db.relationship("User", foreign_keys=[teacher_id], backref="classes_teaching")
-
+    #relationships
+    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 class Student(db.Model):
     __tablename__ = "students"
@@ -158,35 +156,9 @@ class Invoice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     amount = db.Column(db.Float, nullable=False)
-    content = db.Column(db.String(255), nullable=False)
+    content: db.Column = db.Column(db.String(255), nullable=False)
     #relationships
     accountant_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-class Setting(db.Model):
-    __tablename__ = "settings"
-    id = db.Column(db.Integer, primary_key=True)
-
-    tuition_base = db.Column(db.Integer, nullable=False, default=0)
-    meal_fee_per_day = db.Column(db.Integer, nullable=False, default=0)
-    max_students_per_class = db.Column(db.Integer, nullable=False, default=30)
-
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    updated_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
-
-
-class Notification(db.Model):
-    __tablename__ = "notifications"
-    id = db.Column(db.Integer, primary_key=True)
-
-    title = db.Column(db.String(255), nullable=False)
-    content = db.Column(db.Text, nullable=False)
-
-    target_role = db.Column(db.String(50), nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    created_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
-
 
 #Mapping model to DTO
 def user_to_dto(user: User) -> UserDTO:
