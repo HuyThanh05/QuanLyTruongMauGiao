@@ -10,7 +10,23 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 admin = Admin(
     name="microblog",
+    # template_mode="bootstrap5",
+    url="/admin-panel",
 )
+
+from flask import redirect, request, url_for
+
+class SecureModelView(ModelView):
+    def is_accessible(self):
+        if not current_user.is_authenticated:
+            return False
+        roles = getattr(current_user, "roles", []) or []
+        return any(getattr(r, "name", "") == "Admin" for r in roles)
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for("auth.login", next=request.url))  # sửa "auth.login" đúng endpoint login của bạn
+
+
 babel = Babel()
 
 def create_app():
@@ -62,8 +78,8 @@ def create_app():
 
     # flask-admin
     admin.init_app(app)
-    admin.add_view(ModelView(User, db.session))
-    admin.add_view(ModelView(Student, db.session))
+    admin.add_view(SecureModelView(User, db.session, name="Users"))
+    admin.add_view(SecureModelView(Student, db.session, name="Students"))
 
     return app
 

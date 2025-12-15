@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, abort, request, jsonify
 from flask_login import login_required, current_user
 from functools import wraps
+from flask import render_template
+from flask_login import login_required
 
 from app.models.Models import Classroom, Student
 from app.services.class_service import get_all_class
@@ -156,25 +158,6 @@ def admin_settings():
     flash("Đã cập nhật quy định và tạo thông báo.", "success")
     return redirect(url_for("page_routes.admin_settings"))
 
-@page_routes.route("/admin/teaching-assign", methods=["GET", "POST"])
-@roles_required("Admin")
-def admin_teaching_assign():
-    if request.method == "GET":
-        classrooms = Classroom.query.all()
-        teachers = get_teachers()
-        return render_template("pages/admin/teaching_assign.html", classrooms=classrooms, teachers=teachers)
-
-    class_id = request.form.get("class_id", type=int)
-    teacher_id = request.form.get("teacher_id", type=int)  # để trống -> None
-
-    classroom, err = assign_teacher_to_class(class_id, teacher_id)
-    if err:
-        flash(err, "danger")
-        return redirect(url_for("page_routes.admin_teaching_assign"))
-
-    flash("Đã lưu phân công giảng dạy.", "success")
-    return redirect(url_for("page_routes.admin_teaching_assign"))
-
 @page_routes.route("/admin/notifications", methods=["GET", "POST"])
 @roles_required("Admin")
 def admin_notifications():
@@ -205,3 +188,8 @@ def parent_notifications():
 @roles_required("Admin")
 def admin_reports():
     return render_template("pages/report.html", Title="Doanh thu")
+
+@page_routes.route("/admin/users")
+@login_required
+def admin_users():
+    return render_template("pages/admin/users_admin.html")
