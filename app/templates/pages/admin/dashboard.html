@@ -1,0 +1,29 @@
+{% extends 'pages/base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3 class="mb-3">Admin Dashboard</h3>
+
+  <div class="row g-3">
+    <div class="col-md-3">
+      <a class="btn btn-outline-primary w-100" href="/admin/settings">Quy định</a>
+    </div>
+    <div class="col-md-3">
+      <a class="btn btn-outline-success w-100" href="/admin/teaching-assign">Phân công giảng dạy</a>
+    </div>
+    <div class="col-md-3">
+      <a class="btn btn-outline-warning w-100" href="/admin/notifications">Gửi thông báo</a>
+    </div>
+    <div class="col-md-3">
+      <a class="btn btn-outline-dark w-100" href="/admin/reports">Xem báo cáo</a>
+    </div>
+  </div>
+
+  <hr class="my-4">
+
+  <p class="text-muted mb-0">
+    Chọn chức năng để quản trị hệ thống.
+  </p>
+</div>
+{% endblock %}
