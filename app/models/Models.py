@@ -104,11 +104,6 @@ class TuitionFee(db.Model):
     meal_fee = db.Column(db.Float, nullable=False)
     extra_fee = db.Column(db.Float, nullable=False)
     total = column_property(fee_base + meal_fee + extra_fee)
-
-    base_status = db.Column(db.Enum(PaymentStatusEnum), default='Unpaid')
-    meal_status = db.Column(db.Enum(PaymentStatusEnum), default='Unpaid')
-    extra_status = db.Column(db.Enum(PaymentStatusEnum), default='Unpaid')
-
     payment_date = db.Column(db.DateTime)
     status = db.Column(db.Enum(PaymentStatusEnum), nullable=False)
     #relationships

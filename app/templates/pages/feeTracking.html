@@ -34,19 +34,15 @@ block content %}
           </div>
           <p class="text-muted mb-1">Bé: Minh Anh - Lớp Chồi 1</p>
           <p class="text-muted mb-3">Tổng số tiền phải đóng trong tháng</p>
-          <div class="fs-3 fw-semibold text-primary" id="total-fee"></div>
+          <div class="fs-3 fw-semibold text-primary">8.500.000 đ</div>
           <div class="mt-3">
             <div class="d-flex justify-content-between">
               <span>Học phí cơ bản</span>
-              <strong id="base-fee"></strong>
+              <strong>6.000.000 đ</strong>
             </div>
             <div class="d-flex justify-content-between">
               <span>Tiền ăn</span>
-              <strong id="meal-fee"></strong>
-            </div>
-              <div class="d-flex justify-content-between">
-              <span>Phụ thu khác</span>
-              <strong id="extra-fee">0</strong>
+              <strong>2.500.000 đ</strong>
             </div>
           </div>
           <div class="mt-4 d-grid gap-2">
@@ -85,8 +81,31 @@ block content %}
                   <th class="text-end">Liên kết</th>
                 </tr>
               </thead>
-              <tbody id="tuition-items-tbody">
-                <!--Load dữ liệu qua js -->
+              <tbody>
+                <tr>
+                  <td>Học phí cơ bản</td>
+                  <td class="text-end">6.000.000 đ</td>
+                  <td class="text-center">
+                    <span class="badge text-bg-success">Đã thu</span>
+                  </td>
+                  <td class="text-end">05/12/2025</td>
+                  <td class="text-end">
+                    <a href="#" class="btn btn-sm btn-outline-secondary">
+                      Xem biên lai
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tiền ăn</td>
+                  <td class="text-end">2.500.000 đ</td>
+                  <td class="text-center">
+                    <span class="badge text-bg-warning">Chưa thu</span>
+                  </td>
+                  <td class="text-end">05/12/2025</td>
+                  <td class="text-end">
+                    <a href="#" class="btn btn-sm btn-primary">Thanh toán</a>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -175,10 +194,4 @@ block content %}
     </div>
   </div>
 </div>
-<script src="{{ url_for('static', filename='Js/fee_tracking.js') }}"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', async () => {
-    await main();
-});
-</script>
 {% endblock %}
