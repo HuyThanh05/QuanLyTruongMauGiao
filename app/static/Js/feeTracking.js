@@ -1,4 +1,5 @@
-let studentId = 1;
+let studentId = null;
+let parentId = null;
 let thisMonth, thisYear;
 let tuitions = [];
 let baseFeeValue = 0,
@@ -75,6 +76,48 @@ async function loadTuitionItemsTable(tuitionId) {
   }
 }
 
+async function loadStudentOptions() {
+  const select = document.getElementById("studentSelector");
+  const nameLabel = document.getElementById("student-name-label");
+  if (!select) return;
+
+  // Lấy danh sách con của phụ huynh hiện tại
+  const students = await fetchDataUrl(`/api/parent/students`);
+  if (!students || !Array.isArray(students) || students.length === 0) {
+    console.warn("No students for current parent");
+    return;
+  }
+
+  // Xóa option mẫu cũ (hard-code)
+  select.innerHTML = "";
+
+  students.forEach((s) => {
+    const opt = document.createElement("option");
+    opt.value = s.id;
+    opt.textContent = s.classroom?.name
+      ? `${s.name} - ${s.classroom.name}`
+      : s.name;
+    select.appendChild(opt);
+  });
+
+  // chọn bé đầu tiên mặc định
+  studentId = students[0].id;
+  select.value = String(studentId);
+
+  if (nameLabel) {
+    nameLabel.textContent = select.options[select.selectedIndex].textContent;
+  }
+}
+
+function getSelectedMonthYear() {
+  const monthInput = document.getElementById("monthSelector");
+  if (monthInput && monthInput.value) {
+    const [yearStr, monthStr] = monthInput.value.split("-");
+    return [Number(monthStr), Number(yearStr)];
+  }
+  return [thisMonth, thisYear];
+}
+
 async function main() {
   try {
     const allTuitions = await fetchDataUrl(`/api/tuitions`);
@@ -84,11 +127,12 @@ async function main() {
     }
 
     tuitions = allTuitions.filter(
-      (t) => t.student && t.student.id === studentId
+      (t) => t.student && String(t.student.id) === String(studentId)
     );
     console.log("Tuitions for student:", tuitions);
 
-    let latestTuitionArray = queryTuitionFeeByMonthYear(9, 2024);
+    const [month, year] = getSelectedMonthYear();
+    let latestTuitionArray = queryTuitionFeeByMonthYear(month, year);
 
     let defaultTuitionData = {
       total_fee: 0,
@@ -137,7 +181,7 @@ async function main() {
     console.error("Error in main function:", error);
   }
 }
-// Function để xử lý action của item (có thể được gọi từ HTML)
+
 function handleItemAction(tuitionId, itemType, status) {
   console.log("Handle action:", tuitionId, itemType, status);
   // TODO: Implement payment or view receipt logic
@@ -148,6 +192,39 @@ function handleItemAction(tuitionId, itemType, status) {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  main();
+document.addEventListener("DOMContentLoaded", async () => {
+  // set default month = tháng hiện tại
+  const monthInput = document.getElementById("monthSelector");
+  if (monthInput) {
+    const mm = String(thisMonth).padStart(2, "0");
+    monthInput.value = `${thisYear}-${mm}`;
+  }
+
+  // load danh sách con, sau đó load học phí cho bé đầu tiên
+  await loadStudentOptions();
+  if (studentId != null) {
+    await main();
+  }
+
+  // khi chọn bé khác
+  const select = document.getElementById("studentSelector");
+  const nameLabel = document.getElementById("student-name-label");
+  if (select) {
+    select.addEventListener("change", async () => {
+      studentId = select.value;
+      if (nameLabel) {
+        nameLabel.textContent =
+          select.options[select.selectedIndex].textContent;
+      }
+      await main();
+    });
+  }
+
+  // khi bấm nút "Xem" theo tháng
+  const filterBtn = document.getElementById("filter-btn");
+  if (filterBtn) {
+    filterBtn.addEventListener("click", async () => {
+      await main();
+    });
+  }
 });
