@@ -162,6 +162,18 @@ class Invoice(db.Model):
     #relationships
     accountant_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+class Setting(db.Model):
+    __tablename__ = "settings"
+
+    id = db.Column(db.Integer, primary_key=True)
+    tuition_base = db.Column(db.Integer, default=0)
+    meal_fee_per_day = db.Column(db.Integer, default=0)
+    max_students_per_class = db.Column(db.Integer, default=0)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_by = db.Column(db.Integer)
+
 #Mapping model to DTO
 def user_to_dto(user: User) -> UserDTO:
     return UserDTO(
@@ -182,4 +194,15 @@ def dto_to_user(dto:UserDTO) -> User:
         email = dto.email
     )
     return user
+
+
+class Notification(db.Model):
+    __tablename__ = "notifications"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    target_role = db.Column(db.String(50), nullable=False)  # All/Parent/Teacher/Accountant
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id"))
 
