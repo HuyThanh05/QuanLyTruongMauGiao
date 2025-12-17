@@ -49,7 +49,7 @@ function renderTuitionsTable(tuitions) {
                   >${tuition.status === "Paid" ? "Đã thu" : "Chưa thu"}</span
                 >
               </td>
-              <td class="text-end">05/12/2025</td>
+              <td class="text-end">${tuition.due_date || ""}</td>
         `;
     tbody.appendChild(row);
   }
@@ -161,7 +161,11 @@ async function renderUI() {
 
   updateStatistics(ym);
 
-  currentTuitions = tuitionsFee;
+  // Chỉ hiển thị học phí của tháng đang chọn
+  currentTuitions = tuitionsFee.filter(
+    (t) =>
+      Number(t.year) === Number(ym.year) && Number(t.month) === Number(ym.month)
+  );
 
   ClassFilter();
   btnFilter();
@@ -175,10 +179,59 @@ async function renderUI() {
     document.getElementById("unpaid-btn")?.classList.remove("active");
   }
 
-  document.getElementById("month-btn").addEventListener("click", () => {
-    const selectedYm = getMonthInput();
-    if (!selectedYm) return;
+  const monthBtn = document.getElementById("month-btn");
+  if (monthBtn) {
+    monthBtn.addEventListener("click", () => {
+      const selectedYm = getMonthInput();
+      if (!selectedYm) return;
 
-    updateStatistics(selectedYm);
-  });
+      // Cập nhật theo tháng đang chọn
+      updateStatistics(selectedYm);
+      currentTuitions = tuitionsFee.filter(
+        (t) =>
+          Number(t.year) === Number(selectedYm.year) &&
+          Number(t.month) === Number(selectedYm.month)
+      );
+      applyFilters();
+    });
+  }
+
+  // test
+  const generateBtn = document.getElementById("generate-tuition-btn");
+  if (generateBtn) {
+    generateBtn.addEventListener("click", async () => {
+      const { year, month } = getMonthInput();
+      try {
+        const res = await fetch("/api/tuitions/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            year: Number(year),
+            month: Number(month),
+          }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          alert(data.message || "Tạo học phí thất bại");
+          return;
+        }
+
+        alert(
+          `Đã tạo ${data.created} học phí cho tháng ${data.month}/${data.year}`
+        );
+
+        // Reload dữ liệu + UI
+        await initData();
+        const ymAfter = getMonthInput();
+        updateStatistics(ymAfter);
+        currentTuitions = tuitionsFee;
+        ClassFilter();
+        applyFilters();
+      } catch (err) {
+        console.error(err);
+        alert(err.message || "Có lỗi khi gọi API tạo học phí");
+      }
+    });
+  }
 }
