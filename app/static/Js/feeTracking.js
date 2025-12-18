@@ -157,9 +157,15 @@ async function main() {
           if (latestTuition.status === "Paid") {
             payNowBtn.classList.add("d-none");
             viewReceiptBtn.classList.remove("d-none");
+            // Khi đã thu dẫn tới trang biên lai
+            viewReceiptBtn.onclick = () => {
+              window.location.href = `/payment/${latestTuition.id}/receipt`;
+            };
           } else {
             payNowBtn.classList.remove("d-none");
             viewReceiptBtn.classList.add("d-none");
+            // Khi chưa thu, không cho xem biên lai
+            viewReceiptBtn.onclick = null;
           }
         }
       }
@@ -170,6 +176,7 @@ async function main() {
       if (payNowBtn && viewReceiptBtn) {
         payNowBtn.classList.remove("d-none");
         viewReceiptBtn.classList.add("d-none");
+        viewReceiptBtn.onclick = null;
       }
     }
 
@@ -206,11 +213,10 @@ async function main() {
 
 function handleItemAction(tuitionId, itemType, status) {
   console.log("Handle action:", tuitionId, itemType, status);
-  // TODO: Implement payment or view receipt logic
   if (status === "Paid") {
-    alert("Xem biên lai");
+    window.location.href = `/payment/${tuitionId}/receipt`;
   } else {
-    alert("Thanh toán");
+    window.location.href = `/payment/${tuitionId}`;
   }
 }
 

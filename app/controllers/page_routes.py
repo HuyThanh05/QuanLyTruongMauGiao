@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, abort, request,
 from flask_login import login_required, current_user
 from functools import wraps
 
-from app.models.Models import Classroom, Student
+from app.models.Models import Classroom, Student, TuitionFee
 from app.services.class_service import get_all_class
 from app.services.health_record_service import count_student_record, count_students_recorded_today, count_students_not_recorded_today
 from app.services.student_service import get_all_students, total_student, search_students, \
@@ -87,28 +87,53 @@ def fee():
 def report():
     return render_template('pages/report.html', Title='Doanh thu')
 
-@page_routes.route('/studentprofile')
-@roles_required('Parent')
-def studentprofile():
-    return render_template('pages/studentProfile.html', Title = "Quản lý hồ sơ")
-
 @page_routes.route('/kidtracking')
 @roles_required('Parent')
 def kid():
     parent_id = current_user.id
     student = Student.query.filter_by(parent_id=parent_id).first()
-    count = count_student_record(student.id)
-    return render_template('pages/kid.html',Title = "Thông tin trẻ",parent_id=parent_id,student_id=student.id if student else None,count=count)
+
+    # Nếu phụ huynh chưa có trẻ, tránh lỗi khi đếm record
+    if student:
+        count = count_student_record(student.id)
+        student_id = student.id
+    else:
+        count = 0
+        student_id = None
+
+    return render_template(
+        'pages/kid.html',
+        Title="Thông tin trẻ",
+        parent_id=parent_id,
+        student_id=student_id,
+        count=count
+    )
 
 @page_routes.route('/feetracking')
 @roles_required('Parent')
 def feetracking():
-    return render_template('pages/feeTracking.html', Title = "Theo dõi học phí")
+    # Lấy tất cả con của phụ huynh hiện tại
+    parent_id = current_user.id
+    students = Student.query.filter_by(parent_id=parent_id).all()
+    student_ids = [s.id for s in students]
 
-@page_routes.route('/parent/notification')
-@roles_required('Parent')
-def parentnotification():
-    return render_template('pages/parentNotification.html', Title = "Thông báo")
+    tuitions = []
+    if student_ids:
+        tuitions = (
+            TuitionFee.query
+            .filter(TuitionFee.student_id.in_(student_ids))
+            .order_by(TuitionFee.year, TuitionFee.month)
+            .all()
+        )
+
+    latest_tuition = tuitions[-1] if tuitions else None
+
+    return render_template(
+        'pages/feeTracking.html',
+        Title="Theo dõi học phí",
+        tuitions=tuitions,
+        tuition=latest_tuition,
+    )
 
 @page_routes.route('/signup', methods=['GET'])
 def signup():
