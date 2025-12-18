@@ -141,7 +141,8 @@ def signup():
         user_roles = [role.name for role in current_user.roles]
         if 'Admin' in user_roles:
             return redirect(url_for('admin.index'))
-    return render_template('pages/login.html')
+    mode = request.args.get('mode', '')
+    return render_template('pages/login.html', mode=mode)
 
 @page_routes.route('/administrator')
 @roles_required('Admin')
