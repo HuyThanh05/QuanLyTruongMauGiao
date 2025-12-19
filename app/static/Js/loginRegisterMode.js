@@ -47,3 +47,30 @@ if (loginBtn) {
     window.history.pushState({}, "", url);
   });
 }
+
+// Validation cho form đăng ký
+const registerForm = document.querySelector(".register form");
+if (registerForm) {
+  registerForm.addEventListener("submit", (e) => {
+    const phoneInput = registerForm.querySelector('input[name="phone"]');
+    if (phoneInput) {
+      const phoneValue = phoneInput.value.trim();
+      if (phoneValue.length > 10) {
+        e.preventDefault();
+        removeFlashMessages();
+
+        const errorMessage = document.createElement("div");
+        errorMessage.className = "flash-message";
+        errorMessage.textContent = "Số điện thoại không hợp lệ";
+        errorMessage.style.color = "#ff0000";
+        errorMessage.style.marginTop = "10px";
+        registerForm.appendChild(errorMessage);
+
+        setTimeout(() => {
+          errorMessage.remove();
+        }, 5000);
+        return false;
+      }
+    }
+  });
+}

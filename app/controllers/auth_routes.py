@@ -8,6 +8,7 @@ from app.services.auth_service import (
     MissingFieldError,
     PasswordMismatchError,
     InvalidCredentials,
+    InvalidPhoneError,
 )
 from app.services.user_service import EmailAlreadyExists
 
@@ -43,6 +44,9 @@ def signup():
         return redirect(url_for('pages.signup', mode='register'))
     except PasswordMismatchError:
         flash('Mật khẩu xác nhận không khớp', 'register_error')
+        return redirect(url_for('pages.signup', mode='register'))
+    except InvalidPhoneError:
+        flash('Số điện thoại không hợp lệ', 'register_error')
         return redirect(url_for('pages.signup', mode='register'))
     except EmailAlreadyExists:
         flash('Email đã được sử dụng', 'register_error')
