@@ -2,7 +2,6 @@ const container = document.querySelector(".container");
 const registerBtn = document.querySelector(".register-btn");
 const loginBtn = document.querySelector(".login-btn");
 
-// Hàm xóa flash messages
 function removeFlashMessages() {
   const flashMessages = document.querySelectorAll(".flash-message");
   flashMessages.forEach((msg) => {
@@ -20,12 +19,15 @@ document.addEventListener("DOMContentLoaded", () => {
   } else if (mode && mode.toLowerCase() === "login") {
     container.classList.remove("active");
   }
+  setTimeout(() => {
+    removeFlashMessages();
+  }, 5000);
 });
 
 if (registerBtn) {
   registerBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    removeFlashMessages(); // Xóa flash messages khi chuyển form
+    removeFlashMessages();
     container.classList.add("active");
     // Cập nhật URL với mode=register
     const url = new URL(window.location);
@@ -37,7 +39,7 @@ if (registerBtn) {
 if (loginBtn) {
   loginBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    removeFlashMessages(); // Xóa flash messages khi chuyển form
+    removeFlashMessages();
     container.classList.remove("active");
     // Cập nhật URL với mode=login
     const url = new URL(window.location);
