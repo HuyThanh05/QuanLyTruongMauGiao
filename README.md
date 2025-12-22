@@ -39,6 +39,10 @@ Sau khi chạy `dao.py`, các tài khoản mẫu (mật khẩu: `123456`) riêng
 - **Parent**: parent@example.com
 - **Accountant**: accountant@example.com
 
+## Deploy
+
+Ứng dụng đã được deploy lên pythonanywhere: `https://letuankhoi123.pythonanywhere.com/`
+
 ## Lưu Ý
 
 - Chạy `dao.py` trước khi chạy `run.py` lần đầu tiên
