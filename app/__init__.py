@@ -220,16 +220,16 @@ class ThongBaoView(BaseView):
         return self.render("admin/thongbao.html")
 
 
-class BaoCaoView(BaseView):
-    def is_accessible(self):
-        return SecureModelView.is_accessible(self)
-
-    def inaccessible_callback(self, name, **kwargs):
-        return SecureModelView.inaccessible_callback(self, name, **kwargs)
-
-    @expose("/")
-    def index(self):
-        return self.render("admin/baocao.html")
+# class BaoCaoView(BaseView):
+#     def is_accessible(self):
+#         return SecureModelView.is_accessible(self)
+#
+#     def inaccessible_callback(self, name, **kwargs):
+#         return SecureModelView.inaccessible_callback(self, name, **kwargs)
+#
+#     @expose("/")
+#     def index(self):
+#         return self.render("admin/baocao.html")
 
 
 def create_app():
@@ -240,7 +240,7 @@ def create_app():
     )
 
     app.config.from_mapping(
-        SQLALCHEMY_DATABASE_URI="mysql+pymysql://root:password@localhost/educa?charset=utf8mb4",
+        SQLALCHEMY_DATABASE_URI="mysql+pymysql://root:hhthah05%HT@localhost/educa?charset=utf8mb4",
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SECRET_KEY="khoideptrai",
         BABEL_DEFAULT_LOCALE='vi',
