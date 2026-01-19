@@ -1,4 +1,3 @@
-/*SIDEBAR*/
 .sidebar {
   position: fixed;
   top: 0;
@@ -12,10 +11,10 @@
 }
 
 .sidebar-purple {
-  --sidebar-bg: #f5f0ff;
-  --sidebar-border: #e6dcff;
-  --sidebar-text: #5b4a8f;
-  --sidebar-hover: rgba(111, 66, 193, 0.08);
+  --sidebar-bg: lightblue;
+  --sidebar-border: steelblue;
+  --sidebar-text: #003366;
+  --sidebar-hover: #bcdff5;
 
   background: var(--sidebar-bg);
   border-right: 1px solid var(--sidebar-border);
@@ -33,51 +32,42 @@
 }
 
 .sidebar .brand-title {
-  color: #5b4a8f;
-  font-weight: 800;
-  letter-spacing: 0.4px;
+  color: #003366;
+  font-weight: 700;
   padding-bottom: 6px;
-  border-bottom: 2px solid #e6dcff;
+  border-bottom: 1px solid steelblue;
 }
 
 .sidebar .brand-link:hover .brand-title {
-  color: #6f42c1;
-  border-color: #d3c2ff;
+  color: navy;
 }
 
 .sidebar-purple .nav-link {
   color: var(--sidebar-text);
-  border-radius: 0;
   padding: 0.5rem 0.75rem;
   display: flex;
   align-items: center;
+  border-radius: 4px;
 }
 
 .sidebar-purple .nav-link:hover {
   background: var(--sidebar-hover);
-  color: var(--sidebar-text);
+  color: navy;
 }
 
 .sidebar-purple .nav-link.active {
-  background: rgba(111, 66, 193, 0.15);
-  color: #6f42c1;
+  background: #9fd3f0;
+  color: navy;
   font-weight: 600;
-  border-left: 3px solid #6f42c1;
-  border-radius: 10px;
-}
-
-.sidebar-purple .nav-link.active i {
-  color: #6f42c1;
+  border-left: 3px solid steelblue;
 }
 
 .sidebar .logout-button {
-  background: linear-gradient(135deg, #ffffff 0%, #f3e9ff 100%);
-  color: #5b4a8f;
-  border: 1px solid #c4a7ff;
-  border-radius: 14px;
-  padding: 0.65rem 1.25rem;
-  box-shadow: 0 6px 16px rgba(111, 66, 193, 0.18);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  background: white;
+  color: #003366;
+  border: 1px solid steelblue;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
 }
 
 .sidebar .logout-container {
@@ -90,43 +80,39 @@
 }
 
 .sidebar .logout-button i {
-  color: #6f42c1;
+  color: navy;
 }
 
 .sidebar .logout-button:hover {
-  background: linear-gradient(135deg, #f0e4ff 0%, #e2d2ff 100%);
-  color: #4a3c7a;
-  transform: translateY(-1px);
-  box-shadow: 0 10px 20px rgba(111, 66, 193, 0.25);
+  background: #bcdff5;
+  color: navy;
 }
 
-/*NAVBAR (HEADER)*/
 .navbar {
-  padding-top: 0.25rem; /* 4px */
-  padding-bottom: 0.25rem; /* 4px */
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  background-color: lightblue;
 }
 
+.navbar .nav-link,
 .navbar .navbar-brand {
-  font-size: 1rem;
+  color: #003366;
 }
 
-.navbar .btn {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
+.navbar .nav-link:hover {
+  color: navy;
 }
 
-/*FOOTER*/
 .app-footer {
-  border-top: 1px solid #ece7ff;
-  background: #faf7ff;
+  border-top: 1px solid steelblue;
+  background: lightblue;
   width: 100%;
-  flex: 0 0 auto;
 }
 
 .app-footer .nav-link {
-  color: #6b5aa7;
+  color: #003366;
 }
 
 .app-footer .nav-link:hover {
-  color: #4f3d92;
+  color: navy;
 }

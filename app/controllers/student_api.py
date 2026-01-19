@@ -1,8 +1,6 @@
 from datetime import date
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify
 from flask_login import current_user
-from sqlalchemy import func
-
 from app.utils import _get_payload, _string_to_date, get_filter_params
 from app import db
 from app.controllers.page_routes import roles_required
@@ -11,7 +9,8 @@ from app.services.student_service import search_students, is_classroom_full
 
 student_api = Blueprint('student_api', __name__)
 
-# GET: /api/students
+
+# Get student
 @student_api.route('/api/students', methods=['GET'])
 @roles_required('Teacher')
 def get_students():
@@ -20,13 +19,9 @@ def get_students():
 
     students_data = []
     for student in students:
-        # Lấy nhiệt độ mới nhất của học sinh
-        latest_health = db.session.query(HealthRecord).filter_by(
-            student_id=student.id
-        ).order_by(HealthRecord.date_created.desc()).first()
-        
+        latest_health = db.session.query(HealthRecord).filter_by(student_id=student.id).order_by(
+            HealthRecord.date_created.desc()).first()
         latest_temperature = latest_health.temperature if latest_health else None
-        
         students_data.append({
             'id': student.id,
             'name': student.name,
@@ -48,17 +43,12 @@ def get_students():
 
     return jsonify(students_data), 200
 
-
+# Get student
 @student_api.route("/api/parent/students", methods=["GET"])
 @roles_required("Parent")
 def get_students_for_current_parent():
-    """
-    Trả về danh sách học sinh của phụ huynh đang đăng nhập (Parent).
-    Dùng cho các màn Parent như theo dõi học phí, thông tin trẻ, v.v.
-    """
     parent_id = current_user.id
     students = Student.query.filter_by(parent_id=parent_id).all()
-
     data = []
     for s in students:
         data.append({
@@ -71,44 +61,37 @@ def get_students_for_current_parent():
                 "name": s.classroom.name if s.classroom else "Chưa phân lớp",
             },
         })
-
     return jsonify(data), 200
 
 
-# DELETE: /api/students/<int:student_id>
+# DELETE student
 @student_api.route('/api/students/<int:student_id>', methods=['DELETE'])
 @roles_required('Teacher')
 def delete_student(student_id):
     student = Student.query.filter_by(id=student_id).first()
     if not student:
         return jsonify({"message": "student not found"}), 404
-
     db.session.delete(student)
     db.session.commit()
     return jsonify({"message": "student deleted"}), 200
 
 
-# POST: /api/students
+# CREATE student
 @student_api.route('/api/students', methods=['POST'])
 @roles_required('Teacher')
 def create_student():
     payload = _get_payload()
-
     required_fields = ['name', 'dob', 'gender', 'address']
     for f in required_fields:
         if f not in payload:
             return jsonify({"message": f"{f} is required"}), 400
-
     dob_value = _string_to_date(payload['dob'])
     if dob_value is None:
         return jsonify({"message": "dob is invalid"}), 400
-
-    # Kiểm tra lớp đầy nếu có class_id
     class_id = payload.get('class_id')
     if class_id:
         if is_classroom_full(classroom_id=class_id):
             return jsonify({"message": "Lớp đã đầy"}), 400
-
     today = date.today()
     age = today.year - dob_value.year - ((today.month, today.day) < (dob_value.month, dob_value.day))
 
@@ -137,8 +120,7 @@ def create_student():
         }
     }), 201
 
-
-# PUT: /api/students/<int:student_id>
+# UPDATE student
 @student_api.route('/api/students/<int:student_id>', methods=['PUT'])
 @roles_required('Teacher')
 def update_student(student_id):
@@ -147,20 +129,18 @@ def update_student(student_id):
         return jsonify({"message": "student not found"}), 404
 
     payload = _get_payload()
+
     required_fields = ['name', 'dob', 'gender', 'class_id', 'parent_id']
     for f in required_fields:
         if f not in payload:
             return jsonify({"message": f"{f} is required"}), 400
-
     dob_value = _string_to_date(payload['dob'])
     if dob_value is None:
         return jsonify({"message": "dob is invalid"}), 400
-
     student.name = payload['name']
     student.dob = dob_value
     student.gender = payload['gender']
-    
-    # Kiểm tra lớp đầy nếu có thay đổi class_id
+
     class_id = payload['class_id']
     if class_id:
         if is_classroom_full(classroom_id=class_id, exclude_student_id=student_id):
@@ -181,8 +161,7 @@ def update_student(student_id):
         }
     }), 200
 
-
-# PATCH: /api/students/<int:student_id>
+# UPDATE student
 @student_api.route('/api/students/<int:student_id>', methods=['PATCH'])
 @roles_required('Teacher')
 def update_partial_student(student_id):
@@ -194,24 +173,19 @@ def update_partial_student(student_id):
 
     if "name" in payload:
         student.name = payload['name']
-
     if "dob" in payload:
         dob_value = _string_to_date(payload["dob"])
         if dob_value is None:
             return jsonify({"message": "dob is invalid"}), 400
         student.dob = dob_value
-
     if "gender" in payload:
         student.gender = payload['gender']
-    
     if "class_id" in payload:
         class_id = payload['class_id']
-        # Kiểm tra lớp đầy (loại trừ học sinh hiện tại nếu đang ở cùng lớp)
         if class_id:
             if is_classroom_full(classroom_id=class_id, exclude_student_id=student_id):
                 return jsonify({"message": "Lớp đã đầy"}), 400
         student.class_id = class_id
-    
     if "parent_id" in payload:
         student.parent_id = payload['parent_id']
 

@@ -1,6 +1,6 @@
 /* Hero Section */
 .hero-section {
-  background: linear-gradient(135deg, #f5f0ff 0%, #e6dcff 50%, #f5f0ff 100%);
+  background: lightskyblue;
   padding: 5rem 0;
   min-height: 60vh;
   display: flex;

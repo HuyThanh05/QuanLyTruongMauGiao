@@ -1,8 +1,5 @@
 from typing import List
-
-from app.models.DTO import StudentDTO
 from app.models.Models import Student, Classroom
-
 
 def get_all_students() -> List[Student]:
     return Student.query.all()

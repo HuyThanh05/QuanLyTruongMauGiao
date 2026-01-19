@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from werkzeug.security import check_password_hash
-
 from app.models.Models import User
 from app.services.user_service import create_user_account, EmailAlreadyExists
 
@@ -54,4 +53,3 @@ def authenticate_user(email: str, password: str) -> User:
         return user
 
     raise InvalidCredentials()
-

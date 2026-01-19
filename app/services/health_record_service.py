@@ -1,7 +1,5 @@
 from datetime import date
-
 from sqlalchemy import func
-
 from app import db
 from app.models.Models import HealthRecord, Student
 

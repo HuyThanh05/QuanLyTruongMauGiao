@@ -3,7 +3,6 @@ import enum
 from datetime import datetime, date
 from typing import List, Optional
 
-# Enums
 class GenderEnum(enum.Enum):
     Nam = "Nam"
     Nu = "Nữ"
@@ -27,7 +26,6 @@ class UserCreateDTO:
     email:str
     password:str
 
-# student
 @dataclasses.dataclass
 class StudentDTO:
     id:int

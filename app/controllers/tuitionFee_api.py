@@ -1,36 +1,30 @@
 from flask import Blueprint, jsonify, request
-from flask_login import current_user
 from datetime import datetime
 from app import db
+from app.controllers.page_routes import roles_required
 from app.models.Models import TuitionFee, Student, Classroom, Setting, PaymentStatusEnum
 from app.services.tuition_service import total_revenue, monthly_revenue, monthly_collected_amounts, \
     monthly_uncollected_amounts
-from app.controllers.page_routes import roles_required
 
 tuitionFee_api = Blueprint('tuitionFee_api', __name__)
 
-
+# get list tuition fee
 @tuitionFee_api.route('/api/tuitions', methods=["GET"])
 @roles_required('Teacher', 'Admin', 'Parent')
 def get_tuition():
     year = request.args.get("year", type=int)
     month = request.args.get("month", type=int)
-
     query = TuitionFee.query
 
     if year is not None:
         query = query.filter(TuitionFee.year == year)
     if month is not None:
         query = query.filter(TuitionFee.month == month)
-
     tuitions = query.all()
-
     tuitions_data = []
     for tuition in tuitions:
-        # tránh lỗi null student
         if tuition.student is None:
             continue
-
         tuitions_data.append({
             "id": tuition.id,
             "fee_base": tuition.fee_base,
@@ -51,11 +45,10 @@ def get_tuition():
         })
     return jsonify(tuitions_data), 200
 
-#GET: GET /api/tuitions/totals
+# get total
 @tuitionFee_api.route('/api/tuitions/totals', methods=["GET"])
 @roles_required('Teacher', 'Admin')
 def get_totals():
-
     months_years = (
         db.session.query(TuitionFee.month, TuitionFee.year)
         .distinct()
@@ -73,10 +66,9 @@ def get_totals():
             "monthly_collected_amounts": monthly_collected_amounts(month, year),
             "monthly_uncollected_amounts": monthly_uncollected_amounts(month, year)
         })
-
     return jsonify(totals_data), 200
 
-
+# create tuition
 @tuitionFee_api.route('/api/tuitions/generate', methods=["POST"])
 @roles_required('Admin', 'Teacher')
 def generate_tuitions():
@@ -87,14 +79,11 @@ def generate_tuitions():
     settings = Setting.query.first()
     if not settings:
         return jsonify({"message": "Chưa cấu hình học phí trong bảng settings"}), 400
-
     students = Student.query.all()
     if not students:
         return jsonify({"message": "Không có học sinh nào"}), 400
-
     created = 0
     for student in students:
-        #Nếu đã có thì bỏ qua
         existing = TuitionFee.query.filter_by(
             student_id=student.id,
             month=month,
@@ -102,7 +91,6 @@ def generate_tuitions():
         ).first()
         if existing:
             continue
-
         fee = TuitionFee(
             month=month,
             year=year,
@@ -117,9 +105,7 @@ def generate_tuitions():
         )
         db.session.add(fee)
         created += 1
-
     db.session.commit()
-
     return jsonify(
         {
             "message": "Đã tạo học phí tháng mới",
@@ -129,28 +115,24 @@ def generate_tuitions():
         }
     ), 201
 
-
+# flag tuition
 @tuitionFee_api.route("/api/tuitions/<int:tuition_id>/mark_paid", methods=["POST"])
 @roles_required('Admin', 'Teacher')
 def mark_tuition_paid(tuition_id):
-    """Đánh dấu học phí là đã thanh toán (sử dụng sau khi quét QR)."""
     tuition = TuitionFee.query.get_or_404(tuition_id)
-
     tuition.base_status = PaymentStatusEnum.Paid
     tuition.meal_status = PaymentStatusEnum.Paid
     tuition.extra_status = PaymentStatusEnum.Paid
     tuition.status = PaymentStatusEnum.Paid
     tuition.payment_date = datetime.utcnow()
-
     db.session.commit()
-
     return jsonify({"message": "Cập nhật trạng thái học phí thành Đã thu"}), 200
 
+# detail tuition
 @tuitionFee_api.route("/api/tuitions/<int:tuition_id>/items", methods=["GET"])
 @roles_required('Teacher', 'Admin', 'Parent')
 def get_tuition_items(tuition_id):
     tuition = TuitionFee.query.get_or_404(tuition_id)
-
     items = [
         {
             "label": "Học phí cơ bản",
@@ -178,6 +160,7 @@ def get_tuition_items(tuition_id):
         "overall_status": tuition.overall_status.value  # hybrid_property
     }, 200
 
+# list class
 @tuitionFee_api.route('/api/classrooms', methods=["GET"])
 @roles_required('Teacher', 'Admin', 'Parent')
 def get_classrooms():

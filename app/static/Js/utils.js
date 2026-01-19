@@ -1,16 +1,14 @@
-
 async function fetchDataUrl(url) {
-    const response = await fetch(url);
-    if (!response.ok) {
-        console.log("Error fetching:");
-        return;
-    }
-    else{
-        console.log("Fetching successfully")
-        return await response.json();
-    }
-
+  const response = await fetch(url, {
+    credentials: "same-origin"
+  });
+  if (!response.ok) {
+    console.log("Error fetching:", response.status, url);
+    return null;
+  }
+  return await response.json();
 }
+
 
 function formatNumber(amount) {
   if (amount == null || isNaN(amount)) return "0";

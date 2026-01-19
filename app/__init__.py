@@ -275,7 +275,7 @@ def create_app():
     from app.controllers.kid_api import kid_api
     from app.controllers.health_api import health_api
     from app.controllers.tuitionFee_api import tuitionFee_api
-    from app.controllers.report_controller import report_br
+    from app.controllers.report_controller import report_bp
     from app.controllers.payment_controller import payment_bp
 
     app.register_blueprint(page_routes)
@@ -285,7 +285,7 @@ def create_app():
     app.register_blueprint(kid_api)
     app.register_blueprint(health_api)
     app.register_blueprint(tuitionFee_api)
-    app.register_blueprint(report_br)
+    app.register_blueprint(report_bp)
     app.register_blueprint(payment_bp)
 
     # Flask-Admin

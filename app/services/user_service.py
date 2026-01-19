@@ -1,20 +1,14 @@
 from werkzeug.security import generate_password_hash
-
 from app import db
 from app.models.Models import Role, User
 
-
 class EmailAlreadyExists(Exception):
-    """Raised khi email đã tồn tại trong hệ thống."""
     pass
-
 
 def _get_or_create_role(role_name: str) -> Role:
     role = Role.query.filter_by(name=role_name).first()
     if role:
         return role
-
-    # Tự động tạo role nếu chưa tồn tại để tránh lỗi khi tạo user mặc định
     role = Role(name=role_name)
     db.session.add(role)
     db.session.flush()  # đảm bảo role có id trước khi gán
@@ -42,9 +36,7 @@ def create_user_account(
         role_to_use = role_name
     else:
         role_to_use = "Parent"
-
     role = _get_or_create_role(role_to_use)
-
     user = User(
         name=name or "guest",
         email=email,
