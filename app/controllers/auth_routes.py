@@ -1,7 +1,7 @@
-from flask import Blueprint, request, url_for, redirect, flash, current_app
+# Blueprint cho module xác thực
+from flask import Blueprint, request, url_for, redirect, flash, current_app, session
 from flask_login import login_user, logout_user, current_user
 from flask_principal import identity_changed, Identity
-
 from app.services.auth_service import (
     authenticate_user,
     signup_parent_user,
@@ -12,26 +12,31 @@ from app.services.auth_service import (
 )
 from app.services.user_service import EmailAlreadyExists
 
-auth_service = Blueprint('auth', __name__)
+# Khởi tạo Blueprint cho auth
+auth_service = Blueprint("auth", __name__)
+
+#  Điều hướng user
+def redirect_by_role(user):
+    roles = [r.name for r in user.roles]
+    if "Admin" in roles:
+        return redirect(url_for("admin.index"))
+    return redirect(url_for("pages.home"))
 
 
-@auth_service.route('/signup', methods=['POST'])
+# ĐĂNG KÝ
+@auth_service.route("/signup", methods=["POST"])
 def signup():
     if current_user.is_authenticated:
-        # check role if logged in 
-        user_roles = [role.name for role in current_user.roles]
-        if 'Admin' in user_roles:
-            return redirect(url_for('admin.index'))
-        return redirect(url_for('pages.home'))
+        return redirect_by_role(current_user)
 
-    # get data from form
-    name = request.form.get('username') or "guest"
-    email = request.form.get('email')
-    phone = request.form.get('phone')
-    password = request.form.get('password')
-    confirm_password = request.form.get('confirmPassword')
+    name = request.form.get("username")
+    email = request.form.get("email")
+    phone = request.form.get("phone")
+    password = request.form.get("password")
+    confirm_password = request.form.get("confirmPassword")
 
     try:
+        # Gọi service để tạo tài khoản mới
         signup_parent_user(
             name=name,
             email=email,
@@ -39,60 +44,45 @@ def signup():
             password=password,
             confirm_password=confirm_password,
         )
+        flash("Đăng ký thành công! Vui lòng đăng nhập", "success")
+        return redirect(url_for("pages.signup", mode="login"))
+
     except MissingFieldError:
-        flash('Vui lòng nhập đầy đủ thông tin', 'register_error')
-        return redirect(url_for('pages.signup', mode='register'))
+        flash("Vui lòng nhập đầy đủ thông tin", "register_error")
     except PasswordMismatchError:
-        flash('Mật khẩu xác nhận không khớp', 'register_error')
-        return redirect(url_for('pages.signup', mode='register'))
+        flash("Mật khẩu xác nhận không khớp", "register_error")
     except InvalidPhoneError:
-        flash('Số điện thoại không hợp lệ', 'register_error')
-        return redirect(url_for('pages.signup', mode='register'))
+        flash("Số điện thoại không hợp lệ", "register_error")
     except EmailAlreadyExists:
-        flash('Email đã được sử dụng', 'register_error')
-        return redirect(url_for('pages.signup', mode='register'))
-
-    flash('Đăng ký thành công! Vui lòng đăng nhập', 'success')
-    return redirect(url_for('pages.signup', mode='login'))
+        flash("Email đã được sử dụng", "register_error")
+    return redirect(url_for("pages.signup", mode="register"))
 
 
-@auth_service.route('/login', methods=['POST'])
+#  ĐĂNG NHẬP
+@auth_service.route("/login", methods=["POST"])
 def login():
     if current_user.is_authenticated:
-        # Nếu đã đăng nhập, kiểm tra role để redirect
-        user_roles = [role.name for role in current_user.roles]
-        if 'Admin' in user_roles:
-            return redirect(url_for('admin.index'))
-        return redirect(url_for('pages.home'))
-
-    # Get data from form
-    email = request.form.get('email')
-    password = request.form.get('password')
+        return redirect_by_role(current_user)
+    email = request.form.get("email")
+    password = request.form.get("password")
 
     try:
         user = authenticate_user(email, password)
         login_user(user)
         identity_changed.send(current_app, identity=Identity(user.id))
-        flash('Đăng nhập thành công!', 'success')
-        
-        # Kiểm tra role để redirect đúng trang
-        user_roles = [role.name for role in user.roles]
-        if 'Admin' in user_roles:
-            return redirect(url_for('admin.index'))
-        return redirect(url_for('pages.home'))
+        flash("Đăng nhập thành công!", "success")
+        return redirect_by_role(user)
+
     except MissingFieldError:
-        flash('Vui lòng nhập đầy đủ thông tin', 'error')
+        flash("Vui lòng nhập đầy đủ thông tin", "error")
     except InvalidCredentials:
-        flash('Email hoặc mật khẩu không đúng', 'error')
+        flash("Email hoặc mật khẩu không đúng", "error")
+    return redirect(url_for("pages.signup", mode="login"))
 
-    return redirect(url_for('pages.signup', mode='login'))
 
-
-@auth_service.route('/logout', methods=['GET', 'POST'])
+# ĐĂNG XUẤT
+@auth_service.route("/logout", methods=["GET", "POST"])
 def logout():
     logout_user()
-    # Xóa tất cả flash messages khi đăng xuất
-    from flask import session
-    if '_flashes' in session:
-        session.pop('_flashes', None)
-    return redirect(url_for('pages.home'))
+    session.pop("_flashes", None)
+    return redirect(url_for("pages.home"))
