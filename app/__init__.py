@@ -239,8 +239,11 @@ def create_app():
         static_folder="static",
     )
 
+    import os
+
     app.config.from_mapping(
-        SQLALCHEMY_DATABASE_URI="mysql+pymysql://avnadmin:AVNS_X0Hz6oVyNuXvf8Pm0cl@mysql-162a47c6-quanlytruongmaugiao.j.aivencloud.com:14947/defaultdb?ssl_mode=REQUIRED",
+        SQLALCHEMY_DATABASE_URI=os.environ.get("DATABASE_URL",
+                                               "mysql+pymysql://avnadmin:AVNS_X0Hz6oVyNuXvf8Pm0cl@mysql-162a47c6-quanlytruongmaugiao.j.aivencloud.com:14947/defaultdb"),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SECRET_KEY="khoideptrai",
         BABEL_DEFAULT_LOCALE='vi',
