@@ -240,7 +240,7 @@ def create_app():
     )
 
     app.config.from_mapping(
-        SQLALCHEMY_DATABASE_URI="mysql+pymysql://root:hhthah05%HT@localhost/educa?charset=utf8mb4",
+        SQLALCHEMY_DATABASE_URI = "mysql+pymysql://avnadmin:AVNS_X0Hz6oVyNuXvf8Pm0cl@mysql-162a47c6-quanlytruongmaugiao.j.aivencloud.com:14947/defaultdb?ssl-mode=REQUIRED",
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SECRET_KEY="khoideptrai",
         BABEL_DEFAULT_LOCALE='vi',
