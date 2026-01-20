@@ -18,10 +18,9 @@ class PaymentStatusEnum(enum.Enum):
     Unpaid = "Unpaid"
 
 roles_users = db.Table('roles_users',
-                       db.Column('user_id', db.Integer(), db.ForeignKey('users.id')),
-                       db.Column('role_id', db.Integer(), db.ForeignKey('roles.id'))
-                       )
-
+    db.Column('user_id', db.Integer(), db.ForeignKey('users.id'), primary_key=True),
+    db.Column('role_id', db.Integer(), db.ForeignKey('roles.id'), primary_key=True)
+)
 # Database Models
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
